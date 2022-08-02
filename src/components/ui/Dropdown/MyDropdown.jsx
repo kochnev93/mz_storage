@@ -49,8 +49,27 @@ class MyDropdown extends Component {
           title: 'Стачек 92',
           isCheked: false
         },
+        {
+          id: 9,
+          title: 'Славы 21',
+          isCheked: false
+        },
+        {
+          id: 10,
+          title: 'Славы 52',
+          isCheked: false
+        },
+        {
+          id: 11,
+          title: 'Оптиков',
+          isCheked: false
+        },
+        {
+          id: 12,
+          title: 'Пятилеток',
+          isCheked: false
+        },
       ],
-      select_value: 'Выберите...',
       selectOptionAll: false,
     };
 
@@ -58,7 +77,7 @@ class MyDropdown extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    document.addEventListener('mousedown', this.handleClickOutside); 
   }
 
   componentWillUnmount() {
@@ -76,16 +95,23 @@ class MyDropdown extends Component {
     // Отслеживаем клик вне компонента
     const dropdown = document.querySelector(`.${styles.myDropdown}`);
     if ( !dropdown.contains(e.target) && this.state.isOpen){
-      this.openDropdown();
+      this.closeDropdown();
     }
   }
 
   openDropdown = () => {
-    // Открытие/закрытие дропдауна
+    // Открытие дропдауна
     const dropdown_list = document.getElementById('my_dropdown__list');
-    dropdown_list.classList.toggle(`${styles.myDropdown__list_open}`);
-    this.setState({isOpen: !this.state.isOpen});
+    dropdown_list.classList.add(`${styles.myDropdown__list_open}`);
+    this.setState({isOpen: true});
 
+  };
+
+  closeDropdown = () => {
+    // закрытие дропдауна
+    const dropdown_list = document.getElementById('my_dropdown__list');
+    dropdown_list.classList.remove(`${styles.myDropdown__list_open}`);
+    this.setState({isOpen: false});
   };
 
   liHandler = (e) => {
@@ -160,6 +186,10 @@ class MyDropdown extends Component {
     this.setState({search: e.target.value});
   }
 
+  focusInput = () => {
+    document.getElementById('inputt').focus();
+  }
+
   render() {
     //Количество выбранных элементов
     let countSelected = 0;
@@ -185,10 +215,11 @@ class MyDropdown extends Component {
     });
 
     let buttonSelectAll;
-    if(this.state.selectOptionAll){
-      buttonSelectAll = <button className={`${styles.select_all} ${styles.select_all_checked}`} onClick={this.selectAll}>Выбрать все</button>
-    } else{
-      buttonSelectAll = <button className={styles.select_all} onClick={this.selectAll}>Выбрать все</button>
+    if(this.state.search.length === 0){
+      buttonSelectAll = 
+      <button className={this.state.selectOptionAll ? `${styles.select_all} ${styles.select_all_checked}` : `${styles.select_all}`} onClick={this.selectAll}>
+        Выбрать все
+      </button>
     }
 
     return (
@@ -205,13 +236,13 @@ class MyDropdown extends Component {
               }
             </ul>
 
-            <input onChange={this.searchOption} value={this.state.search}></input>
+            <input id='inputt' onChange={this.searchOption} value={this.state.search}></input>
           </div>
          
 
           <ul id='my_dropdown__list' className={styles.myDropdown__list}>
             {buttonSelectAll}
-            {listOptions}
+            {listOptions.length === 0 ? <li className={styles.nothing_found}>Ничего не найдено</li> : listOptions}
           </ul>
 
         </div>
