@@ -1,0 +1,90 @@
+.form_elements {
+    position: relative;
+  }
+  
+  .form_elements_input {
+    padding: 4px 13px;
+    border-radius: 3px;
+    outline: none;
+    border: 0px;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.87);
+    background: none;
+    appearance: none;
+    font-size: 14px;
+  }
+
+  .form_elements_input[type="submit"] {
+    background: #5684E7;
+    color: white;
+    padding: 5px 13px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .form_elements_label {
+    position: absolute;
+    top: 4px;
+    left: 13px;
+    color: rgba(0, 0, 0, 0.23);
+    transition: top 0.3s ease;
+    pointer-events: none;
+  }
+  
+  
+  .form_elements_input:focus ~ .form_elements_label,
+  .form_elements_input:not(:placeholder-shown) ~ .form_elements_label {
+    top: -11px;
+    left: 14px;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.87);
+  }
+  
+  .form_elements_input:focus ~ .form_elements_fieldset>legend,
+  .form_elements_input:not(:placeholder-shown) ~ .form_elements_fieldset>legend{
+     max-width: 100%;
+  }
+  
+  .form_elements_input:focus ~ .form_elements_fieldset{
+    border: 2px solid rgba(0, 0, 0, 0.87);
+  }
+  
+  
+  .form_elements_fieldset {
+    position: absolute;
+    top: -11px;
+    bottom: -6px;
+    right: 0;
+    left: 0;
+    text-align: left;
+    min-width: 0%;
+    overflow: hidden;
+    padding: 0 8px;
+    margin: 0;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    pointer-events: none;
+  
+    > legend {
+      font-size: 10px;
+      float: unset;
+      overflow: hidden;
+      display: block;
+      width: auto;
+      padding: 0;
+      height: 11px;
+      visibility: hidden;
+      max-width: 0.01px;
+      white-space: nowrap;
+      visibility: hidden;
+      transition: max-width 0.3s ease;
+  
+      > span {
+        padding-left: 5px;
+        padding-right: 5px;
+        display: inline-block;
+        opacity: 0;
+        visibility: visible;
+      }
+    }
+  }

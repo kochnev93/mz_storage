@@ -1,0 +1,15 @@
+.main_section{
+    display: flex;
+    position: relative;
+}
+
+.main{
+    padding-top: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
+    height: 100vh;
+    background-color: #f5f5f5;;
+    z-index: 2;
+    overflow: auto;
+    flex-grow: 1;
+}
