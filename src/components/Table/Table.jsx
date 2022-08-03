@@ -157,7 +157,7 @@ class Table extends Component {
         {this.state.filter_message && <p className={styles.filter_message}>{this.state.filter_message}</p>}
 
         <MyTable titleColumn={titleColumn} content={this.state.data} />
-
+<br /><br />
         <MyDropdown />
 
         <div

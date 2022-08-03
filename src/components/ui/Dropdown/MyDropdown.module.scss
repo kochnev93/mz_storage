@@ -6,7 +6,7 @@
   position: relative;
 }
 
-.myDropdown__button {
+.myDropdown__container {
   display: flex;
   align-items: center;
   width: 100%;
@@ -15,38 +15,96 @@
   background: transparent;
   outline: none;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.23);
   color: rgba(0, 0, 0, 0.23);
   cursor: pointer;
+}
 
-  input{
-    background: transparent;
-    outline: none;
-    border: none;
-    width: 25px;
-    flex-grow: 4;
-    color: #333;
-    font-size: inherit;
+.myDropdown_input{
+  background: transparent;
+  outline: none;
+  border: none;
+  width: 25px;
+  flex-grow: 4;
+  color: #333;
+  font-size: inherit;
+  cursor: pointer;
+
+  &::placeholder{
+    color: red;
   }
 }
 
-.myDropdown__list {
+.myDropdown_label{
   position: absolute;
-  top: 35px;
+  top: 6px;
+  left: 13px;
+  color: rgba(0, 0, 0, 0.23);
+  transition: top 0.3s ease;
+  pointer-events: none;
+}
+
+.myDropdown_fieldset {
+  position: absolute;
+  top: -11px;
+  bottom: -6px;
+  right: 0;
+  left: 0;
+  text-align: left;
+  min-width: 0%;
+  overflow: hidden;
+  padding: 0 8px;
+  margin: 0;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  pointer-events: none;
+
+  > legend {
+    font-size: 10px;
+    float: unset;
+    overflow: hidden;
+    display: block;
+    width: auto;
+    padding: 0;
+    height: 11px;
+    visibility: hidden;
+    max-width: 0.01px;
+    white-space: nowrap;
+    visibility: hidden;
+    transition: max-width 0.3s ease;
+
+    > span {
+      padding-left: 5px;
+      padding-right: 5px;
+      display: inline-block;
+      opacity: 0;
+      visibility: visible;
+    }
+  }
+}
+
+.myDropdown__listItems {
+  position: absolute;
+  top: 40px;
   list-style: none;
   width: 100%;
   height: 0;
   transition: all 0.3s ease-out;
   overflow: hidden;
-  padding: 5px;
+  padding: 10px;
   border-radius: 4px;
   background-color: white;
   box-sizing: border-box;
   opacity: 0;
   overflow-y: scroll;
 
+  &__open {
+    height: 300px;
+    transition: all .3s ease-out;
+    opacity: 1;
+  }
+
   &::-webkit-scrollbar {
-    width: 7px;
+    width: 3px;
     background-color: rgba(0, 0, 0, 0.05);
   }
   
@@ -63,7 +121,6 @@
   -webkit-box-shadow: 0px 10px 11px -4px rgba(34, 60, 80, 0.1);
   -moz-box-shadow: 0px 10px 11px -4px rgba(34, 60, 80, 0.1);
   box-shadow: 0px 10px 11px -4px rgba(34, 60, 80, 0.1);
-
   transition: all .2s ease;
 
   li {
@@ -88,23 +145,15 @@
       pointer-events: none;
       border: none;
     }
-  }
 
+  }
 
   li:not(:last-child) {
     margin-bottom: 5px;
   }
 }
 
-.myDropdown__list_open {
-  height: 300px;
-  transition: all .3s ease-out;
-  opacity: 1;
-}
-
-
-.myDropdown_selected{
-
+.myDropdown_menuSelectedItems{
   list-style: none;
   display: flex;
   margin-right: 5px;
@@ -119,14 +168,13 @@
     font-size: 12px;
     margin-left: 5px;
     
-
-    .selected_title{
+    .selectedItem_title{
       padding: 3px 5px;
       color: #333333;
       pointer-events: none;
     }
 
-    .selected_closeIcon{
+    .selectedItem_closeIcon{
       display: flex;
       justify-content: center;
       align-items: center;
@@ -170,3 +218,14 @@
   }
 }
 
+.myDropdown_input.empty ~ .myDropdown_label {
+  top: -11px;
+  left: 14px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+
+.myDropdown_input.empty ~ .myDropdown_fieldset>legend{
+   max-width: 100%;
+}
