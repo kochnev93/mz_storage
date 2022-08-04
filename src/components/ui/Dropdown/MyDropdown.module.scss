@@ -97,7 +97,7 @@
   opacity: 0;
   overflow-y: scroll;
 
-  &__open {
+  &.open {
     height: 300px;
     transition: all .3s ease-out;
     opacity: 1;
@@ -212,7 +212,7 @@
   cursor: pointer;
   transition: all .2s ease;
 
-  &_checked{
+  &.checked{
     background-color: #0dc6bf;
     color: white;
   }
@@ -228,4 +228,11 @@
 
 .myDropdown_input.empty ~ .myDropdown_fieldset>legend{
    max-width: 100%;
+}
+
+.input_clear{
+  width: 10px;
+  &:hover{
+    fill: red;
+  }
 }
