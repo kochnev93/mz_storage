@@ -13,7 +13,7 @@ class MyDropdown extends Component {
       isOpen: false,
       selectOptionAnyone: false,
       selectOptionAll: false,
-      multiple: false,
+      multiple: true,
       options: [
         {
           id: 1,
