@@ -13,7 +13,7 @@ class MyDropdown extends Component {
       isOpen: false,
       selectOptionAnyone: false,
       selectOptionAll: false,
-      multiple: true,
+      multiple: props.multiple,
       options: [
         {
           id: 1,
@@ -103,10 +103,10 @@ class MyDropdown extends Component {
 
   handleClickOutside = (e) => {
     // Отслеживаем клик вне компонента
-    const dropdown = document.querySelector(`.${styles.myDropdown}`);
-    if (!dropdown.contains(e.target) && this.state.isOpen) {
-      this.closeDropdown();
-    }
+    // const dropdown = document.querySelector(`.${styles.myDropdown}`);
+    // if (!dropdown.contains(e.target) && this.state.isOpen) {
+    //   this.closeDropdown();
+    // }
   };
 
   openDropdown = () => {
@@ -123,10 +123,14 @@ class MyDropdown extends Component {
   liHandler = (e) => {
     e.stopPropagation();
 
+    console.log(e.target);
+
     // Находим индекс элемента, который выбрали
     let indexOption = this.state.options.findIndex(
       (item) => item.title === e.target.dataset.value
     );
+
+    console.log(indexOption);
 
     // Создаем новое состояние
     let newOptions = this.state.options.map((option, index) => {

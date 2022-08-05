@@ -11,7 +11,7 @@ export const Admin = () => {
 
   return (
     <section className={styles.main_section}>
-      <Header />
+      <Header title='Номенклатура'/>
       <Navbar />
       <main className={styles.main}>
         <h1>This is Admin</h1>

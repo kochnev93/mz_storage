@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux';
 
 import { MdOutlineMenu } from 'react-icons/Md';
 
-function Header(props) {
+
+function Header({title}) {
   const dispatch = useDispatch();
   const classButton = useSelector((state) => state.button_menu.ButtonMenuOpen);
 
@@ -21,7 +22,7 @@ function Header(props) {
       <div className={styles.wrapperHeader}>
         <div className={styles.logo}>
           <MdOutlineMenu onClick={() => dispatch(setHeader())} />
-          <h3>Склад</h3>
+          <h3>{title ? title : 'Склад'}</h3>
         </div>
       </div>
     </header>

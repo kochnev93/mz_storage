@@ -5,6 +5,7 @@ import { MyTable } from '../elements/Table/MyTable.jsx';
 import { MyInputSearch } from '../elements/Form/InputSearch/MyInputSearch.jsx';
 import { MyInputSubmit } from '../elements/Form/InputSubmit/MyInputSubmit.jsx';
 import MyDropdown from '../ui/Dropdown/MyDropdown.jsx';
+import { flexbox } from '@mui/system';
 
 
 
@@ -158,7 +159,13 @@ class Table extends Component {
 
         <MyTable titleColumn={titleColumn} content={this.state.data} />
 <br /><br />
-        <MyDropdown />
+
+        <MyDropdown multiple={false} />
+        <br /><br />
+        <MyDropdown multiple={true} />
+        <br /><br />
+        <MyDropdown multiple={false} />
+       
 
         <div
           className={
