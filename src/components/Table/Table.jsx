@@ -124,48 +124,26 @@ class Table extends Component {
       <div className="dashboard">
         <form className={styles.form_dashboard_filter}>
           <div>
-            <Select
-              type="text"
-              idDataList="storage_name"
-              nameInput="storage_name"
-              label="Склад"
-              dataList={array}
-              style={{ width: 200 }}
-              onChange={this.filter_warehouse}
-            />
+            <MyDropdown id='dropdown_storage' name='Склад' multiple={true} />
           </div>
 
           <div>
-            <Select
-              type="text"
-              idDataList="storage_category"
-              nameInput="storage_category"
-              label="Категория"
-              dataList={array}
-              style={{ width: 200 }}
-              onChange={this.filter_category}
-            />
+            <MyDropdown id='dropdown_category' name='Категория' multiple={true} />
           </div>
 
           <div>
             <MyInputSearch />
           </div>
+
           <div>
             <MyInputSubmit onClick={this.get_list} />
           </div>
+
         </form>
 
         {this.state.filter_message && <p className={styles.filter_message}>{this.state.filter_message}</p>}
 
         <MyTable titleColumn={titleColumn} content={this.state.data} />
-<br /><br />
-
-        <MyDropdown multiple={false} />
-        <br /><br />
-        <MyDropdown multiple={true} />
-        <br /><br />
-        <MyDropdown multiple={false} />
-       
 
         <div
           className={

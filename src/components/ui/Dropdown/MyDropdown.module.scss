@@ -96,6 +96,7 @@
   box-sizing: border-box;
   opacity: 0;
   overflow-y: scroll;
+  z-index: 10;
 
   &.open {
     height: 300px;

@@ -9,6 +9,8 @@ class MyDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: props.id,
+      name: props.name || 'Выберите',
       searchInput: '',
       isOpen: false,
       selectOptionAnyone: false,
@@ -103,10 +105,10 @@ class MyDropdown extends Component {
 
   handleClickOutside = (e) => {
     // Отслеживаем клик вне компонента
-    // const dropdown = document.querySelector(`.${styles.myDropdown}`);
-    // if (!dropdown.contains(e.target) && this.state.isOpen) {
-    //   this.closeDropdown();
-    // }
+    const dropdown = document.getElementById(this.state.id);
+    if (!dropdown.contains(e.target) && this.state.isOpen) {
+      this.closeDropdown();
+    } 
   };
 
   openDropdown = () => {
@@ -123,14 +125,10 @@ class MyDropdown extends Component {
   liHandler = (e) => {
     e.stopPropagation();
 
-    console.log(e.target);
-
     // Находим индекс элемента, который выбрали
     let indexOption = this.state.options.findIndex(
       (item) => item.title === e.target.dataset.value
     );
-
-    console.log(indexOption);
 
     // Создаем новое состояние
     let newOptions = this.state.options.map((option, index) => {
@@ -157,7 +155,7 @@ class MyDropdown extends Component {
 
   selectAll = (e) => {
     // Обработчик кнопки - Выбрать все
-
+    e.preventDefault();
     e.stopPropagation();
 
     // Создаем новое состояние
@@ -261,7 +259,7 @@ class MyDropdown extends Component {
     }
 
     return (
-      <div className={styles.myDropdown}>
+      <div id={this.state.id} className={styles.myDropdown}>
         <div className={styles.myDropdown__wrapper}>
 
           <div className={styles.myDropdown__container} onClick={this.openDropdown}>
@@ -295,12 +293,12 @@ class MyDropdown extends Component {
 
 
             <label className={styles.myDropdown_label}>
-              {this.state.selectOptionAnyone || this.state.searchInput ? 'Склад' : 'Выберите склад'}
+              {this.state.selectOptionAnyone || this.state.searchInput ? this.state.name : `Выберите ${this.state.name.toLowerCase()}`}
             </label>
 
             <fieldset className={styles.myDropdown_fieldset}>
               <legend>
-                <span>Склад</span>
+                <span>{this.state.name}</span>
               </legend>
             </fieldset>
 
