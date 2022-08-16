@@ -88,14 +88,14 @@ class MyDropdown extends Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
-    this.getWarehoses();
+    this.getContent(this.state.id);
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  getWarehoses = () => {
+  getContent = (id) => {
     let myHeaders = new Headers();
     myHeaders.append('content-type', 'application/json');
 
@@ -104,7 +104,7 @@ class MyDropdown extends Component {
       headers: myHeaders,
     };
 
-    fetch('http://localhost:3001/api/get_warehouse', requestOptions)
+    fetch(`http://localhost:3001/api/get_${id}`, requestOptions)
       .then((res) => {
 
         if (!res.ok) {
@@ -186,6 +186,7 @@ class MyDropdown extends Component {
       selectOptionAnyone: selectedAnyone
     });
     
+    this.getSelectedOptions();
   };
 
   selectAll = (e) => {
@@ -245,6 +246,16 @@ getListOptions = (list) => {
   return list;
 };
 
+getSelectedOptions = () => {
+  let options = this.state.options.filter( option => {
+    return option.isCheked
+  });
+
+  if(this.props.changeValue){
+    this.props.changeValue(options);
+  }
+}
+
   render() {
     //Количество выбранных элементов
     let countSelected = 0;
@@ -299,6 +310,7 @@ getListOptions = (list) => {
       );
     }
 
+
     return (
       <div id={this.state.id} className={styles.myDropdown}>
         <div className={styles.myDropdown__wrapper}>
@@ -337,7 +349,7 @@ getListOptions = (list) => {
               {this.state.selectOptionAnyone || this.state.searchInput ? this.state.title : this.state.placeholder}
             </label>
 
-            <fieldset className={styles.myDropdown_fieldset}>
+            <fieldset className={cx(styles.myDropdown_fieldset, {[styles.error]: !this.props.validation} )}>
               <legend>
                 <span>{this.state.title}</span>
               </legend>
@@ -348,6 +360,10 @@ getListOptions = (list) => {
           <ul className={cx(styles.myDropdown__listItems, {[styles.open]: this.state.isOpen})}>
             {buttonSelectAll}
             { this.getListOptions(listOptions)}
+          </ul>
+
+          <ul>
+           
           </ul>
 
         </div>

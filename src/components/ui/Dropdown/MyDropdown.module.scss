@@ -58,6 +58,10 @@
   border: 1px solid rgba(0, 0, 0, 0.23);
   pointer-events: none;
 
+  &.error{
+    border: 1px solid rgba(255, 0, 0, 0.575);
+  }
+
   > legend {
     font-size: 10px;
     float: unset;
@@ -99,7 +103,8 @@
   z-index: 10;
 
   &.open {
-    height: 300px;
+    height: auto;
+    max-height: 300px;
     transition: all .3s ease-out;
     opacity: 1;
   }

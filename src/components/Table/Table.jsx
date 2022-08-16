@@ -119,7 +119,7 @@ class Table extends Component {
         <form className={styles.form_dashboard_filter}>
           <div>
             <MyDropdown 
-              id="dropdown_storage" 
+              id="warehouse" 
               title="Склад"
               placeholder="Выберите склад" 
               multiple={true} 
@@ -128,7 +128,7 @@ class Table extends Component {
 
           <div>
             <MyDropdown
-              id="dropdown_category"
+              id="category"
               title="Категория"
               placeholder="Выберите категорию" 
               multiple={true}

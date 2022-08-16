@@ -1,10 +1,27 @@
-import React from 'react';
+import React, {useState} from 'react';
 import cx from 'classnames';
 import styles from './myModal.module.scss';
 import { AiOutlineClose } from 'react-icons/Ai';
 import MyDropdown from './../Dropdown/MyDropdown.jsx';
 
 function Modal({ active, setActive }) {
+  const [warehouse, setWarehouse] = useState([]);
+  const [validationWarehouse, setValidationWarehouse] = useState(true);
+  const [category, setCategory] = useState([]);
+  const [validationCategory, setValidationCategory] = useState(true);
+
+  const validateAddForm = () => {
+    warehouse.length === 0 ? setValidationWarehouse(false) : setValidationWarehouse(true);
+    category.length === 0 ? setValidationCategory(false) : setValidationCategory(true);
+  }
+
+  const addProduct = (e) => {
+    e.preventDefault();
+    validateAddForm();
+    console.log(warehouse);
+    console.log(category);
+  }
+
   return (
     <div
       className={cx(styles.myModal_overlay, { [styles.active]: active })}
@@ -25,19 +42,23 @@ function Modal({ active, setActive }) {
               <div className={styles.myModal_form_itemsContainer}>
                 <div className={styles.myModal_form_item}>
                   <MyDropdown
-                    id="modalAdd_storage"
+                    id="warehouse"
                     title="Склад"
                     placeholder="Выберите склад"
-                    multiple={true}
+                    multiple={false}
+                    changeValue = {setWarehouse}
+                    validation = {validationWarehouse}
                   />
                 </div>
 
                 <div className={styles.myModal_form_item}>
                   <MyDropdown
-                    id="modalAdd_category"
+                    id="category"
                     title="Категория"
                     placeholder="Выберите категорию"
-                    multiple={true}
+                    multiple={false}
+                    changeValue = {setCategory}
+                    validation = {validationCategory}
                   />
                 </div>
 
@@ -61,9 +82,7 @@ function Modal({ active, setActive }) {
                 <input
                   type="submit"
                   value="Добавить"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
+                  onClick={addProduct}
                 />
               </div>
             </form>
