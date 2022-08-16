@@ -22,41 +22,57 @@ function Modal({ active, setActive }) {
 
           <div className={styles.myModal_body}>
             <form className={styles.myModal_form}>
-                <div className={styles.myModal_form_itemsContainer}>
-                    <div className={styles.myModal_form_item}>
-                        <label></label>
-                        <MyDropdown multiple={true} />
-                    </div>
-
-                    <div className={styles.myModal_form_item}>
-                        <label></label>
-                        <MyDropdown multiple={false} />
-                    </div>
-
-                    <div className={styles.myModal_form_item}>
-                        <label>Наименование</label>
-                        <input type="text" />
-                    </div>
-
-                    <div className={styles.myModal_form_item}>
-                        <label>Товар</label>
-                        <input type="text" />
-                    </div>
-
-                    <div className={styles.myModal_form_item}>
-                        <label>Товар</label>
-                        <input type="text" />
-                    </div>
-
+              <div className={styles.myModal_form_itemsContainer}>
+                <div className={styles.myModal_form_item}>
+                  <MyDropdown
+                    id="modalAdd_storage"
+                    title="Склад"
+                    placeholder="Выберите склад"
+                    multiple={true}
+                  />
                 </div>
 
-                <div className={styles.myModal_form_buttons}>
-                    <input type="submit" value="Добавить" onClick={(e) => {e.preventDefault()}}/>
+                <div className={styles.myModal_form_item}>
+                  <MyDropdown
+                    id="modalAdd_category"
+                    title="Категория"
+                    placeholder="Выберите категорию"
+                    multiple={true}
+                  />
                 </div>
+
+                <div className={styles.myModal_form_item}>
+                  <label>Наименование</label>
+                  <input type="text" />
+                </div>
+
+                <div className={styles.myModal_form_item}>
+                  <label>Товар</label>
+                  <input type="text" />
+                </div>
+
+                <div className={styles.myModal_form_item}>
+                  <label>Товар</label>
+                  <input type="text" />
+                </div>
+              </div>
+
+              <div className={styles.myModal_form_buttons}>
+                <input
+                  type="submit"
+                  value="Добавить"
+                  onClick={(e) => {
+                    e.preventDefault();
+                  }}
+                />
+              </div>
             </form>
           </div>
 
-          <div className={styles.myModal_footer}>Данная форма предназначена для добавления товара в номенклатуру. Для оформления прихода воспользуйтесь другой формой.</div>
+          <div className={styles.myModal_footer}>
+            Данная форма предназначена для добавления товара в номенклатуру. Для
+            оформления прихода воспользуйтесь другой формой.
+          </div>
         </div>
       </div>
     </div>

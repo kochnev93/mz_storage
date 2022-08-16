@@ -10,74 +10,77 @@ class MyDropdown extends Component {
     super(props);
     this.state = {
       id: props.id,
-      name: props.name || 'Выберите',
+      title: props.title || 'Название',
+      placeholder: props.placeholder || 'Выберите...',
       searchInput: '',
       isOpen: false,
       selectOptionAnyone: false,
       selectOptionAll: false,
       multiple: props.multiple,
-      options: [
-        {
-          id: 1,
-          title: 'Дунайский',
-          isCheked: false,
-        },
-        {
-          id: 2,
-          title: 'Крыленко',
-          isCheked: false,
-        },
-        {
-          id: 3,
-          title: 'Яхтенная',
-          isCheked: false,
-        },
-        {
-          id: 4,
-          title: 'Бухарестская',
-          isCheked: false,
-        },
-        {
-          id: 5,
-          title: 'Победы',
-          isCheked: false,
-        },
-        {
-          id: 6,
-          title: 'Лаврики',
-          isCheked: false,
-        },
-        {
-          id: 7,
-          title: 'Стачек 28',
-          isCheked: false,
-        },
-        {
-          id: 8,
-          title: 'Стачек 92',
-          isCheked: false,
-        },
-        {
-          id: 9,
-          title: 'Славы 21',
-          isCheked: false,
-        },
-        {
-          id: 10,
-          title: 'Славы 52',
-          isCheked: false,
-        },
-        {
-          id: 11,
-          title: 'Оптиков',
-          isCheked: false,
-        },
-        {
-          id: 12,
-          title: 'Пятилеток',
-          isCheked: false,
-        },
-      ],
+      isLoaded: false,
+      // options: [
+      //   {
+      //     id: 1,
+      //     title: 'Дунайский',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 2,
+      //     title: 'Крыленко',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 3,
+      //     title: 'Яхтенная',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 4,
+      //     title: 'Бухарестская',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 5,
+      //     title: 'Победы',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 6,
+      //     title: 'Лаврики',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 7,
+      //     title: 'Стачек 28',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 8,
+      //     title: 'Стачек 92',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 9,
+      //     title: 'Славы 21',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 10,
+      //     title: 'Славы 52',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 11,
+      //     title: 'Оптиков',
+      //     isCheked: false,
+      //   },
+      //   {
+      //     id: 12,
+      //     title: 'Пятилеток',
+      //     isCheked: false,
+      //   },
+      // ],
+      options: []
     };
 
     this.openDropdown = this.openDropdown.bind(this);
@@ -85,10 +88,42 @@ class MyDropdown extends Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+    this.getWarehoses();
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  getWarehoses = () => {
+    let myHeaders = new Headers();
+    myHeaders.append('content-type', 'application/json');
+
+    let requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+    };
+
+    fetch('http://localhost:3001/api/get_warehouse', requestOptions)
+      .then((res) => {
+
+        if (!res.ok) {
+          throw new Error(`${res.status}. ${res.statusText}`);
+        } else {
+          return res.json();
+        }
+      })
+      .then((result) => {
+        if (!result.error) {
+          this.setState({
+            isLoaded: true,
+            options: result.data
+          });
+        } 
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   isSelectedAll = (arr) => {
@@ -204,6 +239,12 @@ class MyDropdown extends Component {
     });
   };
 
+getListOptions = (list) => {
+  if (!this.state.isLoaded) return 'Загрузка...';
+  if (list.length === 0) return 'Ничего не найдено';
+  return list;
+};
+
   render() {
     //Количество выбранных элементов
     let countSelected = 0;
@@ -247,7 +288,7 @@ class MyDropdown extends Component {
     });
 
     let buttonSelectAll;
-    if (!this.state.searchInput && this.state.multiple) {
+    if (!this.state.searchInput && this.state.multiple && this.state.isLoaded) {
       buttonSelectAll = (
         <button
           className={ cx(styles.select_all, {[styles.checked]: this.state.selectOptionAll}) }
@@ -265,7 +306,7 @@ class MyDropdown extends Component {
           <div className={styles.myDropdown__container} onClick={this.openDropdown}>
 
             <ul className={styles.myDropdown_menuSelectedItems}>
-              { countSelected < 3 ? optionsSelected : 
+              { countSelected < 2 ? optionsSelected : 
                 <li>
                   <div className={styles.selectedItem_title}>Выбрано: {countSelected} знач.</div>
                   <div className={styles.selectedItem_closeIcon} onClick={this.closeAll}><AiOutlineClose /></div>
@@ -293,12 +334,12 @@ class MyDropdown extends Component {
 
 
             <label className={styles.myDropdown_label}>
-              {this.state.selectOptionAnyone || this.state.searchInput ? this.state.name : `Выберите ${this.state.name.toLowerCase()}`}
+              {this.state.selectOptionAnyone || this.state.searchInput ? this.state.title : this.state.placeholder}
             </label>
 
             <fieldset className={styles.myDropdown_fieldset}>
               <legend>
-                <span>{this.state.name}</span>
+                <span>{this.state.title}</span>
               </legend>
             </fieldset>
 
@@ -306,9 +347,7 @@ class MyDropdown extends Component {
 
           <ul className={cx(styles.myDropdown__listItems, {[styles.open]: this.state.isOpen})}>
             {buttonSelectAll}
-            {listOptions.length === 0 ? (
-              <li className={styles.nothing_found}>Ничего не найдено</li>
-            ) : listOptions }
+            { this.getListOptions(listOptions)}
           </ul>
 
         </div>
