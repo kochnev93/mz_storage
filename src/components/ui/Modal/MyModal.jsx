@@ -3,16 +3,26 @@ import cx from 'classnames';
 import styles from './myModal.module.scss';
 import { AiOutlineClose } from 'react-icons/Ai';
 import MyDropdown from './../Dropdown/MyDropdown.jsx';
+import MyInput from './../Input/MyInput.jsx';
 
 function Modal({ active, setActive }) {
+  const [errors, setErrors] = useState(false);
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
 
   const validateAddForm = () => {
-    warehouse.length === 0 ? setValidationWarehouse(false) : setValidationWarehouse(true);
-    category.length === 0 ? setValidationCategory(false) : setValidationCategory(true);
+
+    if(warehouse.length === 0){
+      setValidationWarehouse(false);
+      setErrors(true);
+    } else{
+      setValidationWarehouse(true);
+      setErrors(false);
+    }
+    // warehouse.length === 0 ? setValidationWarehouse(false) : setValidationWarehouse(true);
+    // category.length === 0 ? setValidationCategory(false) : setValidationCategory(true);
   }
 
   const addProduct = (e) => {
@@ -31,10 +41,17 @@ function Modal({ active, setActive }) {
         <div className={styles.myModal_wrapper}>
           <div className={styles.myModal_header}>
             <div>Добавить товар</div>
-            <AiOutlineClose
-              className={styles.close_icon}
-              onClick={() => setActive(false)}
-            />
+
+            <div className={styles.myModal_toolbar}>
+              <div className={styles.myModal_error}>
+                {errors && 'Заполните поля'}
+              </div>
+
+              <AiOutlineClose
+                className={styles.close_icon}
+                onClick={() => setActive(false)}
+              />
+          </div>
           </div>
 
           <div className={styles.myModal_body}>
@@ -76,6 +93,9 @@ function Modal({ active, setActive }) {
                   <label>Товар</label>
                   <input type="text" />
                 </div>
+
+                <MyInput />
+                
               </div>
 
               <div className={styles.myModal_form_buttons}>
@@ -85,6 +105,8 @@ function Modal({ active, setActive }) {
                   onClick={addProduct}
                 />
               </div>
+
+              
             </form>
           </div>
 

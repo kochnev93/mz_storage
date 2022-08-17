@@ -58,12 +58,23 @@
     align-items: center;
     padding: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.23);
+}
 
-    > .close_icon{
-        cursor: pointer;
-        &:hover{
-            fill: red;
-        }
+.myModal_toolbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.myModal_error{
+    color: #fb5951;
+    margin-right: 10px;
+}
+
+.close_icon{
+    cursor: pointer;
+    &:hover{
+        fill: red;
     }
 }
 

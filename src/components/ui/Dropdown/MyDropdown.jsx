@@ -362,10 +362,6 @@ getSelectedOptions = () => {
             { this.getListOptions(listOptions)}
           </ul>
 
-          <ul>
-           
-          </ul>
-
         </div>
       </div>
     );
