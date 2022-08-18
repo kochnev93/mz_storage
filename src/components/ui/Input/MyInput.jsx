@@ -1,28 +1,25 @@
-import React, {useState} from 'react';
+import React from 'react';
 import cx from 'classnames';
-import styles from './myInput.module.scss';
+import styles from './MyInput.module.scss';
 
-function Input() {
- 
+ const MyInput = (props) => {
   return (
-    <div className={styles.myInput_wrapper}>
-
-        <input
-          className={ cx(styles.myInput_input) }
-        />
-
-        <label className={styles.myInput_label}>
-         rrr
-        </label>
-
-        <fieldset className={styles.myInput_fieldset}>
-            <legend>
-            <span>rrr</span>
-          </legend>
-        </fieldset>
-
+    <div className={styles.myInput}>
+      <input
+        className={styles.myInput_input}
+        type={props.type}
+        placeholder=" "
+        onChange={(e) => {props.changeValue(e.target.value)}}
+        value = {props.value}
+      />
+      <label className={styles.myInput_label}>{props.title}</label>
+      <fieldset className={ cx(styles.myInput_fieldset, {[styles.error]: !props.validation}) }>
+        <legend>
+          <span>{props.title}</span>
+        </legend>
+      </fieldset>
     </div>
   );
-}
+};
 
-export default Input;
+export default MyInput;

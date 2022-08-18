@@ -1,35 +1,110 @@
 import React, {useState} from 'react';
 import cx from 'classnames';
+
+//Styles
 import styles from './myModal.module.scss';
 import { AiOutlineClose } from 'react-icons/Ai';
+
+// Components
 import MyDropdown from './../Dropdown/MyDropdown.jsx';
 import MyInput from './../Input/MyInput.jsx';
+import ButtonSend from '../Buttons/ButtonSend.jsx';
 
 function Modal({ active, setActive }) {
   const [errors, setErrors] = useState(false);
+  const [message, setMessage] = useState('');
+
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
+
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
 
-  const validateAddForm = () => {
+  const [product, setProduct] = useState('');
+  const [validationProduct, setValidationProduct] = useState(true);
 
-    if(warehouse.length === 0){
-      setValidationWarehouse(false);
-      setErrors(true);
-    } else{
-      setValidationWarehouse(true);
-      setErrors(false);
+  const [serialNumber, setSerialNumber] = useState('');
+  const [validationSerialNumber, setValidationSerialNumber] = useState(true);
+
+
+  const resetForm = (e) => {
+    e.preventDefault();
+
+    setWarehouse([]);
+    setValidationWarehouse(true);
+
+    setCategory([]);
+    setValidationCategory(true);
+
+    setProduct('');
+    setValidationProduct(true);
+
+    setSerialNumber('');
+    setValidationSerialNumber(true);
+
+    setErrors(false);
+    setMessage('');
+  }
+
+  const resetValidation = () => {
+    setValidationWarehouse(true);
+    setValidationCategory(true);
+    setValidationProduct(true);
+    setValidationSerialNumber(true);
+    setErrors(false);
+    setMessage('');
+  }
+
+  const validateAddForm = () => {
+    resetValidation();
+
+    const delSpaseStr = (str) =>{
+      return str.replace(/\s+/g, ' ').trim();
     }
-    // warehouse.length === 0 ? setValidationWarehouse(false) : setValidationWarehouse(true);
-    // category.length === 0 ? setValidationCategory(false) : setValidationCategory(true);
+    
+    const validationItem = (item) => {
+      return item.length === 0 ? false : true;
+    }
+
+    setProduct( delSpaseStr(product) );
+    setSerialNumber( delSpaseStr(serialNumber) );
+
+    let countError = 0;
+
+    if( !validationItem(warehouse) ){
+      setValidationWarehouse(false);
+      countError++;
+    }
+
+    if( !validationItem(category) ){
+      setValidationCategory(false);
+      countError++;
+    }
+
+
+    if( !validationItem(product) ){
+      setValidationProduct(false);
+      countError++;
+    }
+
+    if( !validationItem(serialNumber) ){
+      setValidationSerialNumber(false);
+      countError++;
+    }
+
+    if ( countError == 0 ){
+      console.log('Отправлено')
+    } else{
+      setErrors(true);
+      setMessage(`Заполните поля, количество ошибок: ${countError}`)
+      console.log('Ошибка');
+    }
+    
   }
 
   const addProduct = (e) => {
     e.preventDefault();
     validateAddForm();
-    console.log(warehouse);
-    console.log(category);
   }
 
   return (
@@ -43,8 +118,8 @@ function Modal({ active, setActive }) {
             <div>Добавить товар</div>
 
             <div className={styles.myModal_toolbar}>
-              <div className={styles.myModal_error}>
-                {errors && 'Заполните поля'}
+              <div className={styles.myModal_message}>
+                {message}
               </div>
 
               <AiOutlineClose
@@ -57,7 +132,7 @@ function Modal({ active, setActive }) {
           <div className={styles.myModal_body}>
             <form className={styles.myModal_form}>
               <div className={styles.myModal_form_itemsContainer}>
-                <div className={styles.myModal_form_item}>
+
                   <MyDropdown
                     id="warehouse"
                     title="Склад"
@@ -66,9 +141,7 @@ function Modal({ active, setActive }) {
                     changeValue = {setWarehouse}
                     validation = {validationWarehouse}
                   />
-                </div>
 
-                <div className={styles.myModal_form_item}>
                   <MyDropdown
                     id="category"
                     title="Категория"
@@ -77,33 +150,33 @@ function Modal({ active, setActive }) {
                     changeValue = {setCategory}
                     validation = {validationCategory}
                   />
-                </div>
 
-                <div className={styles.myModal_form_item}>
-                  <label>Наименование</label>
-                  <input type="text" />
-                </div>
+                  <MyInput
+                    type="text" 
+                    title="Наименование"
+                    changeValue={setProduct}
+                    validation = {validationProduct}
+                    value = {product}
+                  />
 
-                <div className={styles.myModal_form_item}>
-                  <label>Товар</label>
-                  <input type="text" />
-                </div>
+                  <MyInput 
+                    tepe="text"
+                    title="S/N"
+                    changeValue={setSerialNumber}
+                    validation = {validationSerialNumber}
+                    value = {serialNumber}
+                  />
 
-                <div className={styles.myModal_form_item}>
-                  <label>Товар</label>
-                  <input type="text" />
-                </div>
-
-                <MyInput />
-                
               </div>
 
               <div className={styles.myModal_form_buttons}>
+
                 <input
-                  type="submit"
-                  value="Добавить"
-                  onClick={addProduct}
+                  type="reset"
+                  value="Очистить"
+                  onClick={resetForm}
                 />
+                <ButtonSend send={addProduct} title="Добавить" />
               </div>
 
               

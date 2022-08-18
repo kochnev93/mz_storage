@@ -66,9 +66,10 @@
     align-items: center;
 }
 
-.myModal_error{
+.myModal_message{
     color: #fb5951;
     margin-right: 10px;
+    font-size: 12px;
 }
 
 .close_icon{
@@ -82,25 +83,20 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
+    align-items: start;
 
     padding: 20px;
-    min-height: 200px;
+    //min-height: 200px;
     max-height: 500px;
     box-sizing: border-box;
     overflow-y: auto;
 }
 
-.myModal_form_item{
-    display: flex;
-    flex-direction: column;
-
-    label{
-        margin-bottom: 5px;
-    }
-}
-
 .myModal_form_buttons{
-    padding: 20px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding: 0 20px 20px 20px;
 }
 
 .myModal_footer{

@@ -1,29 +1,51 @@
-.myInput_wrapper{
+.myInput {
     position: relative;
-}
-
-.myInput_input{
-    background: transparent;
+  }
+  
+  .myInput_input {
+    padding: 10px;
+    border-radius: 4px;
     outline: none;
-    border: none;
-    color: #333;
-    font-size: inherit;
-    cursor: pointer;
-}
+    border: 0px;
+    width: 100%;
+    color: rgba(0, 0, 0, 0.87);
+    background: none;
+    appearance: none;
+    font-size: 14px;
+  }
 
-.myInput_label{
+  .myInput_label {
     position: absolute;
-    top: 6px;
+    top: 9px;
     left: 13px;
     color: rgba(0, 0, 0, 0.23);
     transition: top 0.3s ease;
     pointer-events: none;
-}
-
-.myInput_fieldset{
+  }
+  
+  
+  .myInput_input:focus ~ .myInput_label,
+  .myInput_input:not(:placeholder-shown) ~ .myInput_label {
+    top: -6px;
+    left: 14px;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.87);
+  }
+  
+  .myInput_input:focus ~ .myInput_fieldset>legend,
+  .myInput_input:not(:placeholder-shown) ~ .myInput_fieldset>legend{
+     max-width: 100%;
+  }
+  
+  .myInput_input:focus ~ .myInput_fieldset{
+    border: 2px solid rgba(0, 0, 0, 0.87);
+  }
+  
+  
+  .myInput_fieldset {
     position: absolute;
-    top: -11px;
-    bottom: -6px;
+    top: -6px;
+    bottom: -2px;
     right: 0;
     left: 0;
     text-align: left;
@@ -39,28 +61,27 @@
         border: 1px solid red;
         background-color: #f443361c;
     }
-
+  
     > legend {
-        font-size: 10px;
-        float: unset;
-        overflow: hidden;
-        display: block;
-        width: auto;
-        padding: 0;
-        height: 11px;
-        visibility: hidden;
-        max-width: 0.01px;
-        white-space: nowrap;
-        visibility: hidden;
-        transition: max-width 0.3s ease;
-    
-        > span {
-          padding-left: 5px;
-          padding-right: 5px;
-          display: inline-block;
-          opacity: 0;
-          visibility: visible;
-        }
+      font-size: 10px;
+      float: unset;
+      overflow: hidden;
+      display: block;
+      width: auto;
+      padding: 0;
+      height: 11px;
+      visibility: hidden;
+      max-width: 0.01px;
+      white-space: nowrap;
+      visibility: hidden;
+      transition: max-width 0.3s ease;
+  
+      > span {
+        padding-left: 5px;
+        padding-right: 5px;
+        display: inline-block;
+        opacity: 0;
+        visibility: visible;
       }
-    
-}
+    }
+  }
