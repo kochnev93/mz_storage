@@ -1,11 +1,11 @@
 .btn {
 	display: inline-block;	
 	box-sizing: border-box;
-	padding: 10px 15px;
+	padding: 5px 10px;
 	outline: none;
 	border: none;    
 	border-radius: 4px;
-	font-size: 12px;
+	font-size: 10px;
 	text-transform: uppercase;
 	font-weight: normal;
 	text-decoration: none;
@@ -17,7 +17,13 @@
 	transition: box-shadow .18s ease-out,background .18s ease-out,color .18s ease-out;
 
     &.send{
-        background-color: #0dc6bf;
+        background-color: var(--main-color);
+    }
+
+	&.clear{
+		border: 1px solid rgba(0, 0, 0, 0.23);
+		background: transparent;
+        color: rgba(0, 0, 0, 0.23);
     }
 }
 

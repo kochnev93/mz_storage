@@ -186,7 +186,13 @@ class MyDropdown extends Component {
       selectOptionAnyone: selectedAnyone
     });
     
-    this.getSelectedOptions();
+    if(this.props.changeValue){
+      this.getSelectedOptions();
+    }
+
+    if(!this.state.multiple){
+      this.closeDropdown();
+    }
   };
 
   selectAll = (e) => {
@@ -250,13 +256,28 @@ getSelectedOptions = () => {
   let options = this.state.options.filter( option => {
     return option.isCheked
   });
+  
+  this.props.changeValue(options);
+}
 
-  if(this.props.changeValue){
-    this.props.changeValue(options);
-  }
+clearDropdown = () => {
+  let newOptions = this.state.options.map((option) => {
+    option.isCheked = false;
+    return option;
+  });
+
+  this.props.setReset(false);
+
+  this.setState({
+    options: newOptions,
+    selectOptionAll: false,
+    selectOptionAnyone: false
+  });
 }
 
   render() {
+    {this.props.reset ? this.clearDropdown() : null}
+
     //Количество выбранных элементов
     let countSelected = 0;
 

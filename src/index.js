@@ -13,6 +13,7 @@ import { store } from './store/store';
 import { Provider } from 'react-redux';
 
 import './style/styles.module.scss';
+import './style/vars.css';
 import './index.css';
 
 

@@ -8,11 +8,12 @@ import { AiOutlineClose } from 'react-icons/Ai';
 // Components
 import MyDropdown from './../Dropdown/MyDropdown.jsx';
 import MyInput from './../Input/MyInput.jsx';
-import ButtonSend from '../Buttons/ButtonSend.jsx';
+import MyButton from '../Buttons/ButtonSend.jsx';
 
 function Modal({ active, setActive }) {
   const [errors, setErrors] = useState(false);
   const [message, setMessage] = useState('');
+  const [reset, setReset] = useState(false);
 
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
@@ -44,6 +45,7 @@ function Modal({ active, setActive }) {
 
     setErrors(false);
     setMessage('');
+    setReset(true);
   }
 
   const resetValidation = () => {
@@ -140,6 +142,8 @@ function Modal({ active, setActive }) {
                     multiple={false}
                     changeValue = {setWarehouse}
                     validation = {validationWarehouse}
+                    reset={reset}
+                    setReset={setReset}
                   />
 
                   <MyDropdown
@@ -149,6 +153,8 @@ function Modal({ active, setActive }) {
                     multiple={false}
                     changeValue = {setCategory}
                     validation = {validationCategory}
+                    reset={reset}
+                    setReset={setReset}
                   />
 
                   <MyInput
@@ -170,13 +176,8 @@ function Modal({ active, setActive }) {
               </div>
 
               <div className={styles.myModal_form_buttons}>
-
-                <input
-                  type="reset"
-                  value="Очистить"
-                  onClick={resetForm}
-                />
-                <ButtonSend send={addProduct} title="Добавить" />
+                <MyButton type="clear" action={resetForm} title="Сбросить" />
+                <MyButton type="send" action={addProduct} title="Добавить" />
               </div>
 
               

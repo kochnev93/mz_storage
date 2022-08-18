@@ -11,13 +11,12 @@ export const Admin = () => {
 
   return (
     <section className={styles.main_section}>
+      <Modal active={modalWindow} setActive={setModalWindow} />
       <Header title='Номенклатура'/>
       <Navbar />
       <main className={styles.main}>
         <h1>This is Admin</h1>
         <button onClick={() => setModalWindow(true)}>Modal</button>
-
-        <Modal active={modalWindow} setActive={setModalWindow} />
       </main>
     </section>
   );
