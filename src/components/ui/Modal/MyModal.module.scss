@@ -55,6 +55,12 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.myModal_body {
+  &.loading {
+    background-color: #f1f1f1;
+  }
+}
+
 .myModal_toolbar {
   display: flex;
   justify-content: space-between;
@@ -62,9 +68,15 @@
 }
 
 .myModal_message {
-  color: #fb5951;
   margin-right: 10px;
   font-size: 12px;
+
+  &.succses {
+    color: green;
+  }
+  &.error {
+    color: #fb5951;
+  }
 }
 
 .close_icon {
@@ -98,7 +110,7 @@
 
 .myModal_footer {
   padding: 20px;
-  font-size: 8px;
+  font-size: 10px;
   color: grey;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }

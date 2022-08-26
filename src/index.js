@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { About } from './pages/About/About.jsx';
 import { Dashboard } from './pages/Dashboard/Dashboard.jsx';
 import { Admin } from './pages/Admin/Admin.jsx';
+import { Auth } from './pages/Auth/Auth.jsx';
 
 
 // Redux
@@ -25,6 +26,7 @@ ReactDOM.render(
           <Route path="/" element={<Dashboard />} />
           <Route path="about" element={<About />} />
           <Route path="admin" element={<Admin />} />
+          <Route path="auth" element={<Auth />} />
         </Routes>
       </BrowserRouter>
     </Provider>

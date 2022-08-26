@@ -123,6 +123,7 @@ class Table extends Component {
               title="Склад"
               placeholder="Выберите склад" 
               multiple={true} 
+              validation = {true}
             />
           </div>
 
@@ -132,6 +133,7 @@ class Table extends Component {
               title="Категория"
               placeholder="Выберите категорию" 
               multiple={true}
+              validation = {true}
             />
           </div>
 

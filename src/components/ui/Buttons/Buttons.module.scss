@@ -1,5 +1,7 @@
 .btn {
-	display: inline-block;	
+	display: flex;
+	align-items: center;
+	justify-content: center;
 	box-sizing: border-box;
 	padding: 5px 10px;
 	outline: none;
@@ -14,10 +16,18 @@
 	user-select: none;
 	appearance: none;
 	touch-action: manipulation;  
-	transition: box-shadow .18s ease-out,background .18s ease-out,color .18s ease-out;
+	transition: all .2s ease-out;
 
     &.send{
         background-color: var(--main-color);
+		&.loading:after{
+			content: '';
+			width: 15px;
+			height: 15px;
+			background: url('./loading.gif');
+			background-size: cover;
+			background-position: center;
+		}
     }
 
 	&.clear{
@@ -25,6 +35,14 @@
 		background: transparent;
         color: rgba(0, 0, 0, 0.23);
     }
+
+}
+
+.btn:disabled {
+	background-color: #dbdbdb;
+	color: #444;
+	pointer-events: none;
+	border: none;
 }
 
 // .btn:focus-visible {
