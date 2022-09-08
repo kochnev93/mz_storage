@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 import MyInput from '../../components/ui/Input/MyInput.jsx';
 
 import styles from './Auth.module.scss';
 
+// Redux
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../features/users/userSlice.js';
+
+
 export const Auth = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const frompage = location.state?.from?.pathname || '/';
+
   const [login, setLogin] = useState('');
   const [validationLogin, setValidationLogin] = useState(true);
   const [password, setPassword] = useState('');
@@ -52,7 +63,7 @@ export const Auth = () => {
         body: data,
       };
 
-      fetch('http://localhost:3001/api/register', requestOptions)
+      fetch('http://localhost:3001/api/auth', requestOptions)
         .then((res) => {
           if (res.status >= 200 && res.status < 300) {
             return res.json();
@@ -63,7 +74,21 @@ export const Auth = () => {
           }
         })
         .then((result) => {
-          console.log(result)
+          dispatch(setUser({
+            id: result.id,
+            login: result.login,
+            role: result.role,
+            accessToken: result.accessToken
+          }));
+
+          localStorage.setItem('mz_storage_user', JSON.stringify({
+            id: result.id,
+            login: result.login,
+            role: result.role,
+            accessToken: result.accessToken
+          }));
+          
+          navigate(frompage);
         })
         .catch((err) => {
           console.log(err)
