@@ -1,3 +1,18 @@
 :root {
-    --main-color: #0dc6bf;
+  --main-color: #0dc6bf;
+
+  /* Header */
+  --minHeightHeader: 60px;
+  --headerTransition: left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  --paddingWrapperHeader: 0 10px;
+  --colorLogoHeader: white;
+  --colorIconHeader: white;
+
+  /* Navbar */
+  --widthMenuIsClose: 50px;
+  --widthMenuIsOpen: 250px;
+  --paddingMenu: 10px;
+  --linkHoverColor: #757575;
+  --navbarTransition: all 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+  --colorMenuIcon: #757575;
 }

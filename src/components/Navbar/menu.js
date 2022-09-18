@@ -1,19 +1,18 @@
-
 export const menu = [
     {
-        icon: 'MdDashboard',
+        icon: 'MdOutlineSpaceDashboard',
         title: 'Главная',
         url: '/',
         desc: 'Главная'
     },
     {
-        icon: 'MdDashboard',
+        icon: 'AiOutlineInfoCircle',
         title: 'О нас',
         url: '/about',
         desc: 'О нас'
     },
     {
-        icon: 'Администратор',
+        icon: 'MdOutlineAdminPanelSettings',
         title: 'Администратор',
         url: '/admin',
         desc: 'Администратор'
