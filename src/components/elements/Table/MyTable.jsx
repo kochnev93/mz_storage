@@ -14,10 +14,10 @@ export const MyTable = (props) => {
     bodyContent = content.map((item, index) => 
     <tr>
       <td>{index + 1}</td>
-      <td>{item.storage}</td>
-      <td>{item.category}</td>
-      <td>{item.name}</td>
-      <td>{item.serial}</td>
+      <td>{item.warehouse_product}</td>
+      <td>{item.category_product}</td>
+      <td>{item.name_product}</td>
+      <td>{item.sn_product}</td>
       <td>{item.count}</td>
       <td>Action</td>
     </tr>

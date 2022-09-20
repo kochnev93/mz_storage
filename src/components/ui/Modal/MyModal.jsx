@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
+import authHeader from '../../../services/auth-header';
 
 //Styles
 import styles from './myModal.module.scss';
@@ -9,6 +10,7 @@ import { AiOutlineClose } from 'react-icons/Ai';
 import MyDropdown from './../Dropdown/MyDropdown.jsx';
 import MyInput from './../Input/MyInput.jsx';
 import MyButton from '../Buttons/ButtonSend.jsx';
+
 
 function Modal({ active, setActive }) {
   const [errors, setErrors] = useState(false);
@@ -109,6 +111,7 @@ function Modal({ active, setActive }) {
       setIsLoading(true);
       let myHeaders = new Headers();
       myHeaders.append('content-type', 'application/json');
+      myHeaders.append('Authorization', `${ authHeader() }`);
 
       let data = JSON.stringify({
         name: product,
@@ -190,7 +193,7 @@ function Modal({ active, setActive }) {
             <form className={styles.myModal_form}>
               <div className={styles.myModal_form_itemsContainer}>
                 <MyDropdown
-                  id="warehouse"
+                  id="addProductModal_warehouse"
                   title="Склад"
                   placeholder="Выберите склад"
                   multiple={false}
@@ -201,7 +204,7 @@ function Modal({ active, setActive }) {
                 />
 
                 <MyDropdown
-                  id="category"
+                  id="addProductModal_category"
                   title="Категория"
                   placeholder="Выберите категорию"
                   multiple={false}
