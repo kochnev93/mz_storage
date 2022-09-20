@@ -19,7 +19,34 @@ class MyDropdown extends Component {
       multiple: props.multiple,
       isLoaded: false,
       localStorageCheckedOptions: props.local,
-      options: []
+      options: [
+        {
+          id: 1,
+          title: 'Бух',
+          isCheked: false
+        },
+        {
+          id: 2,
+          title: 'ССС',
+          isCheked: false
+        },
+        {
+          id: 3,
+          title: 'ЙЙЙ',
+          isCheked: false
+        },
+        {
+          id: 4,
+          title: 'ВВВ',
+          isCheked: false
+        },
+        {
+          id: 5,
+          title: 'БАААух',
+          isCheked: false
+        },
+      ],
+      //options: []
     };
 
     this.openDropdown = this.openDropdown.bind(this);
@@ -27,11 +54,41 @@ class MyDropdown extends Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
-    this.getContent(this.state.id);
+    //this.getContent(this.state.id);
+    this.testUpdate()
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+
+  testUpdate = () => {
+    const data = this.state.options;
+
+    //const checkedOptions = this.state.localStorageCheckedOptions;
+    const checkedOptions = JSON.parse( localStorage.getItem(`mz_${this.state.id}`) );
+    const fetchOptions = data;
+    console.log(checkedOptions);
+    console.log(!!checkedOptions);
+
+    if(checkedOptions){
+      checkedOptions.forEach((item, index) => {
+        const indexOption = fetchOptions.findIndex((fetchItem) => {
+          console.log(item);
+          if( item.id === fetchItem.id )return true;
+          return false;
+        });
+        console.log(indexOption);
+        fetchOptions[indexOption].isCheked = true;
+      });
+    }
+
+    this.setState({
+      isLoaded: true,
+      selectOptionAnyone: true,
+      options: fetchOptions
+    });
   }
 
   getContent = (id) => {
@@ -43,29 +100,36 @@ class MyDropdown extends Component {
       headers: myHeaders,
     };
 
-    fetch(`http://localhost:3001/api/get_${id.split('_')[1]}`, requestOptions)
-      .then((res) => {
+    // fetch(`http://localhost:3001/api/get_${id.split('_')[1]}`, requestOptions)
+    //   .then((res) => {
 
-        if (!res.ok) {
-          throw new Error(`${res.status}. ${res.statusText}`);
-        } else {
-          return res.json();
-        }
-      })
-      .then((result) => {
-        if (!result.error) {
-          if(this.state.localStorageCheckedOptions.length !== 0){
-            //----
-          }
-          this.setState({
-            isLoaded: true,
-            options: result.data
-          });
-        } 
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    //     if (!res.ok) {
+    //       throw new Error(`${res.status}. ${res.statusText}`);
+    //     } else {
+    //       return res.json();
+    //     }
+    //   })
+    //   .then((result) => {
+    //     if (!result.error) {
+    //       const checkedOptions = this.state.localStorageCheckedOptions;
+    //       const fetchOptions = result.data;
+
+    //       if(checkedOptions.length !== 0){
+    //         checkedOptions.forEach((item, index) => {
+    //           const indexOption = fetchOptions.findIndex((fetchItem, fetchIndex) => item.id === fetchItem.id);
+    //           fetchOptions[indexOption].isCheked = true;
+    //         });
+    //       }
+
+    //       this.setState({
+    //         isLoaded: true,
+    //         options: result.data
+    //       });
+    //     } 
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }
 
   isSelectedAll = (arr) => {
