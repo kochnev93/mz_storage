@@ -18,68 +18,7 @@ class MyDropdown extends Component {
       selectOptionAll: false,
       multiple: props.multiple,
       isLoaded: false,
-      // options: [
-      //   {
-      //     id: 1,
-      //     title: 'Дунайский',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 2,
-      //     title: 'Крыленко',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 3,
-      //     title: 'Яхтенная',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 4,
-      //     title: 'Бухарестская',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 5,
-      //     title: 'Победы',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 6,
-      //     title: 'Лаврики',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 7,
-      //     title: 'Стачек 28',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 8,
-      //     title: 'Стачек 92',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 9,
-      //     title: 'Славы 21',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 10,
-      //     title: 'Славы 52',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 11,
-      //     title: 'Оптиков',
-      //     isCheked: false,
-      //   },
-      //   {
-      //     id: 12,
-      //     title: 'Пятилеток',
-      //     isCheked: false,
-      //   },
-      // ],
+      localStorageCheckedOptions: props.local,
       options: []
     };
 
@@ -104,7 +43,7 @@ class MyDropdown extends Component {
       headers: myHeaders,
     };
 
-    fetch(`http://localhost:3001/api/get_${id}`, requestOptions)
+    fetch(`http://localhost:3001/api/get_${id.split('_')[1]}`, requestOptions)
       .then((res) => {
 
         if (!res.ok) {
@@ -115,6 +54,9 @@ class MyDropdown extends Component {
       })
       .then((result) => {
         if (!result.error) {
+          if(this.state.localStorageCheckedOptions.length !== 0){
+            //----
+          }
           this.setState({
             isLoaded: true,
             options: result.data
@@ -220,6 +162,10 @@ class MyDropdown extends Component {
       selectOptionAll: selectedAll,
       selectOptionAnyone: selectedAnyone
     });
+
+    if(this.props.changeValue){
+      this.getSelectedOptions();
+    }
         
   };
 
@@ -238,6 +184,11 @@ class MyDropdown extends Component {
       selectOptionAll: false,
       selectOptionAnyone: false
     });
+
+    if(this.props.changeValue){
+      this.getSelectedOptions();
+    }
+
   };
 
   searchOption = (e) => {
@@ -256,7 +207,7 @@ getSelectedOptions = () => {
   let options = this.state.options.filter( option => {
     return option.isCheked
   });
-  
+
   this.props.changeValue(options);
 }
 

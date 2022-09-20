@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 import MyInput from '../../components/ui/Input/MyInput.jsx';
-import userAuthorization from '../../services/user-authorization.js';
+//import userAuthorization from '../../services/user-authorization.js';
 
 import styles from './Auth.module.scss';
 import 'regenerator-runtime/runtime';
 
 // Redux
-//import { useDispatch } from 'react-redux';
-//import { setUser } from '../../features/users/userSlice.js';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../features/users/userSlice.js';
 
 export const Auth = () => {
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const frompage = location.state?.from?.pathname || '/';
@@ -119,18 +119,7 @@ export const Auth = () => {
     const isValidate = validateForm();
 
     if (isValidate) {
-      const auth = await userAuthorization(login, password);
-      
-      console.log(auth);
-
-      if (auth.isAuth) {
-        navigate(frompage);
-      } else {
-        setError(true);
-        setErrorMessage(auth.error);
-      }
-
-      //load();
+      load();
       //loginFetch();
       // fetch('http://localhost:3001/api/auth', requestOptions)
       //   .then((res) => {
