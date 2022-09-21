@@ -28,6 +28,7 @@ export const Table = () => {
   useEffect(() => {
     setWarehouse(JSON.parse(localStorage.getItem('mz_dashboard_warehouse')));
     setCategory(JSON.parse(localStorage.getItem('mz_dashboard_category')));
+    setData(JSON.parse(localStorage.getItem('mz_dashboard_data')));
   }, []);
 
   useEffect(() => {
@@ -94,10 +95,12 @@ export const Table = () => {
       .then(result => {
         console.log(result);
         setData(result);
+        localStorage.setItem('mz_dashboard_data', JSON.stringify(result));
       })
       .catch((err) => {
         console.log(err);
       });
+
   };
 
   return (
