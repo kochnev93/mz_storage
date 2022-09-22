@@ -10,6 +10,8 @@ import authHeader from '../../services/auth-header';
 
 
 export const Table = () => {
+
+  // Dashboard
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
@@ -68,12 +70,11 @@ export const Table = () => {
   };
 
   const fetchData = async () => {
-
     let myHeaders = new Headers();
     myHeaders.append('content-type', 'application/json');
-    myHeaders.append('Authorization', `${ authHeader() }`);
+    myHeaders.append('Authorization', `${authHeader()}`);
 
-    const data = JSON.stringify( {warehouse: warehouse, category: category} );
+    const data = JSON.stringify({ warehouse: warehouse, category: category });
 
     let requestOptions = {
       //mode: 'no-cors',
@@ -92,7 +93,7 @@ export const Table = () => {
           return res.json();
         }
       })
-      .then(result => {
+      .then((result) => {
         console.log(result);
         setData(result);
         localStorage.setItem('mz_dashboard_data', JSON.stringify(result));
@@ -100,11 +101,11 @@ export const Table = () => {
       .catch((err) => {
         console.log(err);
       });
-
   };
 
   return (
     <div className="dashboard">
+    
       <form className={styles.form_dashboard_filter}>
         <div>
           <MyDropdown
@@ -138,7 +139,10 @@ export const Table = () => {
         </div>
       </form>
 
-      <MyTable titleColumn={titleColumn} content={data} />
+      <MyTable
+        titleColumn={titleColumn}
+        content={data}
+      />
     </div>
   );
 };

@@ -16,6 +16,10 @@
       height: 20px;
       fill: #a5a5a5;
 
+      path{
+        pointer-events: none;
+      }
+
       &:not(:last-child){
         margin-right: 5px;
       }
