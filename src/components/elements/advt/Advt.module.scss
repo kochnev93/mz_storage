@@ -1,0 +1,38 @@
+.advt_popup{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    position: fixed;
+    z-index: 9999;
+    top: 10px;
+    left: 0;
+    right: 0;
+    width: 500px; 
+    background-color: #ff8686;
+    color: white;
+    margin: 0 auto;
+    border-radius: 5px;
+    padding: 20px;
+
+
+    -webkit-transform: translateY(-60%);
+    -moz-transform: translateY(-60%);
+    -ms-transform: translateY(-60%);
+    transform: translateY(-60%);
+    opacity: 0;
+    -webkit-transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
+    -moz-transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
+    transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
+
+    &.active{
+
+
+        -webkit-transform: translateY(0);
+        -moz-transform: translateY(0);
+        -ms-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+
+    }
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { RequireAuth } from './hoc/RequireAuth.jsx';
+import Advt from './components/elements/advt/Advt.jsx';
 
 //Pages
 import { About } from './pages/About/About.jsx';
@@ -17,9 +18,11 @@ import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
 
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+      <Advt />
       <BrowserRouter>
         <Routes>
           <Route

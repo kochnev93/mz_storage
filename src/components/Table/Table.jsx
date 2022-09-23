@@ -16,7 +16,7 @@ export const Table = () => {
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [titleColumn, setTitleColumn] = useState([
     '№ п/п',
     'Склад',
