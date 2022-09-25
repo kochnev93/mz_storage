@@ -1,49 +1,39 @@
+import React, {useState, useEffect} from 'react';
 import cx from 'classnames';
-import React, {useState, useCallback, useEffect} from 'react';
 import styles from './Advt.module.scss';
 import { AiOutlineClose } from 'react-icons/Ai';
 
 
 
 function Advt() {
-const [state, setState] = useState({
-    active: false,
-    error: false,
-    errorMessage: ''
-});
+const [active, setActive] = useState(false);
+const [errorMessage, seterrorMessage] = useState('');
+
 
 useEffect(() => {
-    ping();
+    const interval = setInterval(() => {ping()}, 30000);
+    return () => clearInterval(interval);
 }, []);
 
-const ping = useCallback(() => {
-    fetch(`http://localhost:3001`)
-    .then(res => res.ok ? res : Promise.reject(res))
+const ping = () => {
+    fetch(`http://localhost:3001/api/test`)
+    .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
-        setState({
-            active: false,
-            error: false,
-            errorMessage: ''
-        });
+        setActive(false);
+        seterrorMessage('');
     })
     .catch((err) => {
-        setState({
-            active: true,
-            error: true,
-            errorMessage: `Нет соединения с сервером. ${err}`
-        });
+        setActive(true);
+        seterrorMessage(`Нет соединения с сервером. ${err}`);
     });
-}, [state.error])
-
-
-setInterval(ping(), 5000);
+}
 
   return (
-    <div className={cx(styles.advt_popup, {[styles.active]: state.active})}>
+    <div className={cx(styles.advt_popup, {[styles.active]: active})}>
         <div className={styles.advt_text}>
-            {state.errorMessage}
+            {errorMessage}
         </div>
-        <AiOutlineClose onClick={() => {setState({active: false})}}/>
+        <AiOutlineClose onClick={() => {setActive(false)}}/>
     </div>
   );
 }

@@ -3,13 +3,11 @@ import styles from './header.module.scss';
 import cx from 'classnames';
 
 // Redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setHeader } from '../../features/header/headerSlice';
 import { removeUser } from '../../features/users/userSlice'; 
-import { useSelector } from 'react-redux';
 
 import { MdOutlineMenu } from 'react-icons/Md';
-import { FaUser } from 'react-icons/Fa';
 import { IoMdExit } from 'react-icons/Io';
 
 

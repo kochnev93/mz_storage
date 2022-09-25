@@ -232,7 +232,7 @@ class MyDropdown extends Component {
       return option;
     });
 
-    this.props.setReset(false);
+    this.props.setReset();
 
     this.setState({
       options: newOptions,
