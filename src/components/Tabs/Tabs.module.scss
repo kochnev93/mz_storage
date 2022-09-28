@@ -1,0 +1,39 @@
+.tabs {
+  min-height: 500px;
+}
+
+.tabs_header {
+  margin-bottom: 30px;
+}
+
+.tabs_menu {
+  display: flex;
+  list-style: none;
+
+  li {
+    cursor: pointer;
+    padding: 8px 12px;
+    transition: all 0.3s ease;
+    background-color: rgba(0,0,0,.07);
+    border-radius: var(--border-radius);
+  }
+
+  li:not(:last-child){
+    margin-right: 5px;
+  }
+
+  li.active {
+    background-color: var(--main-color);
+    color: white;
+  }
+
+}
+
+.tabs_item {
+  display: none;
+  transition: all 0.3s ease;
+  &.active {
+    display: block;
+    transition: all 0.3s ease;
+  }
+}

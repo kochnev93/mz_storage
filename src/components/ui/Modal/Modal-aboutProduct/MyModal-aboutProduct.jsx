@@ -22,6 +22,8 @@ import MyDropdown from '../../Dropdown/MyDropdown.jsx';
 import MyInput from '../../Input/MyInput.jsx';
 import MyButton from '../../Buttons/ButtonSend.jsx';
 import Modal from '../MyModal2.jsx';
+import { Tabs } from '../../../Tabs/Tabs.jsx';
+import { Tab } from '../../../Tabs/Tab.jsx';
 
 function ModalAboutProduct() {
   const dispatch = useDispatch();
@@ -95,65 +97,69 @@ function ModalAboutProduct() {
           : 'Редактирование разрешено'
       }
     >
-      <div className={styles.modalAbout_container}>
-        <div className={styles.modalAbout_form}>
-          <div className={styles.modalAbout_formItem}>
-            <MyInput
-              title={'ID'}
-              value={data?.id}
-              disabled={true}
-              validation={true}
-            />
-          </div>
+      <Tabs>
+        <Tab label={'Общее'}>
+          <div className={styles.modalAbout_form}>
+            <div className={styles.modalAbout_formItem}>
+              <MyInput
+                title={'ID'}
+                value={data?.id}
+                disabled={true}
+                validation={true}
+              />
+            </div>
 
-          <div className={styles.modalAbout_formItem}>
-            <MyInput
-              title={'Наименование'}
-              value={data?.name}
-              disabled={true}
-              validation={true}
-            />
-          </div>
+            <div className={styles.modalAbout_formItem}>
+              <MyInput
+                title={'Наименование'}
+                value={data?.name}
+                disabled={true}
+                validation={true}
+              />
+            </div>
 
-          <div className={styles.modalAbout_formItem}>
-            <MyInput
-              title={'Категория'}
-              value={data?.category_id}
-              disabled={true}
-              validation={true}
-            />
-          </div>
+            <div className={styles.modalAbout_formItem}>
+              <MyInput
+                title={'Категория'}
+                value={data?.category_id}
+                disabled={true}
+                validation={true}
+              />
+            </div>
 
-          <div className={styles.modalAbout_formItem}>
-            <MyInput
-              title={'Склад'}
-              value={data?.warehouse_id}
-              disabled={true}
-              validation={true}
-            />
-          </div>
+            <div className={styles.modalAbout_formItem}>
+              <MyInput
+                title={'Склад'}
+                value={data?.warehouse_id}
+                disabled={true}
+                validation={true}
+              />
+            </div>
 
-          <div className={styles.modalAbout_formItem}>
-            <MyInput
-              title={'SN'}
-              value={data?.sn}
-              disabled={true}
-              validation={true}
-            />
+            <div className={styles.modalAbout_formItem}>
+              <MyInput
+                title={'SN'}
+                value={data?.sn}
+                disabled={true}
+                validation={true}
+              />
+            </div>
           </div>
-        </div>
+        </Tab>
+        <Tab label={'История'}>
+          <div>
+            <ul>
+              <li>Создан 20.20.2020</li>
+              <li>Создал: Кочнев Антон</li>
+              <li>Последнеее обновление: 10.10.2022</li>
+            </ul>
+          </div>
+        </Tab>
+        <Tab label={'Комментарии'}>
+          Скоро здесь будут комментарии..
+        </Tab>
+      </Tabs>
 
-        <div>
-          <h4>Информация</h4>
-          <ul>
-            <li>Создан 20.20.2020</li>
-            <li>Создал: Кочнев Антон</li>
-            <li>Последнеее обновление: 10.10.2022</li>
-          </ul>
-          <button disabled={disabled}>Редактировать</button>
-          <button>История</button>
-        </div>
-      </div>
     </Modal>
   );
 }
