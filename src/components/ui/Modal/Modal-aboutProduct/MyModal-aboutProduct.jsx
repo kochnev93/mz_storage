@@ -3,12 +3,19 @@ import cx from 'classnames';
 
 // Hooks
 import authHeader from '../../../../services/auth-header';
+import { useAuth } from '../../../../hooks/use-auth';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { setActive } from '../../../../features/modal/about-productSlice';
+import {
+  setActive,
+  setErrors,
+  setIsLoading,
+  setMessage,
+} from '../../../../features/modal/about-productSlice';
 
 //Styles
+import styles from './MyModal-aboutProduct.module.scss';
 
 // Components
 import MyDropdown from '../../Dropdown/MyDropdown.jsx';
@@ -18,9 +25,16 @@ import Modal from '../MyModal2.jsx';
 
 function ModalAboutProduct() {
   const dispatch = useDispatch();
+  const user = useAuth();
+  console.log(user);
 
+  // Local State
   const [data, setData] = useState(null);
+  const [disabled, setDisabled] = useState(
+    user.role === 'admin' ? false : true
+  );
 
+  // Redux
   const active = useSelector((state) => state.modal_about_product.active);
   const product = useSelector((state) => state.modal_about_product.product_id);
   const errors = useSelector((state) => state.modal_about_product.errors);
@@ -47,17 +61,18 @@ function ModalAboutProduct() {
 
     fetch(`http://localhost:3001/api/get_product/${product}`, requestOptions)
       .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          let error = new Error(res.statusText);
-          error.response = res;
-          throw error;
-        }
+        return res.json();
       })
       .then((result) => {
         console.log(result);
-        
+
+        if (result.errorMessage) {
+          dispatch(setMessage({ message: result.errorMessage, errors: true }));
+          throw Error(result.errorMessage);
+        }
+
+        setData(result.data);
+        dispatch(setIsLoading({ isLoading: false }));
       })
       .catch((err) => {
         console.log(err);
@@ -74,8 +89,71 @@ function ModalAboutProduct() {
       message={message}
       errors={errors}
       isLoading={isLoading}
+      footer={
+        disabled
+          ? 'Редактирование запрещено. Обратитесь к администратору'
+          : 'Редактирование разрешено'
+      }
     >
-      <h1>Товар с id = {product}</h1>
+      <div className={styles.modalAbout_container}>
+        <div className={styles.modalAbout_form}>
+          <div className={styles.modalAbout_formItem}>
+            <MyInput
+              title={'ID'}
+              value={data?.id}
+              disabled={true}
+              validation={true}
+            />
+          </div>
+
+          <div className={styles.modalAbout_formItem}>
+            <MyInput
+              title={'Наименование'}
+              value={data?.name}
+              disabled={true}
+              validation={true}
+            />
+          </div>
+
+          <div className={styles.modalAbout_formItem}>
+            <MyInput
+              title={'Категория'}
+              value={data?.category_id}
+              disabled={true}
+              validation={true}
+            />
+          </div>
+
+          <div className={styles.modalAbout_formItem}>
+            <MyInput
+              title={'Склад'}
+              value={data?.warehouse_id}
+              disabled={true}
+              validation={true}
+            />
+          </div>
+
+          <div className={styles.modalAbout_formItem}>
+            <MyInput
+              title={'SN'}
+              value={data?.sn}
+              disabled={true}
+              validation={true}
+            />
+          </div>
+        </div>
+
+        <div>
+          <h4>Информация</h4>
+          <ul>
+            <li>Создан 20.20.2020</li>
+            <li>Создал: Кочнев Антон</li>
+            <li>Последнеее обновление: 10.10.2022</li>
+          </ul>
+          <button disabled={disabled}>Редактировать</button>
+          <button>История</button>
+        </div>
+      </div>
     </Modal>
   );
 }

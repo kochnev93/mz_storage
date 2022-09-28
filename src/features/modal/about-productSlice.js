@@ -6,7 +6,7 @@ const initialState = {
     errors: false,
     message: '',
     reset: false,
-    isLoading: false,
+    isLoading: true,
 }
 
 export const aboutProductSlice = createSlice({
@@ -22,6 +22,7 @@ export const aboutProductSlice = createSlice({
         },
         setMessage: (state, action) => {
             state.message = action.payload.message
+            state.errors = action.payload.errors
         },
         setReset: (state, action) => {
             state.reset = action.payload.reset

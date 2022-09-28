@@ -11,11 +11,12 @@ import styles from './MyInput.module.scss';
         placeholder=" "
         onChange={(e) => {props.changeValue(e.target.value)}}
         value = {props.value}
+        disabled = {props.disabled || false}
       />
-      <label className={styles.myInput_label}>{props.title}</label>
+      <label className={styles.myInput_label}>{props.title || 'Заголовок'}</label>
       <fieldset className={ cx(styles.myInput_fieldset, {[styles.error]: !props.validation}) }>
         <legend>
-          <span>{props.title}</span>
+          <span>{props.title || 'Заголовок'}</span>
         </legend>
       </fieldset>
     </div>
