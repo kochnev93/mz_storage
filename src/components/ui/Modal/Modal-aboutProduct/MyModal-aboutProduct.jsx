@@ -24,6 +24,8 @@ import MyButton from '../../Buttons/ButtonSend.jsx';
 import Modal from '../MyModal2.jsx';
 import { Tabs } from '../../../Tabs/Tabs.jsx';
 import { Tab } from '../../../Tabs/Tab.jsx';
+import { Chat } from '../../../Chat/Chat.jsx';
+
 
 function ModalAboutProduct() {
   const dispatch = useDispatch();
@@ -156,7 +158,8 @@ function ModalAboutProduct() {
           </div>
         </Tab>
         <Tab label={'Комментарии'}>
-          Скоро здесь будут комментарии..
+          {/* Скоро здесь будут комментарии.. */}
+          <Chat />
         </Tab>
       </Tabs>
 

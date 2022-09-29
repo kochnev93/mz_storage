@@ -17,6 +17,15 @@ export const MyTable = ({ titleColumn, content = null }) => {
   let captionCount;
   let bodyContent;
 
+  content = [{
+    warehouse_title: 'warehouse',
+    category_title: 'category',
+    name: 'name',
+    sn: 'sn',
+    count: 123,
+    id: 999
+  }];
+
   const getEmptyLine = () => {
     return (
       <tr className={styles.empty_line}>
@@ -79,3 +88,14 @@ export const MyTable = ({ titleColumn, content = null }) => {
     </>
   );
 };
+
+MyTable.defaultProps = {
+  content: [{
+    warehouse_title: 'warehouse',
+    category_title: 'category',
+    name: 'name',
+    sn: 'sn',
+    count: 123,
+    id: 999
+  }]
+}

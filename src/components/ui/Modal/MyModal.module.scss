@@ -26,6 +26,7 @@
 .myModal {
   background-color: white;
   min-width: 500px;
+  min-height: 500px;
   max-height: 800px;
   border-radius: 10px;
 
@@ -61,6 +62,9 @@
 
 .myModal_body {
   padding: 20px;
+  max-height: 500px;
+  max-width: 500px;
+  overflow-y: scroll;
 
   &.loading {
     background-color: #f1f1f1;
