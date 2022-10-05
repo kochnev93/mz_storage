@@ -13,3 +13,12 @@
 .modalAbout_formItem{
     margin-bottom: 20px;
 }
+
+.history_list{
+    list-style: none;
+
+    >li{
+        margin-bottom: 15px;
+        border-bottom: 1px solid grey;
+    }
+}

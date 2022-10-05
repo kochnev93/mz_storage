@@ -42,8 +42,9 @@ export const Chat = (props) => {
 
     return(
         <div className={styles.chat}>
-            <ListMessage messages = {messages}/>
             <SendMessage onClick={sendComment} onChange={setComment} value={comment}/>
+            <ListMessage messages = {messages}/>
+            
         </div>
     );
 }

@@ -26,7 +26,6 @@ import { Tabs } from '../../../Tabs/Tabs.jsx';
 import { Tab } from '../../../Tabs/Tab.jsx';
 import { Chat } from '../../../Chat/Chat.jsx';
 
-
 function ModalAboutProduct() {
   const dispatch = useDispatch();
   const user = useAuth();
@@ -34,6 +33,7 @@ function ModalAboutProduct() {
 
   // Local State
   const [data, setData] = useState(null);
+  const [history, setHistory] = useState(null);
   const [disabled, setDisabled] = useState(
     user.role === 'admin' ? false : true
   );
@@ -49,6 +49,7 @@ function ModalAboutProduct() {
   useEffect(() => {
     if (product !== null) {
       fetchData(product);
+      fetchHistory(product);
     }
   }, [product]);
 
@@ -81,6 +82,63 @@ function ModalAboutProduct() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const fetchHistory = (product) => {
+    let myHeaders = new Headers();
+    myHeaders.append('content-type', 'application/json');
+    myHeaders.append('Authorization', `${authHeader()}`);
+
+    let requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+    };
+
+    fetch(
+      `http://localhost:3001/api/get_product_history/${product}`,
+      requestOptions
+    )
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        console.log(result);
+
+        if (result.errorMessage) {
+          dispatch(setMessage({ message: result.errorMessage, errors: true }));
+          throw Error(result.errorMessage);
+        }
+
+        setHistory(result.data);
+        dispatch(setIsLoading({ isLoading: false }));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getHistory = () => {
+    if (history) {
+      return history.map((item) => {
+        return (
+          <li>
+            <div>{item.date}</div>
+            <p>{item.text}</p>
+            <details>
+              <summary>Изменения</summary>
+              <ul>
+                <li>Наименование: {item.change.product_name}</li>
+                <li>Категория: {item.change.category_title}</li>
+                <li>Склад: {item.change.warehouse_title}</li>
+                <li>s/n: {item.change.product_sn}</li>
+              </ul>
+            </details>
+          </li>
+        );
+      });
+    } else {
+      return <li>Ничего не найдено...</li>;
+    }
   };
 
   return (
@@ -150,11 +208,7 @@ function ModalAboutProduct() {
         </Tab>
         <Tab label={'История'}>
           <div>
-            <ul>
-              <li>Создан 20.20.2020</li>
-              <li>Создал: Кочнев Антон</li>
-              <li>Последнеее обновление: 10.10.2022</li>
-            </ul>
+            <ul className={styles.history_list}>{getHistory()}</ul>
           </div>
         </Tab>
         <Tab label={'Комментарии'}>
@@ -162,7 +216,6 @@ function ModalAboutProduct() {
           <Chat />
         </Tab>
       </Tabs>
-
     </Modal>
   );
 }
