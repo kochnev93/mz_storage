@@ -2,21 +2,27 @@ import React, { useState } from 'react';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { setErrors, setReset, setMessage, setIsLoading, setActive } from '../../../../features/modal/add-productSlice';
+import {
+  setErrors,
+  setReset,
+  setMessage,
+  setIsLoading,
+  setActive,
+} from '../../../../features/modal/add-productSlice';
 
 // Hooks
 import authHeader from '../../../../services/auth-header';
 
 //Styles
 import styles from '../myModal.module.scss';
+import styles2 from './Modal-addProduct.module.scss';
 
 // Components
 import MyDropdown from '../../Dropdown/MyDropdown.jsx';
 import MyInput from '../../Input/MyInput.jsx';
 import MyButton from '../../Buttons/ButtonSend.jsx';
 import Modal from '../MyModal2.jsx';
-
-
+import Checkbox from '../../Checkbox/Checkbox.jsx';
 
 function ModalAddProduct() {
   const dispatch = useDispatch();
@@ -27,20 +33,25 @@ function ModalAddProduct() {
   const reset = useSelector((state) => state.modal_add_product.reset);
   const isLoading = useSelector((state) => state.modal_add_product.isLoading);
 
-  const [warehouse, setWarehouse] = useState([]);
-  const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
+
+  const [unit, setUnit] = useState([]);
+  const [validationUnit, setValidationUnit] = useState(true);
+
   const [product, setProduct] = useState('');
   const [validationProduct, setValidationProduct] = useState(true);
-  const [serialNumber, setSerialNumber] = useState('');
-  const [validationSerialNumber, setValidationSerialNumber] = useState(true);
+
+  const [comment, setComment] = useState('');
+  const [validationComment, setValidationComment] = useState(true);
+
+  const [snAccounting, setSnAccounting] = useState(false);
 
   const resetForm = (e) => {
     e.preventDefault();
 
-    setWarehouse([]);
-    setValidationWarehouse(true);
+    setUnit([]);
+    setValidationUnit(true);
 
     setCategory([]);
     setValidationCategory(true);
@@ -48,22 +59,22 @@ function ModalAddProduct() {
     setProduct('');
     setValidationProduct(true);
 
-    setSerialNumber('');
-    setValidationSerialNumber(true);
+    setComment('');
+    setValidationComment(true);
 
-    dispatch( setMessage({message: ''}) );
-    dispatch( setErrors({errors: false}) );
-    dispatch( setReset({reset: true}) );
+    dispatch(setMessage({ message: '' }));
+    dispatch(setErrors({ errors: false }));
+    dispatch(setReset({ reset: true }));
   };
 
   const resetValidation = () => {
-    setValidationWarehouse(true);
+    setValidationUnit(true);
     setValidationCategory(true);
     setValidationProduct(true);
-    setValidationSerialNumber(true);
+    setValidationComment(true);
 
-    dispatch( setMessage({message: ''}) );
-    dispatch( setErrors({errors: false}) );
+    dispatch(setMessage({ message: '' }));
+    dispatch(setErrors({ errors: false }));
   };
 
   const validateAddForm = () => {
@@ -78,14 +89,9 @@ function ModalAddProduct() {
     };
 
     setProduct(delSpaseStr(product));
-    setSerialNumber(delSpaseStr(serialNumber));
+    setComment(delSpaseStr(comment));
 
     let countError = 0;
-
-    if (!validationItem(warehouse)) {
-      setValidationWarehouse(false);
-      countError++;
-    }
 
     if (!validationItem(category)) {
       setValidationCategory(false);
@@ -97,17 +103,20 @@ function ModalAddProduct() {
       countError++;
     }
 
-    if (!validationItem(serialNumber)) {
-      setValidationSerialNumber(false);
+    if (!validationItem(comment)) {
+      setValidationComment(false);
       countError++;
     }
 
     if (countError == 0) {
       return true;
     } else {
-
-      dispatch( setMessage({message: `Заполните поля, количество ошибок: ${countError}`}) );
-      dispatch( setErrors({errors: true}) );
+      dispatch(
+        setMessage({
+          message: `Заполните поля, количество ошибок: ${countError}`,
+        })
+      );
+      dispatch(setErrors({ errors: true }));
 
       return false;
     }
@@ -117,7 +126,7 @@ function ModalAddProduct() {
     e.preventDefault();
 
     if (validateAddForm()) {
-      dispatch( setIsLoading({isLoading: true}) );
+      dispatch(setIsLoading({ isLoading: true }));
 
       let myHeaders = new Headers();
       myHeaders.append('content-type', 'application/json');
@@ -125,8 +134,7 @@ function ModalAddProduct() {
 
       let data = JSON.stringify({
         name: product,
-        sn: serialNumber,
-        warehouse: warehouse[0],
+        sn: comment,
         category: category[0],
       });
 
@@ -149,20 +157,20 @@ function ModalAddProduct() {
         })
         .then((result) => {
           if (result.error) {
-            dispatch( setMessage({message: result.error}) );
-            dispatch( setErrors({errors: true}) );
+            dispatch(setMessage({ message: result.error }));
+            dispatch(setErrors({ errors: true }));
           } else {
-            dispatch( setMessage({message: result.message}) );
+            dispatch(setMessage({ message: result.message }));
           }
 
           setTimeout(() => {
-            dispatch( setIsLoading({isLoading: false}) );
+            dispatch(setIsLoading({ isLoading: false }));
           }, 100);
         })
         .catch((err) => {
-          dispatch( setMessage({message: 'Ошибка сервера'}) );
-          dispatch( setErrors({errors: true}) );
-          dispatch( setIsLoading({isLoading: false}) );
+          dispatch(setMessage({ message: 'Ошибка сервера' }));
+          dispatch(setErrors({ errors: true }));
+          dispatch(setIsLoading({ isLoading: false }));
         });
     }
   };
@@ -170,7 +178,9 @@ function ModalAddProduct() {
   return (
     <Modal
       active={active}
-      setActive = { () => { dispatch( setActive({active: false}) ) } }
+      setActive={() => {
+        dispatch(setActive({ active: false }));
+      }}
       title="Добавить товар"
       message={message}
       errors={errors}
@@ -179,17 +189,6 @@ function ModalAddProduct() {
       <form className={styles.myModal_form}>
         <div className={styles.myModal_form_itemsContainer}>
           <MyDropdown
-            id="addProductModal_warehouse"
-            title="Склад"
-            placeholder="Выберите склад"
-            multiple={false}
-            changeValue={setWarehouse}
-            validation={validationWarehouse}
-            reset={reset}
-            setReset={() => dispatch( setReset({reset: false}) ) }
-          />
-
-          <MyDropdown
             id="addProductModal_category"
             title="Категория"
             placeholder="Выберите категорию"
@@ -197,7 +196,18 @@ function ModalAddProduct() {
             changeValue={setCategory}
             validation={validationCategory}
             reset={reset}
-            setReset={() => dispatch( setReset({reset: false}) ) }
+            setReset={() => dispatch(setReset({ reset: false }))}
+          />
+
+          <MyDropdown
+            id="addProductModal_unit"
+            title="Единица измерения"
+            placeholder="Единица измерения"
+            multiple={false}
+            changeValue={setUnit}
+            validation={validationUnit}
+            reset={reset}
+            setReset={() => dispatch(setReset({ reset: false }))}
           />
 
           <MyInput
@@ -210,10 +220,43 @@ function ModalAddProduct() {
 
           <MyInput
             tepe="text"
-            title="S/N"
-            changeValue={setSerialNumber}
-            validation={validationSerialNumber}
-            value={serialNumber}
+            title="Комментарий"
+            changeValue={setComment}
+            validation={validationComment}
+            value={comment}
+          />
+
+          <Checkbox
+            id="sn_accounting"
+            title="Серийный учет"
+            onChange={setSnAccounting}
+            checked={snAccounting}
+          />
+        </div>
+
+        <div className={styles2.warning}>
+          {snAccounting &&
+            'Внимание! Вы активировали серийный учет для данного товара. Изменить эту опцию далее будет невозможно.'}
+        </div>
+
+        <div>
+          <h4>Характеристики</h4>
+          <p>Заполните характеристики товара:</p>
+
+          <MyInput
+            tepe="text"
+            title="Диагональ"
+            changeValue={setComment}
+            validation={validationComment}
+            value={comment}
+          />
+
+          <MyInput
+            tepe="text"
+            title="Цвет"
+            changeValue={setComment}
+            validation={validationComment}
+            value={comment}
           />
         </div>
 

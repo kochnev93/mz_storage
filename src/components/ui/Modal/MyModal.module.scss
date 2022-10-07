@@ -62,8 +62,9 @@
 
 .myModal_body {
   padding: 20px;
+  height: 100%;
   max-height: 500px;
-  max-width: 500px;
+  //max-width: 500px;
   overflow-y: scroll;
 
   &.loading {
@@ -98,7 +99,7 @@
 
 .myModal_form_itemsContainer {
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   align-items: start;
   align-self: start;
