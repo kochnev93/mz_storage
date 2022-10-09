@@ -1,7 +1,37 @@
+
 .warning{
     max-width: 100%;
     color: red;
-    word-break: break-all;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+    font-size: 12px;
+    padding: 5px 0;
 }
+
+.form{
+    width: 100%;
+}
+
+.itemsContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    align-items: start;
+    align-self: start;
+    height: auto;
+    box-sizing: border-box;
+  }
+  
+  .buttons {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-top: 20px; 
+  
+    button:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+
+  .property{
+    margin-top: 30px;
+  }

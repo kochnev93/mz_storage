@@ -16,8 +16,9 @@ class MyDropdown extends Component {
       isOpen: false,
       selectOptionAnyone: false, 
       selectOptionAll: false,
-      multiple: props.multiple,
+      multiple: props.multiple || false,
       isLoaded: false,
+      url: null,
       options: [],
     };
 
@@ -26,11 +27,34 @@ class MyDropdown extends Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+    console.log('DID')
+    this.getData(this.state.url)
     this.getContent(this.state.id);
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  getData = (url) => {
+    let myHeaders = new Headers();
+    myHeaders.append('content-type', 'application/json');
+
+    let requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+    };
+
+    fetch(`http://localhost:3001/api/${this.state.url}`, requestOptions)
+      .then((res) => {
+        return res.json();
+      })
+      .then((result) => {
+        console.log(result)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   getContent = (id) => {

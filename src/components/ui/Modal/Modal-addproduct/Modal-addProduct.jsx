@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,10 +12,10 @@ import {
 
 // Hooks
 import authHeader from '../../../../services/auth-header';
+import useFetch from '../../../../hooks/useFetch.js';
 
 //Styles
-import styles from '../myModal.module.scss';
-import styles2 from './Modal-addProduct.module.scss';
+import styles from './Modal-addProduct.module.scss';
 
 // Components
 import MyDropdown from '../../Dropdown/MyDropdown.jsx';
@@ -23,6 +23,7 @@ import MyInput from '../../Input/MyInput.jsx';
 import MyButton from '../../Buttons/ButtonSend.jsx';
 import Modal from '../MyModal2.jsx';
 import Checkbox from '../../Checkbox/Checkbox.jsx';
+import { Property } from './Property/Property.jsx';
 
 function ModalAddProduct() {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ function ModalAddProduct() {
   const [validationComment, setValidationComment] = useState(true);
 
   const [snAccounting, setSnAccounting] = useState(false);
+
 
   const resetForm = (e) => {
     e.preventDefault();
@@ -122,6 +124,7 @@ function ModalAddProduct() {
     }
   };
 
+
   const addProduct = (e) => {
     e.preventDefault();
 
@@ -186,8 +189,9 @@ function ModalAddProduct() {
       errors={errors}
       isLoading={isLoading}
     >
-      <form className={styles.myModal_form}>
-        <div className={styles.myModal_form_itemsContainer}>
+      <form className={styles.form}>
+        <h4>Основная информация</h4>
+        <div className={styles.itemsContainer}>
           <MyDropdown
             id="addProductModal_category"
             title="Категория"
@@ -197,6 +201,9 @@ function ModalAddProduct() {
             validation={validationCategory}
             reset={reset}
             setReset={() => dispatch(setReset({ reset: false }))}
+            onChange={() => {
+              getProperty();
+            }}
           />
 
           <MyDropdown
@@ -234,33 +241,14 @@ function ModalAddProduct() {
           />
         </div>
 
-        <div className={styles2.warning}>
+        <div className={styles.warning}>
           {snAccounting &&
             'Внимание! Вы активировали серийный учет для данного товара. Изменить эту опцию далее будет невозможно.'}
         </div>
 
-        <div>
-          <h4>Характеристики</h4>
-          <p>Заполните характеристики товара:</p>
+        {category.length !== 0 ? <Property category_id={category[0].id}/> : null }
 
-          <MyInput
-            tepe="text"
-            title="Диагональ"
-            changeValue={setComment}
-            validation={validationComment}
-            value={comment}
-          />
-
-          <MyInput
-            tepe="text"
-            title="Цвет"
-            changeValue={setComment}
-            validation={validationComment}
-            value={comment}
-          />
-        </div>
-
-        <div className={styles.myModal_form_buttons}>
+        <div className={styles.buttons}>
           <MyButton
             type="clear"
             action={resetForm}
