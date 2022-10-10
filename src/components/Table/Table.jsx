@@ -107,7 +107,7 @@ export const Table = () => {
     <div className="dashboard">
     
       <form className={styles.form_dashboard_filter}>
-        <div>
+        <div className={styles.MyDropdown}>
           <MyDropdown
             id="dashboard_warehouse"
             title="Склад"
@@ -118,7 +118,7 @@ export const Table = () => {
           />
         </div>
 
-        <div>
+        <div className={styles.MyDropdown}>
           <MyDropdown
             id="dashboard_category"
             title="Категория"
@@ -129,7 +129,7 @@ export const Table = () => {
           />
         </div>
 
-        <div>
+        <div className={styles.MyButton}>
           <MyButton
             type="send"
             action={search}

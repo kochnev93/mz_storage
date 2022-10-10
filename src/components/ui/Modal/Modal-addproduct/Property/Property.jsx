@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-// Hooks
-import useFetch from '../../../../../hooks/useFetch.js';
+import React from 'react';
 
 //Styles
 import styles from './Property.module.scss';
@@ -10,49 +7,30 @@ import styles from './Property.module.scss';
 import MyDropdown from '../../../Dropdown/MyDropdown.jsx';
 import MyInput from '../../../Input/MyInput.jsx';
 
-export function Property({category_id}) {
- console.log(category_id);
+export function Property({property, changeValue}) {
 
-  //const [category, setCategory] = useState(category_id[0].id);
-
-  //const [comment, setComment] = useState('');
-  //const [validationComment, setValidationComment] = useState(true);
-
-//console.log(category);
-  const { data, error, isLoading } = useFetch(`http://localhost:3001/api/get_property/${category_id}`);
-
-  console.log(data);
+  const propertyList = property.map((item, index) => {
+    return(
+      <div className={styles.property_item}>
+        <MyDropdown
+          id={`property_${index}`}
+          title={item.title}
+          placeholder={item.title}
+          multiple={false}
+          options={item.value}
+          validation={true}
+          changeValue={changeValue}
+        />
+      </div>
+    );
+  });
 
 
   return (
-    <></>
-    // <div className={styles.property}>
-    //   <h4>Характеристики</h4>
-
-    //   <MyDropdown
-    //     id="addProductModal_unit"
-    //     url={`get_property/${category}`}
-    //     title="Цвет"
-    //     placeholder="Единица измерения"
-    //     multiple={false}
-        
-    //   />
-
-    //   <MyInput
-    //     tepe="text"
-    //     title="Диагональ"
-    //     changeValue={setComment}
-    //     validation={validationComment}
-    //     value={comment}
-    //   />
-
-    //   <MyInput
-    //     tepe="text"
-    //     title="Цвет"
-    //     changeValue={setComment}
-    //     validation={validationComment}
-    //     value={comment}
-    //   />
-    // </div>
+    <div className={styles.property}>
+      <h4>Характеристики</h4>
+      <p>Заполните характеристики товара. Если каких-то свойств не хватает, то обратитесь к администратору</p>
+      {propertyList}
+    </div>
   );
 }

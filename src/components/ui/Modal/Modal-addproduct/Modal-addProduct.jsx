@@ -49,6 +49,148 @@ function ModalAddProduct() {
   const [snAccounting, setSnAccounting] = useState(false);
 
 
+  const [property, setProperty] = useState(
+    [
+      {
+        id: 1,
+        title: 'Цвет',
+        value: [
+          {
+            id: 5,
+            title: 'Белый',
+            isCheked: false
+          },
+          {
+            id: 6,
+            title: 'Черный',
+            isCheked: false
+          }
+        ],
+      },
+      {
+        id: 2,
+        title: 'Диагональ',
+        value: [
+          {
+            id: 7,
+            title: '23.8',
+            isCheked: false
+          },
+          {
+            id: 8,
+            title: '27',
+            isCheked: false
+          }
+        ],
+      },
+      {
+        id: 3,
+        title: 'Видеовыход',
+        value: [
+          {
+            id: 7,
+            title: 'HDMI',
+            isCheked: false
+          },
+          {
+            id: 8,
+            title: 'VGA',
+            isCheked: false
+          }
+        ],
+      },
+      {
+        id: 3,
+        title: 'Видеовыход',
+        value: [
+          {
+            id: 7,
+            title: 'HDMI',
+            isCheked: false
+          },
+          {
+            id: 8,
+            title: 'VGA',
+            isCheked: false
+          }
+        ],
+      },
+      {
+        id: 3,
+        title: 'Видеовыход',
+        value: [
+          {
+            id: 7,
+            title: 'HDMI',
+            isCheked: false
+          },
+          {
+            id: 8,
+            title: 'VGA',
+            isCheked: false
+          }
+        ],
+      },
+      {
+        id: 3,
+        title: 'Видеовыход',
+        value: [
+          {
+            id: 7,
+            title: 'HDMI',
+            isCheked: false
+          },
+          {
+            id: 8,
+            title: 'VGA',
+            isCheked: false
+          }
+        ],
+      },
+      {
+        id: 3,
+        title: 'Видеовыход',
+        value: [
+          {
+            id: 7,
+            title: 'HDMI',
+            isCheked: false
+          },
+          {
+            id: 8,
+            title: 'VGA',
+            isCheked: false
+          }
+        ],
+      },
+    ]
+  );
+
+  useEffect(() => {
+    if(category.length !== 0){
+      fetch(`http://localhost:3001/api/get_property/${category[0].id}`)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw new Error(res.statusText);
+          }
+        })
+        .then((result) => {
+          if (result.error) {
+            dispatch(setMessage({ message: result.error }));
+            dispatch(setErrors({ errors: true }));
+          } else {
+            setProperty(result.data)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [category]);
+
+
   const resetForm = (e) => {
     e.preventDefault();
 
@@ -184,10 +326,11 @@ function ModalAddProduct() {
       setActive={() => {
         dispatch(setActive({ active: false }));
       }}
-      title="Добавить товар"
+      title="Добавить товар в номенклатуру"
       message={message}
       errors={errors}
       isLoading={isLoading}
+      footer={'Данная форма предназначена для добавления товара в номенклатуру'}
     >
       <form className={styles.form}>
         <h4>Основная информация</h4>
@@ -201,9 +344,6 @@ function ModalAddProduct() {
             validation={validationCategory}
             reset={reset}
             setReset={() => dispatch(setReset({ reset: false }))}
-            onChange={() => {
-              getProperty();
-            }}
           />
 
           <MyDropdown
@@ -247,6 +387,8 @@ function ModalAddProduct() {
         </div>
 
         {category.length !== 0 ? <Property category_id={category[0].id}/> : null }
+
+        <Property property={property} changeValue={setProperty} />
 
         <div className={styles.buttons}>
           <MyButton

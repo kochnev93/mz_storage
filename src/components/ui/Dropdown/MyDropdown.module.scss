@@ -100,15 +100,16 @@
   border-radius: 4px;
   background-color: white;
   box-sizing: border-box;
-  opacity: 0;
+  display: none;
   overflow-y: scroll;
   z-index: 10;
+  transition: all .3s ease-out;
 
   &.open {
     height: auto;
     max-height: 300px;
     transition: all .3s ease-out;
-    opacity: 1;
+    display: block;
   }
 
   &::-webkit-scrollbar {

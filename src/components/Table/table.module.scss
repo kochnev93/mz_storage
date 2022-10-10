@@ -4,37 +4,15 @@
     >div:not(:last-child){
         margin-right: 15px;
     }
-}
 
-.error{
-    display: flex;
-    justify-content: space-between;
-
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: #f96060;
-    padding: 10px;
-    max-height: 100px;
-    overflow: auto;
-    transition: display 0.3s ease;
-
-    button{
-        font-weight: 700;
-        background: transparent;
-        outline: none;
-        border: none;
-        text-decoration: underline;
-        cursor: pointer;
+    .MyDropdown{
+        width: 300px;
     }
 
-    &.close{
-        display: none;
+    .MyButton button{
+        padding: 5px 20px;
+        height: 100%;
     }
 }
 
-.filter_message{
-    font-size: 12px;
-    color: #ff5757;
-}
+
