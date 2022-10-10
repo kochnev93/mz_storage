@@ -88,12 +88,12 @@ function ModalAddProduct() {
         title: 'Видеовыход',
         value: [
           {
-            id: 7,
+            id: 9,
             title: 'HDMI',
             isCheked: false
           },
           {
-            id: 8,
+            id: 10,
             title: 'VGA',
             isCheked: false
           }
@@ -104,12 +104,12 @@ function ModalAddProduct() {
         title: 'Видеовыход',
         value: [
           {
-            id: 7,
+            id: 11,
             title: 'HDMI',
             isCheked: false
           },
           {
-            id: 8,
+            id: 12,
             title: 'VGA',
             isCheked: false
           }
@@ -120,12 +120,12 @@ function ModalAddProduct() {
         title: 'Видеовыход',
         value: [
           {
-            id: 7,
+            id: 13,
             title: 'HDMI',
             isCheked: false
           },
           {
-            id: 8,
+            id: 14,
             title: 'VGA',
             isCheked: false
           }
@@ -136,12 +136,12 @@ function ModalAddProduct() {
         title: 'Видеовыход',
         value: [
           {
-            id: 7,
+            id: 15,
             title: 'HDMI',
             isCheked: false
           },
           {
-            id: 8,
+            id: 16,
             title: 'VGA',
             isCheked: false
           }
@@ -152,12 +152,12 @@ function ModalAddProduct() {
         title: 'Видеовыход',
         value: [
           {
-            id: 7,
+            id: 17,
             title: 'HDMI',
             isCheked: false
           },
           {
-            id: 8,
+            id: 18,
             title: 'VGA',
             isCheked: false
           }
@@ -269,55 +269,57 @@ function ModalAddProduct() {
 
   const addProduct = (e) => {
     e.preventDefault();
+    console.log('PORPERTY ADDDDDD-------');
+    console.log(property)
 
-    if (validateAddForm()) {
-      dispatch(setIsLoading({ isLoading: true }));
+    // if (validateAddForm()) {
+    //   dispatch(setIsLoading({ isLoading: true }));
 
-      let myHeaders = new Headers();
-      myHeaders.append('content-type', 'application/json');
-      myHeaders.append('Authorization', `${authHeader()}`);
+    //   let myHeaders = new Headers();
+    //   myHeaders.append('content-type', 'application/json');
+    //   myHeaders.append('Authorization', `${authHeader()}`);
 
-      let data = JSON.stringify({
-        name: product,
-        sn: comment,
-        category: category[0],
-      });
+    //   let data = JSON.stringify({
+    //     name: product,
+    //     sn: comment,
+    //     category: category[0],
+    //   });
 
-      let requestOptions = {
-        //mode: 'no-cors',
-        method: 'POST',
-        headers: myHeaders,
-        body: data,
-      };
+    //   let requestOptions = {
+    //     //mode: 'no-cors',
+    //     method: 'POST',
+    //     headers: myHeaders,
+    //     body: data,
+    //   };
 
-      fetch('http://localhost:3001/api/addProduct', requestOptions)
-        .then((res) => {
-          if (res.status >= 200 && res.status < 300) {
-            return res.json();
-          } else {
-            let error = new Error(res.statusText);
-            error.response = res;
-            throw error;
-          }
-        })
-        .then((result) => {
-          if (result.error) {
-            dispatch(setMessage({ message: result.error }));
-            dispatch(setErrors({ errors: true }));
-          } else {
-            dispatch(setMessage({ message: result.message }));
-          }
+    //   fetch('http://localhost:3001/api/addProduct', requestOptions)
+    //     .then((res) => {
+    //       if (res.status >= 200 && res.status < 300) {
+    //         return res.json();
+    //       } else {
+    //         let error = new Error(res.statusText);
+    //         error.response = res;
+    //         throw error;
+    //       }
+    //     })
+    //     .then((result) => {
+    //       if (result.error) {
+    //         dispatch(setMessage({ message: result.error }));
+    //         dispatch(setErrors({ errors: true }));
+    //       } else {
+    //         dispatch(setMessage({ message: result.message }));
+    //       }
 
-          setTimeout(() => {
-            dispatch(setIsLoading({ isLoading: false }));
-          }, 100);
-        })
-        .catch((err) => {
-          dispatch(setMessage({ message: 'Ошибка сервера' }));
-          dispatch(setErrors({ errors: true }));
-          dispatch(setIsLoading({ isLoading: false }));
-        });
-    }
+    //       setTimeout(() => {
+    //         dispatch(setIsLoading({ isLoading: false }));
+    //       }, 100);
+    //     })
+    //     .catch((err) => {
+    //       dispatch(setMessage({ message: 'Ошибка сервера' }));
+    //       dispatch(setErrors({ errors: true }));
+    //       dispatch(setIsLoading({ isLoading: false }));
+    //     });
+    // }
   };
 
   return (

@@ -20,6 +20,7 @@ export function Property({property, changeValue}) {
           options={item.value}
           validation={true}
           changeValue={changeValue}
+          property={property}
         />
       </div>
     );

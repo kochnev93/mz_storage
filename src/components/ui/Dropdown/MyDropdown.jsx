@@ -14,7 +14,7 @@ class MyDropdown extends Component {
       placeholder: props.placeholder || 'Выберите...',
       searchInput: '',
       isOpen: false,
-      selectOptionAnyone: false, 
+      selectOptionAnyone: false,
       selectOptionAll: false,
       multiple: props.multiple || false,
       isLoaded: false,
@@ -27,15 +27,15 @@ class MyDropdown extends Component {
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
 
-    console.log('this.props.options0', !!this.props.options)
+    console.log('this.props.options0', !!this.props.options);
 
-    if(this.props.options){
+    if (this.props.options) {
       this.setState({
         isLoaded: true,
         options: this.props.options,
       });
-    } else{
-      console.log('getContent')
+    } else {
+      console.log('getContent');
       this.getContent(this.state.id);
     }
   }
@@ -63,14 +63,12 @@ class MyDropdown extends Component {
       })
       .then((result) => {
         if (!result.error) {
-
           const fetchOptions = result.data;
           const checkedOptions = JSON.parse(
             localStorage.getItem(`mz_${this.state.id}`)
           );
 
           if (checkedOptions !== null && checkedOptions.length !== 0) {
-
             checkedOptions.forEach((item) => {
               const indexOption = fetchOptions.findIndex(
                 (fetchItem) => item.id === fetchItem.id
@@ -230,11 +228,26 @@ class MyDropdown extends Component {
   };
 
   getSelectedOptions = () => {
-    let options = this.state.options.filter((option) => {
+    let selectedOptions = this.state.options.filter((option) => {
       return option.isCheked;
     });
 
-    this.props.changeValue(options);
+    const transferredOptions = this.props.property;
+
+    if (this.props.options) {
+      for (let i = 0; i < transferredOptions.length; i++) {
+        for (let j = 0; j < transferredOptions[i].value.length; j++) {
+          if (transferredOptions[i].value[j].id === selectedOptions[j]?.id) {
+            transferredOptions[i].value[j].isCheked = true;
+          }
+        }
+      }
+
+      this.props.changeValue(transferredOptions);
+
+    } else {
+      this.props.changeValue(selectedOptions);
+    }
   };
 
   clearDropdown = () => {
