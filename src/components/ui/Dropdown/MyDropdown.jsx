@@ -154,10 +154,13 @@ class MyDropdown extends Component {
       selectOptionAnyone: selectedAnyone,
     });
 
+
+    // Передача значений родителю
     if (this.props.changeValue) {
       this.getSelectedOptions();
     }
 
+    // Если не выбран множественный выбор, то меню закрывается при выборе элемента
     if (!this.state.multiple) {
       this.closeDropdown();
     }
@@ -239,6 +242,8 @@ class MyDropdown extends Component {
         for (let j = 0; j < transferredOptions[i].value.length; j++) {
           if (transferredOptions[i].value[j].id === selectedOptions[j]?.id) {
             transferredOptions[i].value[j].isCheked = true;
+          } else{
+           // transferredOptions[i].value[j].isCheked = false;
           }
         }
       }

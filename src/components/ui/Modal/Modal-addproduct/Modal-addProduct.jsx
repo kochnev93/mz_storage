@@ -12,7 +12,6 @@ import {
 
 // Hooks
 import authHeader from '../../../../services/auth-header';
-import useFetch from '../../../../hooks/useFetch.js';
 
 //Styles
 import styles from './Modal-addProduct.module.scss';
@@ -269,9 +268,8 @@ function ModalAddProduct() {
 
   const addProduct = (e) => {
     e.preventDefault();
-    console.log('PORPERTY ADDDDDD-------');
-    console.log(property)
-
+    console.info('123')
+    console.table(JSON.stringify(property))
     // if (validateAddForm()) {
     //   dispatch(setIsLoading({ isLoading: true }));
 
@@ -385,10 +383,10 @@ function ModalAddProduct() {
 
         <div className={styles.warning}>
           {snAccounting &&
-            'Внимание! Вы активировали серийный учет для данного товара. Изменить эту опцию далее будет невозможно.'}
+            'Внимание! После установки данного флага будет невозможно вернуть его обратно. При установленном флаге учет товара будет производиться по серийным номерам'}
         </div>
 
-        {category.length !== 0 ? <Property category_id={category[0].id}/> : null }
+        {/* {category.length !== 0 ? <Property category_id={category[0].id}/> : null } */}
 
         <Property property={property} changeValue={setProperty} />
 
