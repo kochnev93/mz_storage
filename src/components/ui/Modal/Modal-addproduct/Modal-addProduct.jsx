@@ -48,123 +48,126 @@ function ModalAddProduct() {
   const [snAccounting, setSnAccounting] = useState(false);
 
 
-  const [property, setProperty] = useState(
-    [
-      {
-        id: 1,
-        title: 'Цвет',
-        value: [
-          {
-            id: 5,
-            title: 'Белый',
-            isCheked: false
-          },
-          {
-            id: 6,
-            title: 'Черный',
-            isCheked: false
-          }
-        ],
-      },
-      {
-        id: 2,
-        title: 'Диагональ',
-        value: [
-          {
-            id: 7,
-            title: '23.8',
-            isCheked: false
-          },
-          {
-            id: 8,
-            title: '27',
-            isCheked: false
-          }
-        ],
-      },
-      {
-        id: 3,
-        title: 'Видеовыход',
-        value: [
-          {
-            id: 9,
-            title: 'HDMI',
-            isCheked: false
-          },
-          {
-            id: 10,
-            title: 'VGA',
-            isCheked: false
-          }
-        ],
-      },
-      {
-        id: 3,
-        title: 'Видеовыход',
-        value: [
-          {
-            id: 11,
-            title: 'HDMI',
-            isCheked: false
-          },
-          {
-            id: 12,
-            title: 'VGA',
-            isCheked: false
-          }
-        ],
-      },
-      {
-        id: 3,
-        title: 'Видеовыход',
-        value: [
-          {
-            id: 13,
-            title: 'HDMI',
-            isCheked: false
-          },
-          {
-            id: 14,
-            title: 'VGA',
-            isCheked: false
-          }
-        ],
-      },
-      {
-        id: 3,
-        title: 'Видеовыход',
-        value: [
-          {
-            id: 15,
-            title: 'HDMI',
-            isCheked: false
-          },
-          {
-            id: 16,
-            title: 'VGA',
-            isCheked: false
-          }
-        ],
-      },
-      {
-        id: 3,
-        title: 'Видеовыход',
-        value: [
-          {
-            id: 17,
-            title: 'HDMI',
-            isCheked: false
-          },
-          {
-            id: 18,
-            title: 'VGA',
-            isCheked: false
-          }
-        ],
-      },
-    ]
-  );
+  // const [property, setProperty] = useState(
+  //   [
+  //     {
+  //       id: 1,
+  //       title: 'Цвет',
+  //       value: [
+  //         {
+  //           id: 5,
+  //           title: 'Белый',
+  //           isCheked: false
+  //         },
+  //         {
+  //           id: 6,
+  //           title: 'Черный',
+  //           isCheked: false
+  //         }
+  //       ],
+  //     },
+  //     {
+  //       id: 2,
+  //       title: 'Диагональ',
+  //       value: [
+  //         {
+  //           id: 7,
+  //           title: '23.8',
+  //           isCheked: false
+  //         },
+  //         {
+  //           id: 8,
+  //           title: '27',
+  //           isCheked: false
+  //         }
+  //       ],
+  //     },
+  //     {
+  //       id: 3,
+  //       title: 'Видеовыход',
+  //       value: [
+  //         {
+  //           id: 9,
+  //           title: 'HDMI',
+  //           isCheked: false
+  //         },
+  //         {
+  //           id: 10,
+  //           title: 'VGA',
+  //           isCheked: false
+  //         }
+  //       ],
+  //     },
+  //     {
+  //       id: 3,
+  //       title: 'Видеовыход',
+  //       value: [
+  //         {
+  //           id: 11,
+  //           title: 'HDMI',
+  //           isCheked: false
+  //         },
+  //         {
+  //           id: 12,
+  //           title: 'VGA',
+  //           isCheked: false
+  //         }
+  //       ],
+  //     },
+  //     {
+  //       id: 3,
+  //       title: 'Видеовыход',
+  //       value: [
+  //         {
+  //           id: 13,
+  //           title: 'HDMI',
+  //           isCheked: false
+  //         },
+  //         {
+  //           id: 14,
+  //           title: 'VGA',
+  //           isCheked: false
+  //         }
+  //       ],
+  //     },
+  //     {
+  //       id: 3,
+  //       title: 'Видеовыход',
+  //       value: [
+  //         {
+  //           id: 15,
+  //           title: 'HDMI',
+  //           isCheked: false
+  //         },
+  //         {
+  //           id: 16,
+  //           title: 'VGA',
+  //           isCheked: false
+  //         }
+  //       ],
+  //     },
+  //     {
+  //       id: 3,
+  //       title: 'Видеовыход',
+  //       value: [
+  //         {
+  //           id: 17,
+  //           title: 'HDMI',
+  //           isCheked: false
+  //         },
+  //         {
+  //           id: 18,
+  //           title: 'VGA',
+  //           isCheked: false
+  //         }
+  //       ],
+  //     },
+  //   ]
+  // );
 
+  const [property, setProperty] = useState([]);
+
+  
   useEffect(() => {
     if(category.length !== 0){
       fetch(`http://localhost:3001/api/get_property/${category[0].id}`)
@@ -176,12 +179,7 @@ function ModalAddProduct() {
           }
         })
         .then((result) => {
-          if (result.error) {
-            dispatch(setMessage({ message: result.error }));
-            dispatch(setErrors({ errors: true }));
-          } else {
-            setProperty(result.data)
-          }
+          setProperty(result.data);
         })
         .catch((err) => {
           console.log(err);
@@ -205,6 +203,8 @@ function ModalAddProduct() {
     setComment('');
     setValidationComment(true);
 
+    setProperty([]);
+
     dispatch(setMessage({ message: '' }));
     dispatch(setErrors({ errors: false }));
     dispatch(setReset({ reset: true }));
@@ -220,7 +220,7 @@ function ModalAddProduct() {
     dispatch(setErrors({ errors: false }));
   };
 
-  const validateAddForm = () => {
+  const validateAddForm = async() => {
     resetValidation();
 
     const delSpaseStr = (str) => {
@@ -231,8 +231,8 @@ function ModalAddProduct() {
       return item.length === 0 ? false : true;
     };
 
-    setProduct(delSpaseStr(product));
-    setComment(delSpaseStr(comment));
+    await setProduct(delSpaseStr(product));
+    await setComment(delSpaseStr(comment));
 
     let countError = 0;
 
@@ -241,13 +241,13 @@ function ModalAddProduct() {
       countError++;
     }
 
-    if (!validationItem(product)) {
-      setValidationProduct(false);
+    if (!validationItem(unit)) {
+      setValidationUnit(false);
       countError++;
     }
 
-    if (!validationItem(comment)) {
-      setValidationComment(false);
+    if (!validationItem(product)) {
+      setValidationProduct(false);
       countError++;
     }
 
@@ -268,56 +268,59 @@ function ModalAddProduct() {
 
   const addProduct = (e) => {
     e.preventDefault();
-    console.info('123')
-    console.table(JSON.stringify(property))
-    // if (validateAddForm()) {
-    //   dispatch(setIsLoading({ isLoading: true }));
 
-    //   let myHeaders = new Headers();
-    //   myHeaders.append('content-type', 'application/json');
-    //   myHeaders.append('Authorization', `${authHeader()}`);
+    if ( validateAddForm() ) {
+      dispatch(setIsLoading({ isLoading: true }));
 
-    //   let data = JSON.stringify({
-    //     name: product,
-    //     sn: comment,
-    //     category: category[0],
-    //   });
+      let myHeaders = new Headers();
+      myHeaders.append('content-type', 'application/json');
+      myHeaders.append('Authorization', `${authHeader()}`);
 
-    //   let requestOptions = {
-    //     //mode: 'no-cors',
-    //     method: 'POST',
-    //     headers: myHeaders,
-    //     body: data,
-    //   };
+      const selectedProperty = property.filter(item => item.value)
 
-    //   fetch('http://localhost:3001/api/addProduct', requestOptions)
-    //     .then((res) => {
-    //       if (res.status >= 200 && res.status < 300) {
-    //         return res.json();
-    //       } else {
-    //         let error = new Error(res.statusText);
-    //         error.response = res;
-    //         throw error;
-    //       }
-    //     })
-    //     .then((result) => {
-    //       if (result.error) {
-    //         dispatch(setMessage({ message: result.error }));
-    //         dispatch(setErrors({ errors: true }));
-    //       } else {
-    //         dispatch(setMessage({ message: result.message }));
-    //       }
+      let data = JSON.stringify({
+        name: product,
+        comment: comment,
+        category: category[0],
+        unit: unit,
+        property: property
+      });
 
-    //       setTimeout(() => {
-    //         dispatch(setIsLoading({ isLoading: false }));
-    //       }, 100);
-    //     })
-    //     .catch((err) => {
-    //       dispatch(setMessage({ message: 'Ошибка сервера' }));
-    //       dispatch(setErrors({ errors: true }));
-    //       dispatch(setIsLoading({ isLoading: false }));
-    //     });
-    // }
+      let requestOptions = {
+        //mode: 'no-cors',
+        method: 'POST',
+        headers: myHeaders,
+        body: data,
+      };
+
+      fetch('http://localhost:3001/api/addProduct', requestOptions)
+        .then((res) => {
+          if (res.status >= 200 && res.status < 300) {
+            return res.json();
+          } else {
+            let error = new Error(res.statusText);
+            error.response = res;
+            throw error;
+          }
+        })
+        .then((result) => {
+          if (result.error) {
+            dispatch(setMessage({ message: result.error }));
+            dispatch(setErrors({ errors: true }));
+          } else {
+            dispatch(setMessage({ message: result.message }));
+          }
+
+          setTimeout(() => {
+            dispatch(setIsLoading({ isLoading: false }));
+          }, 100);
+        })
+        .catch((err) => {
+          dispatch(setMessage({ message: 'Ошибка сервера' }));
+          dispatch(setErrors({ errors: true }));
+          dispatch(setIsLoading({ isLoading: false }));
+        });
+    }
   };
 
   return (
@@ -344,6 +347,7 @@ function ModalAddProduct() {
             validation={validationCategory}
             reset={reset}
             setReset={() => dispatch(setReset({ reset: false }))}
+            url={'get_category'}
           />
 
           <MyDropdown
@@ -355,6 +359,7 @@ function ModalAddProduct() {
             validation={validationUnit}
             reset={reset}
             setReset={() => dispatch(setReset({ reset: false }))}
+            url={'get_unit'}
           />
 
           <MyInput
@@ -386,9 +391,9 @@ function ModalAddProduct() {
             'Внимание! После установки данного флага будет невозможно вернуть его обратно. При установленном флаге учет товара будет производиться по серийным номерам'}
         </div>
 
-        {/* {category.length !== 0 ? <Property category_id={category[0].id}/> : null } */}
+        {category.length !== 0 ? <Property property={property} changeValue={setProperty} /> : null }
 
-        <Property property={property} changeValue={setProperty} />
+        {/* <Property property={property} changeValue={setProperty} /> */}
 
         <div className={styles.buttons}>
           <MyButton

@@ -14,8 +14,8 @@ export function Property({property, changeValue}) {
       <div className={styles.property_item}>
         <MyDropdown
           id={`property_${index}`}
-          title={item.title}
-          placeholder={item.title}
+          title={item.property}
+          placeholder={item.property}
           multiple={false}
           options={item.value}
           validation={true}
@@ -31,7 +31,7 @@ export function Property({property, changeValue}) {
     <div className={styles.property}>
       <h4>Характеристики</h4>
       <p>Заполните характеристики товара. Если каких-то свойств не хватает, то обратитесь к администратору</p>
-      {propertyList}
+      {propertyList.length !== 0 ? propertyList : 'Для данной категории характеристики не найдены'}
     </div>
   );
 }

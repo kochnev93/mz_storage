@@ -18,6 +18,7 @@ class MyDropdown extends Component {
       selectOptionAll: false,
       multiple: props.multiple || false,
       isLoaded: false,
+      url: props.url,
       options: [],
     };
 
@@ -53,7 +54,7 @@ class MyDropdown extends Component {
       headers: myHeaders,
     };
 
-    fetch(`http://localhost:3001/api/get_${id.split('_')[1]}`, requestOptions)
+    fetch(`http://localhost:3001/api/${this.state.url}`, requestOptions)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`${res.status}. ${res.statusText}`);
