@@ -282,7 +282,8 @@ function ModalAddProduct() {
         name: product,
         comment: comment,
         category: category[0],
-        unit: unit,
+        unit: unit[0],
+        snAccounting: snAccounting,
         property: property
       });
 
