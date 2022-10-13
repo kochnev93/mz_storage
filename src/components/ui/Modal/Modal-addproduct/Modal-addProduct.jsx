@@ -335,8 +335,8 @@ function ModalAddProduct() {
         dispatch(setActive({ active: false }));
       }}
       title="Добавить товар в номенклатуру"
-      message={statusApp.status ? message : statusApp.error}
-      errors={statusApp.status ? errors : true}
+      message={message}
+      errors={errors}
       isLoading={isLoading}
       footer={'Данная форма предназначена для добавления товара в номенклатуру'}
     >

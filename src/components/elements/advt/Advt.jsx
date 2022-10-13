@@ -29,6 +29,7 @@ const ping = () => {
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
         dispatch(setStatus({ status: true, error: null }));
+        setActive(false);
     })
     .catch((err) => {
         dispatch(setStatus({ status: false, error: 'Нет соединения с сервером' }));

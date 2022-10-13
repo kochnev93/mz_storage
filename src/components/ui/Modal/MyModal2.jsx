@@ -5,7 +5,12 @@ import cx from 'classnames';
 import styles from './myModal.module.scss';
 import { AiOutlineClose } from 'react-icons/Ai';
 
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
+
 function Modal({ active, setActive, title, footer, message, errors, isLoading, children }) {
+  const dispatch = useDispatch();
+  const statusApp = useSelector((state) => state.appStatus);
   /*
   active - идентификатор видимости
   setActive - функиция, меняет видимость. Передается из родителя
@@ -30,11 +35,11 @@ function Modal({ active, setActive, title, footer, message, errors, isLoading, c
             <div className={styles.myModal_toolbar}>
               <div
                 className={cx(styles.myModal_message, {
-                  [styles.succses]: !errors,
-                  [styles.error]: errors,
+                  [styles.succses]: statusApp.status ? !errors : statusApp.error,
+                  [styles.error]: statusApp.status ? errors : statusApp.error,
                 })}
               >
-                {message}
+                {statusApp.status ? message : statusApp.error}
               </div>
 
               <AiOutlineClose

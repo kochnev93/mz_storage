@@ -44,7 +44,6 @@ function ModalAboutProduct() {
   const message = useSelector((state) => state.modal_about_product.message);
   const reset = useSelector((state) => state.modal_about_product.reset);
   const isLoading = useSelector((state) => state.modal_about_product.isLoading);
-  const statusApp = useSelector((state) => state.appStatus);
 
   useEffect(() => {
     if (product !== null) {
@@ -148,8 +147,8 @@ function ModalAboutProduct() {
         dispatch(setActive({ active: false }));
       }}
       title="Информация о товаре"
-      message={statusApp.status ? message : statusApp.error}
-      errors={statusApp.status ? errors : true}
+      message={message}
+      errors={errors}
       isLoading={isLoading}
       footer={
         disabled
