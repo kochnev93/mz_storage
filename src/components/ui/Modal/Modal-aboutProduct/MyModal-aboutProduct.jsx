@@ -29,7 +29,6 @@ import { Chat } from '../../../Chat/Chat.jsx';
 function ModalAboutProduct() {
   const dispatch = useDispatch();
   const user = useAuth();
-  console.log(user);
 
   // Local State
   const [data, setData] = useState(null);
@@ -45,6 +44,7 @@ function ModalAboutProduct() {
   const message = useSelector((state) => state.modal_about_product.message);
   const reset = useSelector((state) => state.modal_about_product.reset);
   const isLoading = useSelector((state) => state.modal_about_product.isLoading);
+  const statusApp = useSelector((state) => state.appStatus);
 
   useEffect(() => {
     if (product !== null) {
@@ -148,8 +148,8 @@ function ModalAboutProduct() {
         dispatch(setActive({ active: false }));
       }}
       title="Информация о товаре"
-      message={message}
-      errors={errors}
+      message={statusApp.status ? message : statusApp.error}
+      errors={statusApp.status ? errors : true}
       isLoading={isLoading}
       footer={
         disabled

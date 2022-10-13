@@ -1,17 +1,30 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setHeader } from '../../features/header/headerSlice';
+
+// Styles
 import styles from './Navbar.module.scss';
+
+// Component
 import Menu from './Menu.jsx';
 
+// Icons
 import { IoIosArrowBack } from 'react-icons/Io';
 import { FaRegUserCircle } from 'react-icons/Fa';
+import { TiWarningOutline } from 'react-icons/Ti';
+
+// Hooks
 import { useAuth } from '../../hooks/use-auth';
 
+
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { setStatus } from '../../features/app/appSlice.js';
+import { setHeader } from '../../features/header/headerSlice';
+
 function Navbar(props) {
-  const classButton = useSelector((state) => state.button_menu.ButtonMenuOpen);
   const dispatch = useDispatch();
+  const classButton = useSelector((state) => state.button_menu.ButtonMenuOpen);
+  const statusApp = useSelector((state) => state.appStatus);
+  console.log(statusApp);
   const user = useAuth();
 
   return (
@@ -33,12 +46,23 @@ function Navbar(props) {
           <Menu />
         </nav>
 
-        <div className={styles.menu_link}>
-          <div className={styles.menu_icon}>
-            <FaRegUserCircle />
+        <div>
+          {!statusApp.status && <div className={styles.menu_link}>
+            <div className={styles.menu_icon}>
+              <TiWarningOutline style={{fill: '#ff8686'}} title={statusApp.error}/>
+            </div>
+            <div style={{color: '#ff8686', fontSize: '10px'}}>{statusApp.error}</div>
           </div>
-          <div>Привет, {user.login}</div>
+          }
+
+          <div className={styles.menu_link}>
+            <div className={styles.menu_icon}>
+              <FaRegUserCircle />
+            </div>
+            <div>Привет, {user.login}</div>
+          </div>
         </div>
+
       </div>
     </div>
   );

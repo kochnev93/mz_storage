@@ -32,6 +32,7 @@ function ModalAddProduct() {
   const message = useSelector((state) => state.modal_add_product.message);
   const reset = useSelector((state) => state.modal_add_product.reset);
   const isLoading = useSelector((state) => state.modal_add_product.isLoading);
+  const statusApp = useSelector((state) => state.appStatus);
 
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
@@ -166,6 +167,7 @@ function ModalAddProduct() {
   // );
 
   const [property, setProperty] = useState([]);
+  
 
   
   useEffect(() => {
@@ -203,6 +205,8 @@ function ModalAddProduct() {
     setComment('');
     setValidationComment(true);
 
+    setSnAccounting(false);
+
     setProperty([]);
 
     dispatch(setMessage({ message: '' }));
@@ -220,7 +224,7 @@ function ModalAddProduct() {
     dispatch(setErrors({ errors: false }));
   };
 
-  const validateAddForm = async() => {
+  const validateAddForm = () => {
     resetValidation();
 
     const delSpaseStr = (str) => {
@@ -231,8 +235,8 @@ function ModalAddProduct() {
       return item.length === 0 ? false : true;
     };
 
-    await setProduct(delSpaseStr(product));
-    await setComment(delSpaseStr(comment));
+     setProduct(delSpaseStr(product));
+     setComment(delSpaseStr(comment));
 
     let countError = 0;
 
@@ -331,8 +335,8 @@ function ModalAddProduct() {
         dispatch(setActive({ active: false }));
       }}
       title="Добавить товар в номенклатуру"
-      message={message}
-      errors={errors}
+      message={statusApp.status ? message : statusApp.error}
+      errors={statusApp.status ? errors : true}
       isLoading={isLoading}
       footer={'Данная форма предназначена для добавления товара в номенклатуру'}
     >

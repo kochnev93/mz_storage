@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 
-import Table from '../../Table/Table.jsx';
+import { MyTable } from '../../elements/Table/MyTable.jsx';
 
 import styles from './Nomenclature.module.scss';
 
@@ -9,10 +9,26 @@ import styles from './Nomenclature.module.scss';
 
 export const Nomenclature = () => {
 
+  const [titleColumn, setTitleColumn] = useState([
+    '№ п/п',
+    'Склад',
+    'Категория',
+    'Наименование',
+    's/n',
+    'Количество',
+    'Действия',
+  ]);
+
+
+  const [content, setContent] = useState({
+    header:[],
+    body:[],
+  });
+
   return (
     <section className={styles.nomenclature_section}>
         <h2>Номенклатура</h2>
-        <Table />
+        <MyTable titleColumn={titleColumn}/>
     </section>
   );
 };

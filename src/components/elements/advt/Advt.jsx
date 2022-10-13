@@ -4,11 +4,20 @@ import styles from './Advt.module.scss';
 import { AiOutlineClose } from 'react-icons/Ai';
 
 
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { setStatus } from '../../../features/app/appSlice.js';
+
+
 
 function Advt() {
+const dispatch = useDispatch();
 const [active, setActive] = useState(false);
-const [errorMessage, seterrorMessage] = useState('');
+const statusApp = useSelector((state) => state.appStatus);
 
+useEffect(() => {
+    ping();
+}, []);
 
 useEffect(() => {
     const interval = setInterval(() => {ping()}, 30000);
@@ -19,19 +28,18 @@ const ping = () => {
     fetch(`http://localhost:3001/api/test`)
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
-        setActive(false);
-        seterrorMessage('');
+        dispatch(setStatus({ status: true, error: null }));
     })
     .catch((err) => {
+        dispatch(setStatus({ status: false, error: 'Нет соединения с сервером' }));
         setActive(true);
-        seterrorMessage(`Нет соединения с сервером. ${err}`);
     });
 }
 
   return (
     <div className={cx(styles.advt_popup, {[styles.active]: active})}>
         <div className={styles.advt_text}>
-            {errorMessage}
+            {statusApp.error}
         </div>
         <AiOutlineClose onClick={() => {setActive(false)}}/>
     </div>
