@@ -115,6 +115,7 @@ export const Table = () => {
             multiple={true}
             validation={validationWarehouse}
             changeValue={setWarehouse}
+            url={'get_warehouse'}
           />
         </div>
 
@@ -126,6 +127,7 @@ export const Table = () => {
             multiple={true}
             validation={validationCategory}
             changeValue={setCategory}
+            url={'get_category'}
           />
         </div>
 

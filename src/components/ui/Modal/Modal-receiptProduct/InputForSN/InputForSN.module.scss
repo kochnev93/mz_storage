@@ -1,0 +1,135 @@
+.warning{
+  font-size: 12px;
+  padding: 5px 0;
+  color: red
+}
+
+.myInputSN {
+  position: relative;
+}
+
+.myInputSN_input {
+  padding: 10px;
+  border-radius: 4px;
+  outline: none;
+  border: 0px;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.87);
+  background: none;
+  appearance: none;
+  font-size: 14px;
+}
+
+.myInputSN_label {
+  position: absolute;
+  top: 9px;
+  left: 13px;
+  color: rgba(0, 0, 0, 0.23);
+  transition: top 0.3s ease;
+  pointer-events: none;
+}
+
+.myInputSN_input:focus ~ .myInputSN_label,
+.myInputSN_input:not(:placeholder-shown) ~ .myInputSN_label {
+  top: -6px;
+  left: 14px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.myInputSN_input:focus ~ .myInputSN_fieldset > legend,
+.myInputSN_input:not(:placeholder-shown) ~ .myInputSN_fieldset > legend {
+  max-width: 100%;
+}
+
+.myInputSN_input:focus ~ .myInputSN_fieldset {
+  border: 2px solid rgba(0, 0, 0, 0.87);
+}
+
+.myInputSN_fieldset {
+  position: absolute;
+  top: -6px;
+  bottom: -2px;
+  right: 0;
+  left: 0;
+  text-align: left;
+  min-width: 0%;
+  overflow: hidden;
+  padding: 0 8px;
+  margin: 0;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.23);
+  pointer-events: none;
+
+  &.error {
+    border: 1px solid red;
+    background-color: #f443361c;
+  }
+
+  > legend {
+    font-size: 10px;
+    float: unset;
+    overflow: hidden;
+    display: block;
+    width: auto;
+    padding: 0;
+    height: 11px;
+    visibility: hidden;
+    max-width: 0.01px;
+    white-space: nowrap;
+    visibility: hidden;
+    transition: max-width 0.3s ease;
+
+    > span {
+      padding-left: 5px;
+      padding-right: 5px;
+      display: inline-block;
+      opacity: 0;
+      visibility: visible;
+    }
+  }
+}
+
+.myInputSN_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  svg {
+    fill: var(--main-color);
+    width: 30px;
+    height: 20px;
+  }
+}
+
+.selectedItem_menu {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 10px;
+
+  li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background-color: #e6e6e6;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  li:not(:last-child){
+    margin-right: 10px;
+  }
+}
+

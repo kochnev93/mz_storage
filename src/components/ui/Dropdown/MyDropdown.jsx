@@ -18,7 +18,6 @@ class MyDropdown extends Component {
       selectOptionAll: false,
       multiple: props.multiple || false,
       isLoaded: false,
-      url: props.url,
       options: [],
     };
 
@@ -28,16 +27,13 @@ class MyDropdown extends Component {
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
 
-    console.log('this.props.options0', !!this.props.options);
-
     if (this.props.options) {
       this.setState({
         isLoaded: true,
         options: this.props.options,
       });
     } else {
-      console.log('getContent');
-      this.getContent(this.state.id);
+      this.getContent();
     }
   }
 
@@ -45,7 +41,13 @@ class MyDropdown extends Component {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  getContent = (id) => {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.url != this.props.url) {
+      this.getContent();
+    }
+  }
+
+  getContent = () => {
     let myHeaders = new Headers();
     myHeaders.append('content-type', 'application/json');
 
@@ -54,7 +56,9 @@ class MyDropdown extends Component {
       headers: myHeaders,
     };
 
-    fetch(`http://localhost:3001/api/${this.state.url}`, requestOptions)
+    console.log(`${this.state.id}---fetch(${this.state.url})`);
+
+    fetch(`http://localhost:3001/api/${this.props.url}`, requestOptions)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`${res.status}. ${res.statusText}`);
@@ -155,7 +159,6 @@ class MyDropdown extends Component {
       selectOptionAnyone: selectedAnyone,
     });
 
-
     // Передача значений родителю
     if (this.props.changeValue) {
       this.getSelectedOptions();
@@ -236,21 +239,16 @@ class MyDropdown extends Component {
       return option.isCheked;
     });
 
-    const transferredOptions = this.props.property;
-
-    if (this.props.options) {
+    // Если передаются свойства и опции, то передаем готовое состояние
+    if (this.props.property && this.props.options) {
       for (let i = 0; i < transferredOptions.length; i++) {
         for (let j = 0; j < transferredOptions[i].value.length; j++) {
           if (transferredOptions[i].value[j].id === selectedOptions[j]?.id) {
             transferredOptions[i].value[j].isCheked = true;
-          } else{
-           // transferredOptions[i].value[j].isCheked = false;
           }
         }
       }
-
       this.props.changeValue(transferredOptions);
-
     } else {
       this.props.changeValue(selectedOptions);
     }

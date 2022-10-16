@@ -1,0 +1,30 @@
+.selectedItem_title {
+    padding: 3px 5px;
+    color: #333333;
+    pointer-events: none;
+  }
+  
+  .selectedItem_closeIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15px;
+    height: 100%;
+  
+    padding: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 0 5px 5px 0;
+  
+    &:hover {
+      background-color: rgb(236, 146, 146);
+      svg {
+        fill: red;
+      }
+    }
+  
+    svg{
+      pointer-events: none;
+      width: 10px;
+    }
+  }

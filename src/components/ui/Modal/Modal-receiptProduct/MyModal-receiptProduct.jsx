@@ -23,14 +23,14 @@ import MyDropdown from '../../Dropdown/MyDropdown.jsx';
 import MyInput from '../../Input/MyInput.jsx';
 import MyButton from '../../Buttons/ButtonSend.jsx';
 import Modal from '../MyModal2.jsx';
+import InputForSN from './InputForSN/InputForSN.jsx';
+import { IoMdAddCircle } from 'react-icons/Io';
 
 function ModalReceiptProduct() {
   const dispatch = useDispatch();
   const user = useAuth();
 
   // Redux
-  const statusApp = useSelector((state) => state.appStatus);
-
   const active = useSelector((state) => state.modal_receipt_product.active);
   const errors = useSelector((state) => state.modal_receipt_product.errors);
   const message = useSelector((state) => state.modal_receipt_product.message);
@@ -40,47 +40,203 @@ function ModalReceiptProduct() {
   );
 
   //State
-
   const [category, setCategory] = useState([]);
-  //const [validationCategory, setValidationCategory] = useState(true);
 
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
 
   const [product, setProduct] = useState([]);
   const [validationProduct, setValidationProduct] = useState(true);
+  const [urlProduct, setUrlProduct] = useState(`get_receipt_products/0`);
 
-  const [count, setCount] = useState('');
+  const [count, setCount] = useState(null);
   const [validationCount, setValidationCount] = useState(true);
 
-  // const [dropdownProduct, setDropdownProduct] = useState(null);
+  const [sn, setSn] = useState([]);
+  const [inputSN, setInputSN] = useState('');
+  const [validationSN, setValidationSN] = useState({
+    status: true,
+    message: null,
+  });
 
-  // useEffect(() => {
-  //   getDropdownProduct();
-  // }, [category]);
+  const [vendor, setVendor] = useState('');
+  const [validationVendor, setValidationVendor] = useState(true);
 
-  // const getDropdownProduct = () => {
-  //   if (category.length !== 0) {
-  //     setDropdownProduct (
-  //       <>
-  //         <h4>3. Выберите товар, на который необходимо оформить приход</h4>
-  //         <MyDropdown
-  //           id="receiptProductModal_product"
-  //           title="Товар"
-  //           placeholder="Выберите товар"
-  //           multiple={false}
-  //           changeValue={setProduct}
-  //           validation={validationProduct}
-  //           reset={reset}
-  //           setReset={() => dispatch(setResetReceipt({ reset: false }))}
-  //           url={`get_receipt_products/${category[0]?.id}`}
-  //         />
-  //       </>
-  //     );
-  //   }
+  const [contract, setСontract] = useState('');
+  const [validationСontract, setValidationСontract] = useState(true);
 
-  //   setDropdownProduct(null);
-  // };
+  const [url, setUrl] = useState('');
+  const [validationUrl, setValidationUrl] = useState(true);
+
+  useEffect(() => {
+    setProduct([]);
+
+    if (category.length) {
+      setUrlProduct(`get_receipt_products/${category[0].id}`);
+    } else {
+      setUrlProduct(`get_receipt_products/0`);
+    }
+  }, [category]);
+
+  const addReceipt = (e) => {
+    e.preventDefault();
+
+    dispatch(setIsLoadingReceipt({ isLoading: true }));
+
+    let myHeaders = new Headers();
+    myHeaders.append('content-type', 'application/json');
+    myHeaders.append('Authorization', `${authHeader()}`);
+
+    let data = JSON.stringify({
+      warehouse: warehouse,
+      product: product,
+      sn: sn,
+      count: count,
+      contract: contract,
+      url: url,
+      vendor: vendor
+    });
+
+    let requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: data,
+    };
+
+    fetch('http://localhost:3001/api/receipt_product', requestOptions)
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          let error = new Error(res.statusText);
+          error.response = res;
+          throw error;
+        }
+      })
+      .then((result) => {
+        if (result.error) {
+          dispatch(setMessageReceipt({ message: result.error }));
+          dispatch(setErrorsReceipt({ errors: true }));
+        } else {
+          dispatch(setMessageReceipt({ message: result.message }));
+        }
+
+        setTimeout(() => {
+          dispatch(setIsLoadingReceipt({ isLoading: false }));
+        }, 100);
+      })
+      .catch((err) => {
+        dispatch(setMessageReceipt({ message: 'Ошибка сервера' }));
+        dispatch(setErrorsReceipt({ errors: true }));
+        dispatch(setIsLoadingReceipt({ isLoading: false }));
+      });
+  };
+
+  const getComponentReceipt = () => {
+    if (!product.length) {
+      return <></>;
+    }
+
+    if (product[0].accounting_sn) {
+      return (
+        <>
+          <h4>4. Введите серийные номера</h4>
+          <p className={styles.info}>
+            <strong>
+              Внимание! По данному товару ведется серийный учет. <br />
+            </strong>
+            Введите серийный номер и нажите <IoMdAddCircle />, либо Enter
+          </p>
+          <InputForSN
+            title="Серийный номер"
+            type="text"
+            changeValue={setInputSN}
+            validation={validationSN}
+            value={inputSN}
+            addSN={addSerialNumber}
+            deleteSN={deleteSerialNumber}
+            sn={sn}
+          />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <h4>4. Введите количество</h4>
+          <p className={styles.info}>
+            <strong>
+              Внимание! По данному товару не ведется серийный учет. <br />
+            </strong>
+            Введите количество
+          </p>
+          <MyInput
+            type="number"
+            title="Количество"
+            changeValue={setCount}
+            validation={validationCount}
+            value={count}
+          />
+        </>
+      );
+    }
+  };
+
+  const addSerialNumber = (e) => {
+    e.preventDefault();
+
+    setValidationSN({
+      status: true,
+      message: null,
+    });
+
+    if (!sn.length) {
+      setSn([...sn, inputSN]);
+      setInputSN('');
+      return;
+    }
+
+    let index = sn.findIndex((item) => item === inputSN);
+    if (index === -1) {
+      setSn([...sn, inputSN]);
+      setInputSN('');
+      return;
+    } else {
+      setValidationSN({
+        status: false,
+        message: 'Данный серийный номер уже введен',
+      });
+    }
+  };
+
+  const deleteSerialNumber = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    let newState = sn.filter((item) => {
+      return item !== e.target.dataset.value;
+    });
+    setSn(newState);
+  };
+
+  const resetForm = (e) => {
+    e.preventDefault();
+
+    setCategory([]);
+    setWarehouse([]);
+    setProduct([]);
+    setCount(null);
+    setSn([]);
+    setInputSN('');
+    setVendor('');
+    setСontract('');
+    setUrl('');
+
+    dispatch(setMessageReceipt({ message: '' }));
+    dispatch(setErrorsReceipt({ errors: false }));
+    dispatch(setResetReceipt({ reset: true }));
+  };
+
+  const resetValidation = () => {};
 
   return (
     <Modal
@@ -96,57 +252,100 @@ function ModalReceiptProduct() {
     >
       <form className={styles.form}>
         <div className={styles.itemsContainer}>
-          <h4>1. Выберите категорию</h4>
-          <MyDropdown
-            id="receiptProductModal_category"
-            title="Категория"
-            placeholder="Выберите категорию товара"
-            multiple={false}
-            changeValue={setCategory}
-            validation={true}
-            reset={reset}
-            setReset={() => dispatch(setResetReceipt({ reset: false }))}
-            url={'get_category'}
-          />
+          <div className={styles.item}>
+            <h4>1. Выберите категорию</h4>
+            <MyDropdown
+              id="receiptProductModal_category"
+              title="Категория"
+              placeholder="Категория товара"
+              multiple={false}
+              changeValue={setCategory}
+              validation={true}
+              reset={reset}
+              setReset={() => dispatch(setResetReceipt({ reset: false }))}
+              url={'get_category'}
+            />
+          </div>
 
-          <h4>2. Выберите склад, на который осуществляется приход товара</h4>
-          <MyDropdown
-            id="receiptProductModal_warehouse"
-            title="Склад"
-            placeholder="Выберите склад"
-            multiple={false}
-            changeValue={setWarehouse}
-            validation={validationWarehouse}
-            reset={reset}
-            setReset={() => dispatch(setResetReceipt({ reset: false }))}
-            url={'get_warehouse'}
-          />
+          <div className={styles.item}>
+            <h4>2. Выберите склад, на который осуществляется приход товара</h4>
+            <MyDropdown
+              id="receiptProductModal_warehouse"
+              title="Склад"
+              placeholder="Выберите склад"
+              multiple={false}
+              changeValue={setWarehouse}
+              validation={validationWarehouse}
+              reset={reset}
+              setReset={() => dispatch(setResetReceipt({ reset: false }))}
+              url={'get_warehouse'}
+            />
+          </div>
 
-          <h4>3. Выберите товар, на который необходимо оформить приход</h4>
-          <MyDropdown
-            id="receiptProductModal_product"
-            title="Товар"
-            placeholder="Выберите товар"
-            multiple={false}
-            changeValue={setProduct}
-            validation={validationProduct}
-            reset={reset}
-            setReset={() => dispatch(setResetReceipt({ reset: false }))}
-            url={category.length === 0 ? `get_receipt_products/0` : `get_receipt_products/${category[0]?.id}`}
-          />
+          <div className={styles.item}>
+            <h4>3. Выберите товар, на который необходимо оформить приход</h4>
+            <MyDropdown
+              id="receiptProductModal_product"
+              title="Товар"
+              placeholder="Выберите товар"
+              multiple={false}
+              validation={true}
+              changeValue={setProduct}
+              url={urlProduct}
+            />
+          </div>
+
+          <div className={styles.item}>{getComponentReceipt()}</div>
+
+          {product.length !== 0 && (
+            <>
+              <div className={styles.item}>
+                <h4>5. Введите номер счета или УПД</h4>
+                <MyInput
+                  type="text"
+                  title="Номер счета"
+                  changeValue={setСontract}
+                  validation={validationСontract}
+                  value={contract}
+                />
+              </div>
+
+              <div className={styles.item}>
+                <h4>6. Введите наименование контрагента</h4>
+                <MyInput
+                  type="text"
+                  title="Контрагент"
+                  changeValue={setVendor}
+                  validation={validationVendor}
+                  value={vendor}
+                />
+              </div>
+
+              <div className={styles.item}>
+                <h4>7. Введите ссылка на задачу в МП (опционально)</h4>
+                <MyInput
+                  type="url"
+                  title="Ссылка на задачу в МП"
+                  changeValue={setUrl}
+                  validation={validationUrl}
+                  value={url}
+                />
+              </div>
+            </>
+          )}
         </div>
 
         <div className={styles.buttons}>
           <MyButton
             type="clear"
-            //action={resetForm}
+            action={resetForm}
             title="Сбросить"
             loadingTitle="Сбросить"
             loading={isLoading}
           />
           <MyButton
             type="send"
-            // action={}
+            action={addReceipt}
             title="Приход"
             loadingTitle="Сохраняю"
             loading={isLoading}
