@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import cx from 'classnames';
 
 // Hooks
 import authHeader from '../../../../services/auth-header';
-import { useAuth } from '../../../../hooks/use-auth';
+import useFetch from '../../../../hooks/useFetch';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -26,9 +25,9 @@ import Modal from '../MyModal2.jsx';
 import InputForSN from './InputForSN/InputForSN.jsx';
 import { IoMdAddCircle } from 'react-icons/Io';
 
+
 function ModalReceiptProduct() {
   const dispatch = useDispatch();
-  const user = useAuth();
 
   // Redux
   const active = useSelector((state) => state.modal_receipt_product.active);
@@ -68,6 +67,9 @@ function ModalReceiptProduct() {
   const [url, setUrl] = useState('');
   const [validationUrl, setValidationUrl] = useState(true);
 
+ const {fetchNow} = useFetch();
+
+
   useEffect(() => {
     setProduct([]);
 
@@ -78,14 +80,10 @@ function ModalReceiptProduct() {
     }
   }, [category]);
 
-  const addReceipt = (e) => {
+  const addReceipt = async (e) => {
     e.preventDefault();
 
-    dispatch(setIsLoadingReceipt({ isLoading: true }));
-
-    let myHeaders = new Headers();
-    myHeaders.append('content-type', 'application/json');
-    myHeaders.append('Authorization', `${authHeader()}`);
+    //dispatch(setIsLoadingReceipt({ isLoading: true }));
 
     let data = JSON.stringify({
       warehouse: warehouse,
@@ -98,38 +96,48 @@ function ModalReceiptProduct() {
     });
 
     let requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: data,
+      method: 'GET',
+     // headers: myHeaders,
+     // body: data,
     };
 
-    fetch('http://localhost:3001/api/receipt_product', requestOptions)
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          let error = new Error(res.statusText);
-          error.response = res;
-          throw error;
-        }
-      })
-      .then((result) => {
-        if (result.error) {
-          dispatch(setMessageReceipt({ message: result.error }));
-          dispatch(setErrorsReceipt({ errors: true }));
-        } else {
-          dispatch(setMessageReceipt({ message: result.message }));
-        }
+    
+    // fetchNow('http://localhost:3001/api/receipt_product', requestOptions)
 
-        setTimeout(() => {
-          dispatch(setIsLoadingReceipt({ isLoading: false }));
-        }, 100);
-      })
-      .catch((err) => {
-        dispatch(setMessageReceipt({ message: 'Ошибка сервера' }));
-        dispatch(setErrorsReceipt({ errors: true }));
-        dispatch(setIsLoadingReceipt({ isLoading: false }));
-      });
+  
+    const resss = await fetchNow('https://jsonplaceholder.typicode.com/todos/1', requestOptions);
+
+    console.group('FETCH AFTER');
+    console.log(resss);
+    console.groupEnd();
+
+    // fetch('http://localhost:3001/api/receipt_product', requestOptions)
+    //   .then((res) => {
+    //     if (res.ok) {
+    //       return res.json();
+    //     } else {
+    //       let error = new Error(res.statusText);
+    //       error.response = res;
+    //       throw error;
+    //     }
+    //   })
+    //   .then((result) => {
+    //     if (result.error) {
+    //       dispatch(setMessageReceipt({ message: result.error }));
+    //       dispatch(setErrorsReceipt({ errors: true }));
+    //     } else {
+    //       dispatch(setMessageReceipt({ message: result.message }));
+    //     }
+
+    //     setTimeout(() => {
+    //       dispatch(setIsLoadingReceipt({ isLoading: false }));
+    //     }, 100);
+    //   })
+    //   .catch((err) => {
+    //     dispatch(setMessageReceipt({ message: 'Ошибка сервера' }));
+    //     dispatch(setErrorsReceipt({ errors: true }));
+    //     dispatch(setIsLoadingReceipt({ isLoading: false }));
+    //   });
   };
 
   const getComponentReceipt = () => {
@@ -196,10 +204,10 @@ function ModalReceiptProduct() {
     }
 
     let index = sn.findIndex((item) => item === inputSN);
+
     if (index === -1) {
       setSn([...sn, inputSN]);
       setInputSN('');
-      return;
     } else {
       setValidationSN({
         status: false,
@@ -215,6 +223,7 @@ function ModalReceiptProduct() {
     let newState = sn.filter((item) => {
       return item !== e.target.dataset.value;
     });
+
     setSn(newState);
   };
 

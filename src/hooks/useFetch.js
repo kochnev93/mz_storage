@@ -1,31 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import authHeader from '../services/auth-header';
 
-const useFetch = (initialUrl, initialOptions = {}) => {
-  const [url, setUrl] = useState(initialUrl);
-  const [options, setOptions] = useState(initialOptions);
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+const useFetch = (url, options) => {
 
-  console.log(url);
+  async function fetchNow(url, options) {
+    // Заголовки запроса
+    if(options.body){
+      let myHeaders = new Headers();
+      myHeaders.append('content-type', 'application/json');
+      myHeaders.append('Authorization', `${authHeader()}`);
+      options.headers = myHeaders;
+    }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch(url, options);
-        const json = await response.json();
-        setData(json);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [url, options]);
+    let response = await fetch(url, options);
 
-  return { data, error, isLoading };
-};
+    if(response.ok){
+      let result = await response.json();
+      return {data: result}
+    } else{
+      return {error: result}
+    }
+  }
 
-export default useFetch;
+  return { fetchNow };
+}
+
+export default useFetch

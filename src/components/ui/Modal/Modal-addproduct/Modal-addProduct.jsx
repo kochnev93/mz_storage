@@ -32,7 +32,6 @@ function ModalAddProduct() {
   const message = useSelector((state) => state.modal_add_product.message);
   const reset = useSelector((state) => state.modal_add_product.reset);
   const isLoading = useSelector((state) => state.modal_add_product.isLoading);
-  const statusApp = useSelector((state) => state.appStatus);
 
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
@@ -166,7 +165,7 @@ function ModalAddProduct() {
   //   ]
   // );
 
-  const [property, setProperty] = useState([]);
+const [property, setProperty] = useState([]);
   
 
   
