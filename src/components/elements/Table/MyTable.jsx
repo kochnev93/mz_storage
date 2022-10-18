@@ -17,14 +17,62 @@ export const MyTable = ({ titleColumn, content = null }) => {
   let captionCount;
   let bodyContent;
 
-  // content = [{
-  //   warehouse_title: 'warehouse',
-  //   category_title: 'category',
-  //   name: 'name',
-  //   sn: 'sn',
-  //   count: 123,
-  //   id: 999
-  // }];
+  // [
+  //   {
+  //     id: 1,
+  //     name: 'Монитор Asus P123DF',
+  //     id_warehouse: 12,
+  //     warehouse_title: '10-я линия В.О., 17к2',
+  //     id_category: 2,
+  //     category_title: 'Монитор',
+  //     sn: '123'
+  //   },
+  //   {
+  //     id: 1,
+  //     name: 'Монитор Asus P123DF',
+  //     id_warehouse: 12,
+  //     warehouse_title: '10-я линия В.О., 17к2',
+  //     id_category: 2,
+  //     category_title: 'Монитор',
+  //     sn: '123 '
+  //   },
+  //   {
+  //     id: 1,
+  //     name: 'Монитор Asus P123DF',
+  //     id_warehouse: 12,
+  //     warehouse_title: '10-я линия В.О., 17к2',
+  //     id_category: 2,
+  //     category_title: 'Монитор',
+  //     sn: 'пп'
+  //   },
+  //   {
+  //     id: 1,
+  //     name: 'Монитор Asus P123DF',
+  //     id_warehouse: 12,
+  //     warehouse_title: '10-я линия В.О., 17к2',
+  //     id_category: 2,
+  //     category_title: 'Монитор',
+  //     sn: '!!!'
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'АДМ Ligat',
+  //     id_warehouse: 12,
+  //     warehouse_title: '10-я линия В.О., 17к2',
+  //     id_category: 2,
+  //     category_title: 'Монитор',
+  //     sn: 'sn1'
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'АДМ Ligat',
+  //     id_warehouse: 12,
+  //     warehouse_title: '10-я линия В.О., 17к2',
+  //     id_category: 2,
+  //     category_title: 'Монитор',
+  //     sn: 'sn2'
+  //   }
+  // ]
 
   const getEmptyLine = () => {
     return (
@@ -48,7 +96,7 @@ export const MyTable = ({ titleColumn, content = null }) => {
     if (content === null) return getEmptyLine();
     let table = content.map((item, index) => (
       <tr>
-        <td>{index + 1}</td>
+        <td>{item.id}</td>
         <td>{item.warehouse_title}</td>
         <td>{item.category_title}</td>
         <td>{item.name}</td>
@@ -97,5 +145,5 @@ MyTable.defaultProps = {
     sn: 'sn',
     count: 123,
     id: 999
-  }]
+  }] 
 }

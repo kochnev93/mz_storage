@@ -14,10 +14,16 @@ const useFetch = (url, options) => {
     let response = await fetch(url, options);
 
     if(response.ok){
+      
       let result = await response.json();
-      return {data: result}
+      if(result.data){
+        return {data: result.data, error: null}
+      } else{
+        return {data: null, error: result.error}
+      }
+
     } else{
-      return {error: result}
+      console.warn('Ошибка при запросе')
     }
   }
 

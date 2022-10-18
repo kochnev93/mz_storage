@@ -25,7 +25,6 @@ import Modal from '../MyModal2.jsx';
 import InputForSN from './InputForSN/InputForSN.jsx';
 import { IoMdAddCircle } from 'react-icons/Io';
 
-
 function ModalReceiptProduct() {
   const dispatch = useDispatch();
 
@@ -67,8 +66,7 @@ function ModalReceiptProduct() {
   const [url, setUrl] = useState('');
   const [validationUrl, setValidationUrl] = useState(true);
 
- const {fetchNow} = useFetch();
-
+  const { fetchNow } = useFetch();
 
   useEffect(() => {
     setProduct([]);
@@ -83,7 +81,7 @@ function ModalReceiptProduct() {
   const addReceipt = async (e) => {
     e.preventDefault();
 
-    //dispatch(setIsLoadingReceipt({ isLoading: true }));
+    dispatch(setIsLoadingReceipt({ isLoading: true }));
 
     let data = JSON.stringify({
       warehouse: warehouse,
@@ -92,24 +90,30 @@ function ModalReceiptProduct() {
       count: count,
       contract: contract,
       url: url,
-      vendor: vendor
+      vendor: vendor,
     });
 
     let requestOptions = {
-      method: 'GET',
-     // headers: myHeaders,
-     // body: data,
+      method: 'POST',
+      body: data,
     };
 
-    
-    // fetchNow('http://localhost:3001/api/receipt_product', requestOptions)
+    const result = await fetchNow(
+      'http://localhost:3001/api/receipt_product',
+      requestOptions
+    );
 
-  
-    const resss = await fetchNow('https://jsonplaceholder.typicode.com/todos/1', requestOptions);
+    if (result.data) {
+      dispatch(setMessageReceipt({ message: result.data }));
+      setTimeout(() => {
+        dispatch(setIsLoadingReceipt({ isLoading: false }));
+      }, 100);
 
-    console.group('FETCH AFTER');
-    console.log(resss);
-    console.groupEnd();
+    } else {
+      console.warn(result.error);
+      dispatch(setMessageReceipt({ message: result.error }));
+      dispatch(setErrorsReceipt({ errors: true }));
+    }
 
     // fetch('http://localhost:3001/api/receipt_product', requestOptions)
     //   .then((res) => {

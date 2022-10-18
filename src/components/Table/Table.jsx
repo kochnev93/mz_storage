@@ -6,7 +6,13 @@ import { MyInputSubmit } from '../elements/Form/InputSubmit/MyInputSubmit.jsx';
 import MyButton from '../ui/Buttons/ButtonSend.jsx';
 import MyDropdown from '../ui/Dropdown/MyDropdown.jsx';
 import cx from 'classnames';
-import authHeader from '../../services/auth-header';
+
+
+// Hooks
+import useFetch from '../../hooks/useFetch';
+
+
+
 
 
 export const Table = () => {
@@ -18,7 +24,7 @@ export const Table = () => {
   const [validationCategory, setValidationCategory] = useState(true);
   const [data, setData] = useState(null);
   const [titleColumn, setTitleColumn] = useState([
-    '№ п/п',
+    'id',
     'Склад',
     'Категория',
     'Наименование',
@@ -26,6 +32,8 @@ export const Table = () => {
     'Количество',
     'Действия',
   ]);
+
+  const {fetchNow} = useFetch();
 
   useEffect(() => {
     setWarehouse(JSON.parse(localStorage.getItem('mz_dashboard_warehouse')));
@@ -69,38 +77,26 @@ export const Table = () => {
     return countError == 0 ? true : false;
   };
 
-  const fetchData = async () => {
-    let myHeaders = new Headers();
-    myHeaders.append('content-type', 'application/json');
-    myHeaders.append('Authorization', `${authHeader()}`);
+  const getProducts = async (e) => {
+    e.preventDefault();
 
     const data = JSON.stringify({ warehouse: warehouse, category: category });
 
     let requestOptions = {
-      //mode: 'no-cors',
       method: 'POST',
-      headers: myHeaders,
       body: data,
     };
 
-    fetch('http://localhost:3001/api/get_products', requestOptions)
-      .then((res) => {
-        console.log(res);
+    const result = await fetchNow('http://localhost:3001/api/get_products', requestOptions);
 
-        if (!res.ok) {
-          throw new Error(`${res.status}. ${res.statusText}`);
-        } else {
-          return res.json();
-        }
-      })
-      .then((result) => {
-        console.log(result);
-        setData(result);
-        localStorage.setItem('mz_dashboard_data', JSON.stringify(result));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if(result.data){
+      setData(result.data);
+    } else {
+      console.warn(result.error);
+    }
+
+    //localStorage.setItem('mz_dashboard_data', JSON.stringify(result));
+
   };
 
   return (
@@ -134,7 +130,7 @@ export const Table = () => {
         <div className={styles.MyButton}>
           <MyButton
             type="send"
-            action={search}
+            action={getProducts}
             title="Найти"
             loadingTitle="Загрузка"
           />
