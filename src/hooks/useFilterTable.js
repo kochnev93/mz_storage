@@ -1,5 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import Row from '../components/elements/Table/Row.jsx';
+import RowDropdown from '../components/elements/Table/RowDropdown.jsx';
+
 
 
 const useFilterTable = (arr) => {
@@ -8,35 +10,76 @@ const useFilterTable = (arr) => {
        // id товара: Количество вариантов товара
     }
 
-    arr.forEach(item => {
-        if( unique.hasOwnProperty(`${item.id}`) ){
-            unique[`${item.id}`] = unique[`${item.id}`] + 1
-        } else{
-            unique[`${item.id}`] = 1
-        }   
-    });
+    
 
-    console.log(unique);
+    // arr.forEach(item => {
+    //     if( unique.hasOwnProperty(`${item.id}`) ){
+    //         unique[`${item.id}`] = unique[`${item.id}`] + 1
+    //     } else{
+    //         unique[`${item.id}`] = 1
+    //     }   
+    // });
+
+    // console.log(unique);
+
+    // const bodyContent = useMemo(() => {
+    //     return arr.map((item, index) => {
+    //        // if (unique[`${item.id}`] === 1){
+    //             return (
+    //                 <Row product={item} />
+    //             )
+    //        // } 
+
+    //     });
+    // }, []);
+
+
+    const getHiddenStr = (arr) => {
+        const result = [];
+
+        arr.map((item) => {
+            let index = result.findIndex((el) => {
+                return el?.id == item?.id
+            })
+
+            if(index !== -1){
+                result[index].sn.push(item.sn)
+            } else{
+                result.push({
+                    id: item.id,
+                    name: item.name,
+                    id_warehouse: item.id_warehouse,
+                    warehouse_title: item.warehouse_title,
+                    id_category: item.id_category,
+                    category_title: item.category_title,
+                    sn: [item.sn]
+                })
+            }
+        })
+
+        console.log(result)
+        return result;
+    }
+
+    let content = getHiddenStr(arr); 
 
     const bodyContent = useMemo(() => {
-        return arr.map((item, index) => {
-           // if (unique[`${item.id}`] === 1){
+        return content.map((item, index) => {
+            if(item.sn.length > 1){
+                return(
+                    <RowDropdown product={item} count={item.sn.length} sn={item.sn}/>
+                )
+
+            } else{
                 return (
                     <Row product={item} />
-                )
-            //} else{
-                //getHiddenStr(item, unique[`${item.id}`])
-            //}
-
+                ) 
+            }
         });
     }, []);
 
-    const getHiddenStr = (product, count) => {
-        console.log (product, count)
-    }
 
     return bodyContent;
-
 }
 
 export default useFilterTable;

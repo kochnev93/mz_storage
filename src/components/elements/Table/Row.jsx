@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 
 import { AiOutlineInfoCircle } from 'react-icons/Ai';
 import { BiTransfer } from 'react-icons/Bi';
@@ -19,7 +20,7 @@ const Row = (props) => {
           <td>{props.product?.category_title}</td>
           <td>{props.product?.name}</td>
           <td>{props.product?.sn}</td>
-          <td>{props.product?.count}</td>
+          <td>{props.product?.sn?.length}</td>
           <td>
             <div className={styles.product_action}>
               <AiOutlineInfoCircle
