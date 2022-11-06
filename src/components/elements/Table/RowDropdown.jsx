@@ -1,90 +1,107 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import cx from 'classnames';
 
 import { AiOutlineInfoCircle } from 'react-icons/Ai';
 import { BiTransfer } from 'react-icons/Bi';
 
-import styles from './Table.module.scss'
+import styles from './Table.module.scss';
 
 //Hooks
 import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
 
+const RowDropdown = ({ product, count, sn }) => {
+  const dispatch = useDispatch();
 
-const RowDropdown = ({product, count, sn}) => {
-    const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
 
-    const [visible, setVisible] = useState(false);
+  const clickHandler = (e) => {
+    e.preventDefault();
+    setVisible(!visible);
+  };
 
-    const clickHandler = (e) => {
-        e.preventDefault();
-        setVisible(!visible);
+  const declination = (number, one, two, five) => {
+    let n = Math.abs(number);
+    n %= 100;
+    if (n >= 5 && n <= 20) {
+      return five;
     }
-
-    const declination = (number, one, two, five) => {
-        let n = Math.abs(number);
-        n %= 100;
-        if (n >= 5 && n <= 20) {
-          return five;
-        }
-        n %= 10;
-        if (n === 1) {
-          return one;
-        }
-        if (n >= 2 && n <= 4) {
-          return two;
-        }
-        return five;
+    n %= 10;
+    if (n === 1) {
+      return one;
     }
-
-    const mainRow = () => {
-        return (
-            <tr>
-              <td>{product?.id}</td>
-              <td>{product?.warehouse_title}</td>
-              <td>{product?.category_title}</td>
-              <td>{product?.name}</td>
-              <td><a href="" onClick={clickHandler} className={styles.count_link} title={visible ? 'Скрыть' : 'Показать'}>{`${count} ${declination(count, 'вариант', 'варианта', 'вариантов')}`}</a></td>
-              <td>{count}</td>
-              <td>
-                <div className={styles.product_action}>
-                  <AiOutlineInfoCircle
-                    data-productID={product?.id}
-                    title="Информация"
-                    onClick={(e) => {
-                      dispatch(
-                        setActive({ active: true, product_id: e.target.dataset.productID })
-                      );
-                    }}
-                  />
-                  <BiTransfer title="Перемещение" />
-                </div>
-              </td>
-            </tr>
-        ) 
+    if (n >= 2 && n <= 4) {
+      return two;
     }
+    return five;
+  };
 
-    const subRow = sn.map( item => {
-        return (
-            <tr className={ cx(styles.row, {[styles.active]: visible}) } >
-              <td>{' '}</td>
-              <td>{' '}</td>
-              <td>{' '}</td>
-              <td>{product?.name}</td>
-              <td>{item}</td>
-              <td>{'1'}</td>
-              <td>{' '}</td>
-            </tr>
-        ) 
-    })
-
-
+  const mainRow = () => {
     return (
-        <>
-            {mainRow()}
-            {subRow}
-        </>
-    )
-}
+      <tr>
+        <td>{product?.id}</td>
+        <td>{product?.warehouse_title}</td>
+        <td>{product?.category_title}</td>
+        <td>{product?.name}</td>
+        <td>
+          <a
+            href=""
+            onClick={clickHandler}
+            className={styles.count_link}
+            title={visible ? 'Скрыть' : 'Показать'}
+          >{`${count} ${declination(
+            count,
+            'вариант',
+            'варианта',
+            'вариантов'
+          )}`}</a>
+        </td>
+        <td>{count}</td>
+        <td>
+          <div className={styles.product_action}>
+            <AiOutlineInfoCircle
+              data-productID={product?.id}
+              title="Информация"
+              onClick={(e) => {
+                dispatch(
+                  setActive({
+                    active: true,
+                    product_id: e.target.dataset.productID,
+                  })
+                );
+              }}
+            />
+            <BiTransfer title="Перемещение" />
+          </div>
+        </td>
+      </tr>
+    );
+  };
+
+  const subRow = sn.map((item) => {
+    return (
+      <tr className={cx(styles.row, { [styles.active]: visible })}>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td>{product?.name}</td>
+        <td>{item}</td>
+        <td>{'1'}</td>
+        <td>
+          <div className={styles.product_action}>
+            <BiTransfer data-sn={item} title="Перемещение" />
+          </div>
+        </td>
+      </tr>
+    );
+  });
+
+  return (
+    <>
+      {mainRow()}
+      {subRow}
+    </>
+  );
+};
 
 export default RowDropdown;

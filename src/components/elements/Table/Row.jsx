@@ -20,7 +20,7 @@ const Row = (props) => {
           <td>{props.product?.category_title}</td>
           <td>{props.product?.name}</td>
           <td>{props.product?.sn}</td>
-          <td>{props.product?.sn?.length}</td>
+          <td>{props.product?.count ? props.product.count : props.product.sn.length}</td>
           <td>
             <div className={styles.product_action}>
               <AiOutlineInfoCircle

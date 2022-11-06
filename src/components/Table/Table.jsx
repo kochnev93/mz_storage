@@ -22,7 +22,7 @@ export const Table = () => {
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [titleColumn, setTitleColumn] = useState([
     'id',
     'Склад',
@@ -35,16 +35,16 @@ export const Table = () => {
 
   const {fetchNow} = useFetch();
 
-  useEffect(() => {
-    setWarehouse(JSON.parse(localStorage.getItem('mz_dashboard_warehouse')));
-    setCategory(JSON.parse(localStorage.getItem('mz_dashboard_category')));
-    setData(JSON.parse(localStorage.getItem('mz_dashboard_data')));
-  }, []);
+  // useEffect(() => {
+  //   setWarehouse(JSON.parse(localStorage.getItem('mz_dashboard_warehouse')));
+  //   setCategory(JSON.parse(localStorage.getItem('mz_dashboard_category')));
+  //   setData(JSON.parse(localStorage.getItem('mz_dashboard_data')));
+  // }, []);
 
-  useEffect(() => {
-    localStorage.setItem('mz_dashboard_warehouse', JSON.stringify(warehouse));
-    localStorage.setItem('mz_dashboard_category', JSON.stringify(category));
-  }, [warehouse, category]);
+  // useEffect(() => {
+  //   localStorage.setItem('mz_dashboard_warehouse', JSON.stringify(warehouse));
+  //   localStorage.setItem('mz_dashboard_category', JSON.stringify(category));
+  // }, [warehouse, category]);
 
   const search = (e) => {
     e.preventDefault();
