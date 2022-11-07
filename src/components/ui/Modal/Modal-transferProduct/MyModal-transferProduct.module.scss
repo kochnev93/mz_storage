@@ -1,0 +1,30 @@
+.product_prop{
+    list-style: none;
+
+    li{
+        display: flex;
+        align-items: center;
+
+         span:first-child{
+            color: grey;
+            font-size: 14px;
+            margin-right: 10px;
+         }
+    }
+}
+
+.transfer_item:not(:last-child){
+    margin-bottom: 30px;
+}
+
+
+.buttons {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    padding-top: 20px;
+  
+    button:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
