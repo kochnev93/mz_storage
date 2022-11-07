@@ -9,6 +9,8 @@ import styles from './Table.module.scss';
 //Hooks
 import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
+import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
+
 
 const RowDropdown = ({ product, count, sn }) => {
   const dispatch = useDispatch();
@@ -71,7 +73,6 @@ const RowDropdown = ({ product, count, sn }) => {
                 );
               }}
             />
-            <BiTransfer title="Перемещение" />
           </div>
         </td>
       </tr>
@@ -89,7 +90,17 @@ const RowDropdown = ({ product, count, sn }) => {
         <td>{'1'}</td>
         <td>
           <div className={styles.product_action}>
-            <BiTransfer data-sn={item} title="Перемещение" />
+          <BiTransfer 
+              title="Перемещение" 
+              onClick={(e) => {
+                dispatch(
+                  setActiveTransfer({
+                    active: true,
+                    product: {...product, sn: item},
+                  })
+                );
+              }}
+              />
           </div>
         </td>
       </tr>

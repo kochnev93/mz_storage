@@ -7,12 +7,7 @@ import { useAuth } from '../../../../hooks/use-auth';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setActive,
-  setErrors,
-  setIsLoading,
-  setMessage,
-} from '../../../../features/modal/about-productSlice';
+import {setActiveTransfer, setErrorsTransfer, setMessageTransfer, setResetTransfer, setIsLoadingTransfer, setDefaultTransfer} from '../../../../features/modal/transfer-productSlice';
 
 //Styles
 import styles from './MyModal-transferProduct.module.scss';
@@ -26,38 +21,38 @@ function ModalTransferProduct() {
   const dispatch = useDispatch();
   const user = useAuth();
 
-  // Local State
-  const [data, setData] = useState(null);
-  const [history, setHistory] = useState(null);
-  const [disabled, setDisabled] = useState(
-    user.role === 'admin' ? false : true
-  );
-
   // Redux
-  const active = useSelector((state) => state.modal_about_product.active);
-  const product = useSelector((state) => state.modal_about_product.product_id);
-  const errors = useSelector((state) => state.modal_about_product.errors);
-  const message = useSelector((state) => state.modal_about_product.message);
-  const reset = useSelector((state) => state.modal_about_product.reset);
-  const isLoading = useSelector((state) => state.modal_about_product.isLoading);
+  const active = useSelector((state) => state.modal_transfer_product.active);
+  const product = useSelector((state) => state.modal_transfer_product.product);
+  const errors = useSelector((state) => state.modal_transfer_product.errors);
+  const message = useSelector((state) => state.modal_transfer_product.message);
+  const reset = useSelector((state) => state.modal_transfer_product.reset);
+  const isLoading = useSelector((state) => state.modal_transfer_product.isLoading);
+
+  console.log(product)
 
   return (
     <Modal
       active={active}
       setActive={() => {
-        dispatch(setActive({ active: false }));
+        dispatch(setActiveTransfer({ active: false }));
       }}
-      title="Информация о товаре"
+      title={`Перемещение товара`}
       message={message}
       errors={errors}
       isLoading={isLoading}
-      footer={
-        disabled
-          ? 'Редактирование запрещено. Обратитесь к администратору'
-          : 'Редактирование разрешено'
-      }
     >
-  <h1>TRANSFER</h1>
+      <p>Вы перемещате {product?.id}-{product?.name} с серийным номером <b>{product?.sn}</b> со склада {product?.warehouse_title}</p>
+      <h4>Куда переместить?</h4>
+      <MyDropdown
+            id="transfer_warehouse"
+            title="Склад"
+            placeholder="Выберите склад"
+            multiple={false}
+            validation={() => {}}
+            changeValue={() => {}}
+            url={'get_warehouse'}
+          />
     </Modal>
   );
 }
