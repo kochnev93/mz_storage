@@ -17,6 +17,23 @@
     margin-bottom: 30px;
 }
 
+.product_table{
+  border-collapse: collapse;
+  width: 100%;
+
+  td, th{
+    padding: 10px;
+    border: 1px solid black;
+    font-size: 14px;
+  }
+
+  th {
+    background: #f0f0f0; 
+    font-size: 14px;
+    text-align: left;
+   }
+}
+
 
 .buttons {
     display: flex;

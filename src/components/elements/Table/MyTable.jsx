@@ -7,36 +7,45 @@ export const MyTable = ({ titleColumn, content = [] }) => {
   const columns = titleColumn.map((column) => <th>{column}</th>);
 
 
-  // content = [
-  //   {
-  //     id: 1,
-  //     name: 'Монитор Asus P123DF',
-  //     id_warehouse: 12,
-  //     warehouse_title: '10-я линия В.О., 17к2',
-  //     id_category: 2,
-  //     category_title: 'Монитор',
-  //     sn: '123'
-  //   },
-  //   {
-  //     id: 1,
-  //     name: 'Монитор Asus P123DF',
-  //     id_warehouse: 12,
-  //     warehouse_title: '10-я линия В.О., 17к2',
-  //     id_category: 2,
-  //     category_title: 'Монитор',
-  //     sn: '123456'
-  //   },
-  //   {
-  //     id: 3033,
-  //     name: 'АДМ Ligat',
-  //     id_warehouse: 12,
-  //     warehouse_title: '10-я линия В.О., 17к2',
-  //     id_category: 2,
-  //     category_title: 'Монитор',
-  //     sn:[],
-  //     count: 12
-  //   },
-  // ];
+  content = [
+    {
+      id: 1,
+      name: 'Монитор Asus P123DF',
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn: '123'
+    },
+    {
+      id: 1,
+      name: 'Монитор Asus P123DF',
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn: '123456'
+    },
+    {
+      id: 3033,
+      name: 'АДМ Ligat',
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn:[],
+      count: 12
+    },
+    {
+      id: 3036,
+      name: 'АДМ Ligat66',
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn: '123321123',
+    },
+  ];
 
   let captionCount;
   let bodyContent = useFilterTable(content);

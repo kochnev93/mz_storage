@@ -6,7 +6,6 @@ import RowDropdown from '../components/elements/Table/RowDropdown.jsx';
 
 
 const useFilterTable = (arr) => {
-    console.log('UseFILTER', arr)
 
     const getHiddenStr = (arr) => {
         const result = [];
@@ -49,7 +48,6 @@ const useFilterTable = (arr) => {
             }
         })
 
-        console.log(result)
         return result;
     }
 

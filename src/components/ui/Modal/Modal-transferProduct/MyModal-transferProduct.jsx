@@ -45,6 +45,26 @@ function ModalTransferProduct() {
 
   const { fetchNow } = useFetch();
 
+  const checkTransfer = () => {
+    // Функция сверяет текущий склад со складом, который в БД
+    
+    // Получение данных с сервера
+    //---//
+
+    if(result.data !== product?.id_warehouse){
+      dispatch(
+        setMessageTransfer({
+          errors: true,
+          message: 'Товар был перемещен ранее, обновите страницу',
+        })
+      );
+
+      return false;
+    }
+
+    return true;
+  }
+
   const validation = () => {
     dispatch(setDefaultTransfer());
     setValidationWarehouse(true);
@@ -130,24 +150,24 @@ function ModalTransferProduct() {
 
       <div className={styles.transfer_item}>
         <h4>Текущее расположение</h4>
-        <ul className={styles.product_prop}>
-          <li>
-            <span>ID: </span>
-            <span>{product?.id}</span>
-          </li>
-          <li>
-            <span>Наименование: </span>
-            <span>{product?.name}</span>
-          </li>
-          <li>
-            <span>SN: </span>
-            <span>{product?.sn}</span>
-          </li>
-          <li>
-            <span>Склад: </span>
-            <span>{product?.warehouse_title}</span>
-          </li>
-        </ul>
+        <table className={styles.product_table}>
+          <tr>
+            <th>ID</th>
+            <td>{product?.id}</td>
+          </tr>
+          <tr>
+            <th>Наименование</th>
+            <td>{product?.name}</td>
+          </tr>
+          <tr>
+            <th>SN</th>
+            <td>{product?.sn}</td>
+          </tr>
+          <tr>
+            <th>Склад</th>
+            <td>{product?.warehouse_title}</td>
+          </tr>
+        </table>
       </div>
 
       <div className={styles.buttons}>

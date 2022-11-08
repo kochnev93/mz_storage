@@ -8,23 +8,49 @@ import styles from './Table.module.scss'
 //Hooks
 import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
+import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
 
 
-const Row = (props) => {
+
+const Row = ({product}) => {
     const dispatch = useDispatch();
+
+    const transferIcon = () => {
+      if(product?.sn.length){
+        return(
+          <BiTransfer 
+              title="Перемещение" 
+              onClick={(e) => {
+                dispatch(
+                  setActiveTransfer({
+                    active: true,
+                    product: {...product, sn: product.sn[0]},
+                  })
+                );
+              }}
+          />
+        )
+      } else {
+        return(
+          <BiTransfer 
+            title="Расход" 
+          />
+        )
+      }
+    }
 
     return (
         <tr>
-          <td>{props.product?.id}</td>
-          <td>{props.product?.warehouse_title}</td>
-          <td>{props.product?.category_title}</td>
-          <td>{props.product?.name}</td>
-          <td>{props.product?.sn}</td>
-          <td>{props.product?.count ? props.product.count : props.product.sn.length}</td>
+          <td>{product?.id}</td>
+          <td>{product?.warehouse_title}</td>
+          <td>{product?.category_title}</td>
+          <td>{product?.name}</td>
+          <td>{product?.sn}</td>
+          <td>{product?.count ? product.count : product.sn.length}</td>
           <td>
             <div className={styles.product_action}>
               <AiOutlineInfoCircle
-                data-productID={props.product?.id}
+                data-productID={product?.id}
                 title="Информация"
                 onClick={(e) => {
                   dispatch(
@@ -32,7 +58,7 @@ const Row = (props) => {
                   );
                 }}
               />
-              <BiTransfer title="Перемещение" />
+              {transferIcon()}
             </div>
           </td>
         </tr>
