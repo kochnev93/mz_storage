@@ -16,7 +16,7 @@ const Row = ({product}) => {
     const dispatch = useDispatch();
 
     const transferIcon = () => {
-      if(product?.sn.length){
+      if(product?.sn_accounting){
         return(
           <BiTransfer 
               title="Перемещение" 

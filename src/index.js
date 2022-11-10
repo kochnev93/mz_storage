@@ -9,6 +9,7 @@ import { About } from './pages/About/About.jsx';
 import { Dashboard } from './pages/Dashboard/Dashboard.jsx';
 import { Admin } from './pages/Admin/Admin.jsx';
 import { Auth } from './pages/Auth/Auth.jsx';
+import { Error } from './pages/Error/Error.jsx';
 
 //Pages for Admin
 import { Nomenclature } from './components/Admin/Nomenclature/Nomenclature.jsx';
@@ -20,6 +21,7 @@ import { Provider } from 'react-redux';
 import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
+
 
 
 
@@ -46,21 +48,27 @@ ReactDOM.render(
               </RequireAuth>
             }
           />
+
           <Route
             path="admin/*"
             element={
-              <RequireAuth>
+              <RequireAuth onlyAdmin={true}>
                 <Admin />
               </RequireAuth>
             }
           >
-            <Route path="products" element={<h1>Hello products</h1>} />
-            <Route path="nomenclature" element={<Nomenclature />} />
+              <Route path="products" element={<h1>Hello products</h1>} />
+              <Route path="nomenclature" element={<Nomenclature />} />
+              {/* <Route path="*" element={ <Error message={"Страница не найдена"}/> }/> */}
+
           </Route>
+
           <Route
             path="login"
             element={<Auth />}
           />
+
+          <Route path="*" element={ <Error message={"Страница не найдена"}/> }/>
 
         </Routes>
       </BrowserRouter>

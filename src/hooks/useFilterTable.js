@@ -12,8 +12,8 @@ const useFilterTable = (arr) => {
 
         arr.map((item) => {
 
-            // Если продукт имеет поле "Количество"
-            if(item.hasOwnProperty('count')){
+            // Если не ведется серийный учет
+            if(!item.sn_accounting){
                 result.push({
                     id: item.id,
                     name: item.name,
@@ -22,7 +22,8 @@ const useFilterTable = (arr) => {
                     id_category: item.id_category,
                     category_title: item.category_title,
                     sn: [],
-                    count: item.count
+                    count: item.count,
+                    sn_accounting: item.sn_accounting
                 });
 
                 return;
@@ -43,7 +44,8 @@ const useFilterTable = (arr) => {
                     warehouse_title: item.warehouse_title,
                     id_category: item.id_category,
                     category_title: item.category_title,
-                    sn: [item.sn]
+                    sn: [item.sn],
+                    sn_accounting: item.sn_accounting
                 })
             }
         })
@@ -51,15 +53,16 @@ const useFilterTable = (arr) => {
         return result;
     }
 
+    // Отсортированный список товаров
     let content = getHiddenStr(arr); 
 
+
     const bodyContent = useMemo(() => {
-        return content.map((item, index) => {
+        return content.map((item) => {
             if(item.sn.length > 1){
                 return(
                     <RowDropdown product={item} count={item.sn.length} sn={item.sn}/>
                 )
-
             } else{
                 return (
                     <Row product={item} />
