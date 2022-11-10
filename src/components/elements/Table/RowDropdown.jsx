@@ -15,7 +15,9 @@ import { setActiveTransfer } from '../../../features/modal/transfer-productSlice
 const RowDropdown = ({ product, count, sn }) => {
   const dispatch = useDispatch();
 
+  // Состояние скрытых строк
   const [visible, setVisible] = useState(false);
+
 
   const clickHandler = (e) => {
     e.preventDefault();

@@ -8,6 +8,8 @@ import receiptProductSlice from '../features/modal/receipt-productSlice';
 import transferProductSlice from '../features/modal/transfer-productSlice';
 import userSlice from '../features/users/userSlice';
 import appSlice from '../features/app/appSlice';
+import dashboard  from '../features/dashboard/dashboardSlice';
+
 
 
 
@@ -20,5 +22,6 @@ export const store = configureStore({
         modal_about_product: aboutProductSlice,
         modal_receipt_product: receiptProductSlice,
         modal_transfer_product: transferProductSlice,
+        dashboard: dashboard,
     },
 });

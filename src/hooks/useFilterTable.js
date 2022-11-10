@@ -13,7 +13,7 @@ const useFilterTable = (arr) => {
         arr.map((item) => {
 
             // Если не ведется серийный учет
-            if(!item.sn_accounting){
+            if(!item.accounting_sn){
                 result.push({
                     id: item.id,
                     name: item.name,
@@ -23,7 +23,7 @@ const useFilterTable = (arr) => {
                     category_title: item.category_title,
                     sn: [],
                     count: item.count,
-                    sn_accounting: item.sn_accounting
+                    accounting_sn: item.accounting_sn
                 });
 
                 return;
@@ -45,7 +45,7 @@ const useFilterTable = (arr) => {
                     id_category: item.id_category,
                     category_title: item.category_title,
                     sn: [item.sn],
-                    sn_accounting: item.sn_accounting
+                    accounting_sn: item.accounting_sn
                 })
             }
         })

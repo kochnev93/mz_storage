@@ -7,15 +7,13 @@ import MyButton from '../ui/Buttons/ButtonSend.jsx';
 import MyDropdown from '../ui/Dropdown/MyDropdown.jsx';
 import cx from 'classnames';
 
-
 // Hooks
 import useFetch from '../../hooks/useFetch';
-
-
-
-
+import { useDispatch } from 'react-redux';
+import { addProducts } from '../../features/dashboard/dashboardSlice';
 
 export const Table = () => {
+  const dispatch = useDispatch();
 
   // Dashboard
   const [warehouse, setWarehouse] = useState([]);
@@ -33,7 +31,7 @@ export const Table = () => {
     'Действия',
   ]);
 
-  const {fetchNow} = useFetch();
+  const { fetchNow } = useFetch();
 
   // useEffect(() => {
   //   setWarehouse(JSON.parse(localStorage.getItem('mz_dashboard_warehouse')));
@@ -87,21 +85,24 @@ export const Table = () => {
       body: data,
     };
 
-    const result = await fetchNow('http://localhost:3001/api/get_products', requestOptions);
+    const result = await fetchNow(
+      'http://localhost:3001/api/get_products',
+      requestOptions
+    );
 
-    if(result.data){
+    dispatch(addProducts({ products: result.data }));
+
+    if (result.data) {
       setData(result.data);
     } else {
       console.warn(result.error);
     }
 
     //localStorage.setItem('mz_dashboard_data', JSON.stringify(result));
-
   };
 
   return (
     <div className="dashboard">
-    
       <form className={styles.form_dashboard_filter}>
         <div className={styles.MyDropdown}>
           <MyDropdown
@@ -137,10 +138,7 @@ export const Table = () => {
         </div>
       </form>
 
-      <MyTable
-        titleColumn={titleColumn}
-        content={data}
-      />
+      <MyTable titleColumn={titleColumn} content={data} />
     </div>
   );
 };
