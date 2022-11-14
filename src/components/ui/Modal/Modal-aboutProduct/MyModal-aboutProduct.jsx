@@ -4,6 +4,7 @@ import cx from 'classnames';
 // Hooks
 import authHeader from '../../../../services/auth-header';
 import { useAuth } from '../../../../hooks/use-auth';
+import useFetch from '../../../../hooks/useFetch';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,6 +30,7 @@ import { Chat } from '../../../Chat/Chat.jsx';
 function ModalAboutProduct() {
   const dispatch = useDispatch();
   const user = useAuth();
+  const { fetchNow } = useFetch();
 
   // Local State
   const [data, setData] = useState(null);
@@ -39,106 +41,107 @@ function ModalAboutProduct() {
 
   // Redux
   const active = useSelector((state) => state.modal_about_product.active);
-  const product = useSelector((state) => state.modal_about_product.product_id);
+  const product_id = useSelector(
+    (state) => state.modal_about_product.product_id
+  );
+  const warehouse_id = useSelector(
+    (state) => state.modal_about_product.warehouse_id
+  );
   const errors = useSelector((state) => state.modal_about_product.errors);
   const message = useSelector((state) => state.modal_about_product.message);
   const reset = useSelector((state) => state.modal_about_product.reset);
   const isLoading = useSelector((state) => state.modal_about_product.isLoading);
 
   useEffect(() => {
-    if (product !== null) {
-      fetchData(product);
-      fetchHistory(product);
+    if (product_id !== null) {
+      fetchData(product_id, warehouse_id);
+      //fetchHistory(product);
     }
-  }, [product]);
+  }, [product_id]);
 
-  const fetchData = (product) => {
-    let myHeaders = new Headers();
-    myHeaders.append('content-type', 'application/json');
-    myHeaders.append('Authorization', `${authHeader()}`);
+  const fetchData = async (product, warehouse) => {
+    dispatch(setIsLoading({ isLoading: true }));
 
-    let requestOptions = {
-      //mode: 'no-cors',
-      method: 'GET',
-      headers: myHeaders,
-    };
-
-    fetch(`http://localhost:3001/api/get_product/${product}`, requestOptions)
-      .then((res) => {
-        return res.json();
-      })
-      .then((result) => {
-        console.log(result);
-
-        if (result.errorMessage) {
-          dispatch(setMessage({ message: result.errorMessage, errors: true }));
-          throw Error(result.errorMessage);
-        }
-
-        setData(result.data);
-        dispatch(setIsLoading({ isLoading: false }));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const fetchHistory = (product) => {
-    let myHeaders = new Headers();
-    myHeaders.append('content-type', 'application/json');
-    myHeaders.append('Authorization', `${authHeader()}`);
+    let data = JSON.stringify({
+      product_id: product,
+      warehouse_id: warehouse,
+    });
 
     let requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
+      method: 'POST',
+      body: data,
     };
 
-    fetch(
-      `http://localhost:3001/api/get_product_history/${product}`,
+    const result = fetchNow(
+      `http://localhost:3001/api/get_product/${product}`,
       requestOptions
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((result) => {
-        console.log(result);
+    );
 
-        if (result.errorMessage) {
-          dispatch(setMessage({ message: result.errorMessage, errors: true }));
-          throw Error(result.errorMessage);
-        }
-
-        setHistory(result.data);
-        dispatch(setIsLoading({ isLoading: false }));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getHistory = () => {
-    if (history) {
-      return history.map((item) => {
-        return (
-          <li>
-            <div>{item.date}</div>
-            <p>{item.text}</p>
-            <details>
-              <summary>Изменения</summary>
-              <ul>
-                <li>Наименование: {item.change.product_name}</li>
-                <li>Категория: {item.change.category_title}</li>
-                <li>Склад: {item.change.warehouse_title}</li>
-                <li>s/n: {item.change.product_sn}</li>
-              </ul>
-            </details>
-          </li>
-        );
-      });
+    if (result.data) {
+      console.log(result.data);
+      setData(result.data);
+      dispatch(setIsLoading({ isLoading: false }));
     } else {
-      return <li>Ничего не найдено...</li>;
+      dispatch(setMessage({ message: result.errorMessage, errors: true }));
     }
   };
+
+  // const fetchHistory = (product) => {
+  //   let myHeaders = new Headers();
+  //   myHeaders.append('content-type', 'application/json');
+  //   myHeaders.append('Authorization', `${authHeader()}`);
+
+  //   let requestOptions = {
+  //     method: 'GET',
+  //     headers: myHeaders,
+  //   };
+
+  //   fetch(
+  //     `http://localhost:3001/api/get_product_history/${product}`,
+  //     requestOptions
+  //   )
+  //     .then((res) => {
+  //       return res.json();
+  //     })
+  //     .then((result) => {
+  //       console.log(result);
+
+  //       if (result.errorMessage) {
+  //         dispatch(setMessage({ message: result.errorMessage, errors: true }));
+  //         throw Error(result.errorMessage);
+  //       }
+
+  //       setHistory(result.data);
+  //       dispatch(setIsLoading({ isLoading: false }));
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  // const getHistory = () => {
+  //   if (history) {
+  //     return history.map((item) => {
+  //       return (
+  //         <li>
+  //           <div>{item.date}</div>
+  //           <p>{item.text}</p>
+  //           <details>
+  //             <summary>Изменения</summary>
+  //             <ul>
+  //               <li>Наименование: {item.change.product_name}</li>
+  //               <li>Категория: {item.change.category_title}</li>
+  //               <li>Склад: {item.change.warehouse_title}</li>
+  //               <li>s/n: {item.change.product_sn}</li>
+  //             </ul>
+  //           </details>
+  //         </li>
+  //       );
+  //     });
+  //   } else {
+  //     return <li>Ничего не найдено...</li>;
+  //   }
+  // };
 
   return (
     <Modal
@@ -207,7 +210,7 @@ function ModalAboutProduct() {
         </Tab>
         <Tab label={'История'}>
           <div>
-            <ul className={styles.history_list}>{getHistory()}</ul>
+            <ul className={styles.history_list}>{}</ul>
           </div>
         </Tab>
         <Tab label={'Комментарии'}>

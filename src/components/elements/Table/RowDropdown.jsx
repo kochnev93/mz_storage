@@ -64,13 +64,13 @@ const RowDropdown = ({ product, count, sn }) => {
         <td>
           <div className={styles.product_action}>
             <AiOutlineInfoCircle
-              data-productID={product?.id}
               title="Информация"
               onClick={(e) => {
                 dispatch(
                   setActive({
                     active: true,
-                    product_id: e.target.dataset.productID,
+                    product_id: product?.id,
+                    warehouse_id: product?.id_warehouse
                   })
                 );
               }}
@@ -98,6 +98,7 @@ const RowDropdown = ({ product, count, sn }) => {
                 dispatch(
                   setActiveTransfer({
                     active: true,
+                    activeProductID: product?.id,
                     product: {...product, sn: item},
                   })
                 );

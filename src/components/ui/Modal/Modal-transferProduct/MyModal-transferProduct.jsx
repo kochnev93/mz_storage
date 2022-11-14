@@ -14,8 +14,11 @@ import {
   setMessageTransfer,
   setResetTransfer,
   setIsLoadingTransfer,
+  editProductTransfer,
   setDefaultTransfer,
 } from '../../../../features/modal/transfer-productSlice';
+
+import { editProduct } from '../../../../features/dashboard/dashboardSlice';
 
 //Styles
 import styles from './MyModal-transferProduct.module.scss';
@@ -24,6 +27,7 @@ import styles from './MyModal-transferProduct.module.scss';
 import MyDropdown from '../../Dropdown/MyDropdown.jsx';
 import Modal from '../MyModal2.jsx';
 import MyButton from '../../Buttons/ButtonSend.jsx';
+
 
 function ModalTransferProduct() {
   const dispatch = useDispatch();
@@ -44,26 +48,6 @@ function ModalTransferProduct() {
   const [validationWarehouse, setValidationWarehouse] = useState(true);
 
   const { fetchNow } = useFetch();
-
-  const checkTransfer = () => {
-    // Функция сверяет текущий склад со складом, который в БД
-    
-    // Получение данных с сервера
-    //---//
-
-    if(result.data !== product?.id_warehouse){
-      dispatch(
-        setMessageTransfer({
-          errors: true,
-          message: 'Товар был перемещен ранее, обновите страницу',
-        })
-      );
-
-      return false;
-    }
-
-    return true;
-  }
 
   const validation = () => {
     dispatch(setDefaultTransfer());
@@ -114,9 +98,16 @@ function ModalTransferProduct() {
 
       if (result.data) {
         dispatch(setMessageTransfer({ message: result.data }));
+
         setTimeout(() => {
           dispatch(setIsLoadingTransfer({ isLoading: false }));
         }, 100);
+
+        dispatch(editProduct({unit: product, new_warehouse: warehouse}));
+        dispatch(editProductTransfer({new_warehouse: warehouse}));
+        setWarehouse([]);
+        dispatch(setResetTransfer({ reset: true }))
+
       } else {
         console.warn(result.error);
         dispatch(setMessageTransfer({ errors: true, message: result.error }));
@@ -144,6 +135,8 @@ function ModalTransferProduct() {
           multiple={false}
           validation={validationWarehouse}
           changeValue={setWarehouse}
+          reset={reset}
+          setReset={() => dispatch(setResetTransfer({ reset: false }))}
           url={'get_warehouse'}
         />
       </div>

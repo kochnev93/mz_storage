@@ -9,7 +9,7 @@ import cx from 'classnames';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addProducts } from '../../features/dashboard/dashboardSlice';
 
 export const Table = () => {
@@ -20,7 +20,7 @@ export const Table = () => {
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
-  const [data, setData] = useState([]);
+  //const [data, setData] = useState([]);
   const [titleColumn, setTitleColumn] = useState([
     'id',
     'Склад',
@@ -92,14 +92,16 @@ export const Table = () => {
 
     dispatch(addProducts({ products: result.data }));
 
-    if (result.data) {
-      setData(result.data);
-    } else {
-      console.warn(result.error);
-    }
+    // if (result.data) {
+    //   setData(result.data);
+    // } else {
+    //   console.warn(result.error);
+    // }
 
     //localStorage.setItem('mz_dashboard_data', JSON.stringify(result));
   };
+
+  const data = useSelector((state) => state.dashboard.products);
 
   return (
     <div className="dashboard">

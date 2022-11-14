@@ -4,12 +4,13 @@ const useFetch = (url, options) => {
 
   async function fetchNow(url, options) {
     // Заголовки запроса
-    if(options.body){
+    //if(options.body){
       let myHeaders = new Headers();
       myHeaders.append('content-type', 'application/json');
       myHeaders.append('Authorization', `${authHeader()}`);
+      
       options.headers = myHeaders;
-    }
+    //}
 
     let response = await fetch(url, options);
 
@@ -23,7 +24,7 @@ const useFetch = (url, options) => {
       }
 
     } else{
-      console.warn('Ошибка при запросе')
+      console.warn(`Ошибка при запросе ${url}`)
     }
   }
 

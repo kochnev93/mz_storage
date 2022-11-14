@@ -50,11 +50,14 @@ const Row = ({product}) => {
           <td>
             <div className={styles.product_action}>
               <AiOutlineInfoCircle
-                data-productID={product?.id}
                 title="Информация"
                 onClick={(e) => {
                   dispatch(
-                    setActive({ active: true, product_id: e.target.dataset.productID })
+                    setActive({ 
+                      active: true, 
+                      product_id: product?.id,
+                      warehouse_id: product?.id_warehouse
+                    })
                   );
                 }}
               />

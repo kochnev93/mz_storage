@@ -3,6 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
     active: false,
     product: null,
+    acitve_product: null,
     errors: false,
     message: '',
     reset: false,
@@ -16,6 +17,7 @@ export const transferProductSlice = createSlice({
         setActiveTransfer: (state, action) => {
             state.active = action.payload.active
             state.product = action.payload.product
+            state.acitve_product = action.payload.acitve_product
         },
         setErrorsTransfer: (state, action) => {
             state.errors = action.payload.errors
@@ -30,6 +32,12 @@ export const transferProductSlice = createSlice({
         setIsLoadingTransfer: (state, action) => {
             state.isLoading = action.payload.isLoading
         },
+        editProductTransfer: (state, action) => {
+            const new_warehouse_id = action.payload.new_warehouse[0].id;
+            const new_warehouse_title = action.payload.new_warehouse[0].title;
+            state.product.warehouse_id = new_warehouse_id;
+            state.product.warehouse_title = new_warehouse_title;
+        },
         setDefaultTransfer: (state, action) => {
             state.errors = false,
             state.message = '',
@@ -39,5 +47,5 @@ export const transferProductSlice = createSlice({
     }
 });
 
-export const {setActiveTransfer, setErrorsTransfer, setMessageTransfer, setResetTransfer, setIsLoadingTransfer, setDefaultTransfer} = transferProductSlice.actions
+export const {setActiveTransfer, setErrorsTransfer, setMessageTransfer, setResetTransfer, setIsLoadingTransfer, editProductTransfer, setDefaultTransfer} = transferProductSlice.actions
 export default transferProductSlice.reducer
