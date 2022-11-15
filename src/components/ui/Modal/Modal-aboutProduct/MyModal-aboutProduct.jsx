@@ -34,7 +34,8 @@ function ModalAboutProduct() {
 
   // Local State
   const [data, setData] = useState(null);
-  const [history, setHistory] = useState(null);
+  const [sn, setSn] = useState(null);
+  //const [history, setHistory] = useState(null);
   const [disabled, setDisabled] = useState(
     user.role === 'admin' ? false : true
   );
@@ -57,7 +58,7 @@ function ModalAboutProduct() {
       fetchData(product_id, warehouse_id);
       //fetchHistory(product);
     }
-  }, [product_id]);
+  }, [product_id, warehouse_id]);
 
   const fetchData = async (product, warehouse) => {
     dispatch(setIsLoading({ isLoading: true }));
@@ -72,17 +73,30 @@ function ModalAboutProduct() {
       body: data,
     };
 
-    const result = fetchNow(
+    const productInfo = await fetchNow(
       `http://localhost:3001/api/get_product/${product}`,
       requestOptions
     );
 
-    if (result.data) {
-      console.log(result.data);
-      setData(result.data);
+    if (productInfo.data) {
+      console.log(productInfo.data);
+      setData(productInfo.data);
       dispatch(setIsLoading({ isLoading: false }));
     } else {
-      dispatch(setMessage({ message: result.errorMessage, errors: true }));
+      dispatch(setMessage({ message: productInfo.errorMessage, errors: true }));
+    }
+
+    const productSN = await fetchNow(
+      `http://localhost:3001/api/get_sn_list`,
+      requestOptions
+    );
+
+    if (productSN.data) {
+      console.log(productSN.data);
+      setSn(productSN.data);
+      //dispatch(setIsLoading({ isLoading: false }));
+    } else {
+      dispatch(setMessage({ message: productSN.errorMessage, errors: true }));
     }
   };
 
@@ -183,7 +197,7 @@ function ModalAboutProduct() {
             <div className={styles.modalAbout_formItem}>
               <MyInput
                 title={'Категория'}
-                value={data?.category_id}
+                value={data?.category_title}
                 disabled={true}
                 validation={true}
               />
@@ -192,7 +206,7 @@ function ModalAboutProduct() {
             <div className={styles.modalAbout_formItem}>
               <MyInput
                 title={'Склад'}
-                value={data?.warehouse_id}
+                value={data?.warehouse_title}
                 disabled={true}
                 validation={true}
               />
@@ -200,11 +214,37 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'SN'}
-                value={data?.sn}
+                title={'Комментарий'}
+                value={data?.comment}
                 disabled={true}
                 validation={true}
               />
+            </div>
+
+            <div className={styles.modalAbout_formItem}>
+              {data?.accounting_sn ? 'Ведется серийный учет' : null}
+            </div>
+
+            <div className={styles.modalAbout_formItem}>
+              <h4>Наличие на филиале {data?.warehouse_title}</h4>
+              <ol>
+                {sn?.map((el) => {
+                  if (el.id_warehouse == warehouse_id) {
+                    return <li>{el.sn}</li>;
+                  }
+                })}
+              </ol>
+            </div>
+
+            <div className={styles.modalAbout_formItem}>
+            <h4>Наличие на других филиалах</h4>
+              <ol>
+                {sn?.map((el) => {
+                  if (el.id_warehouse != warehouse_id) {
+                    return <li>{el.sn} - {el.warehouse_title}</li>;
+                  }
+                })}
+              </ol>
             </div>
           </div>
         </Tab>
