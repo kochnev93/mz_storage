@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styles from './Table.module.scss';
-import useFilterTable from '../../../hooks/useFilterTable';
+//import useFilterTable from '../../../hooks/useFilterTable';
 
 export const MyTable = ({ titleColumn, content = [] }) => {
 
@@ -51,7 +51,7 @@ export const MyTable = ({ titleColumn, content = [] }) => {
   // ];
 
   let captionCount;
-  let bodyContent = useFilterTable(content);
+ // let bodyContent = useFilterTable(content);
 
   const getEmptyLine = () => {
     return (
@@ -80,7 +80,7 @@ export const MyTable = ({ titleColumn, content = [] }) => {
         </thead>
 
         <tbody>
-          {bodyContent.length ? bodyContent : getEmptyLine() }
+          {content.length ? content : getEmptyLine() }
           { getEmptyLine() }
         </tbody>
 
@@ -90,15 +90,15 @@ export const MyTable = ({ titleColumn, content = [] }) => {
   );
 };
 
-MyTable.defaultProps = {
-  content: [
-    {
-      warehouse_title: 'warehouse',
-      category_title: 'category',
-      name: 'name',
-      sn: 'sn',
-      count: 123,
-      id: 999,
-    },
-  ],
-};
+// MyTable.defaultProps = {
+//   content: [
+//     {
+//       warehouse_title: 'warehouse',
+//       category_title: 'category',
+//       name: 'name',
+//       sn: 'sn',
+//       count: 123,
+//       id: 999,
+//     },
+//   ],
+// };

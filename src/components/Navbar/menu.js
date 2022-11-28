@@ -6,6 +6,12 @@ export const menu = [
         desc: 'Главная'
     },
     {
+        icon: 'BsClipboardCheck',
+        title: 'Номенклатура',
+        url: '/nomenclature',
+        desc: 'Номенклатура'
+    },
+    {
         icon: 'AiOutlineInfoCircle',
         title: 'О нас',
         url: '/about',

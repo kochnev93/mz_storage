@@ -11,7 +11,7 @@ import { MdOutlineMenu } from 'react-icons/Md';
 import { IoMdExit } from 'react-icons/Io';
 
 
-function Header({ title }) {
+function Header({ title = 'Склад' }) {
   const dispatch = useDispatch();
   const menuIsOpen = useSelector((state) => state.button_menu.ButtonMenuOpen);
 
@@ -25,7 +25,7 @@ function Header({ title }) {
       <div className={styles.wrapperHeader}>
         <div className={styles.logo}>
           <MdOutlineMenu onClick={() => dispatch(setHeader())} />
-          <h3>{title ? title : 'Склад'}</h3>
+          <h3>{title}</h3>
         </div>
         <IoMdExit
           className={styles.logout_icon}

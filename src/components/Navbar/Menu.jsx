@@ -8,12 +8,15 @@ import { menu } from './menu.js';
 import { MdOutlineSpaceDashboard } from 'react-icons/Md';
 import { MdOutlineAdminPanelSettings } from 'react-icons/Md';
 import { AiOutlineInfoCircle } from 'react-icons/Ai';
+import { BsClipboardCheck } from 'react-icons/Bs';
+
 
 function Menu() {
   const getIcon = (icon) => {
     switch(icon){
       case 'MdOutlineSpaceDashboard': return <MdOutlineSpaceDashboard />
       case 'MdOutlineAdminPanelSettings': return <MdOutlineAdminPanelSettings />
+      case 'BsClipboardCheck': return <BsClipboardCheck />
       default: return <AiOutlineInfoCircle />
     }
   }
