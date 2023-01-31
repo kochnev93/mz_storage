@@ -24,6 +24,8 @@ export const DashboardTable = () => {
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
+  const [validationFilter, setValidationFilter] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const [titleColumn, setTitleColumn] = useState([
     'id',
     'Склад',
@@ -41,14 +43,22 @@ export const DashboardTable = () => {
 
     setValidationWarehouse(true);
     setValidationCategory(true);
+    setValidationFilter(true);
+    setErrorMessage('');
 
     if (warehouse.length === 0) {
       setValidationWarehouse(false);
+      setValidationFilter(false);
+      setErrorMessage('Выберите склад');
+
       countError++;
     }
 
     if (category.length === 0) {
       setValidationCategory(false);
+      setValidationFilter(false);
+      setErrorMessage('Выберите категорию');
+
       countError++;
     }
 
@@ -58,6 +68,10 @@ export const DashboardTable = () => {
   // Получение списка товаров
   const getProducts = async (e) => {
     e.preventDefault();
+
+    if(!validationForm()){
+      return;
+    }
 
     const data = JSON.stringify({ warehouse: warehouse, category: category });
 
@@ -74,8 +88,12 @@ export const DashboardTable = () => {
     dispatch(addProducts({ products: result.data }));
   };
 
+  // Записываем список товаров в state
   const data = useSelector((state) => state.dashboard.products);
-  let bodyContent = useFilterTable(data);  // Сортировка данных для отображения в таблице
+
+  // Сортировка данных для отображения в таблице
+  let bodyContent = useFilterTable(data);
+
 
   return (
     <div className="dashboard">
@@ -114,7 +132,9 @@ export const DashboardTable = () => {
         </div>
       </form>
 
-      <MyTable titleColumn={titleColumn} content={bodyContent} />
+      <div className={styles.message_error}>{validationFilter ? '' : errorMessage}</div>
+
+      <MyTable titleColumn={titleColumn} content={bodyContent} resultCount={data.length} />
     </div>
   );
 };

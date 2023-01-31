@@ -1,11 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import styles from './Table.module.scss';
-//import useFilterTable from '../../../hooks/useFilterTable';
 
-export const MyTable = ({ titleColumn, content = [] }) => {
+export const MyTable = ({ titleColumn, content = [], resultCount = 0 }) => {
 
   const columns = titleColumn.map((column) => <th>{column}</th>);
-
   // content = [
   //   {
   //     id: 1,
@@ -49,9 +47,7 @@ export const MyTable = ({ titleColumn, content = [] }) => {
   //     sn_accounting: true
   //   },
   // ];
-
   let captionCount;
- // let bodyContent = useFilterTable(content);
 
   const getEmptyLine = () => {
     return (
@@ -67,14 +63,10 @@ export const MyTable = ({ titleColumn, content = [] }) => {
     );
   };
 
-  captionCount = useMemo(() => {
-    return content === null ? 0 : content.length;
-  }, [content]);
-
   return (
     <>
       <table className={styles.myTable}>
-        <caption>Найдено записей: {captionCount} </caption>
+        <caption>Найдено записей: {resultCount} </caption>
         <thead>
           <tr>{columns}</tr>
         </thead>
@@ -90,15 +82,3 @@ export const MyTable = ({ titleColumn, content = [] }) => {
   );
 };
 
-// MyTable.defaultProps = {
-//   content: [
-//     {
-//       warehouse_title: 'warehouse',
-//       category_title: 'category',
-//       name: 'name',
-//       sn: 'sn',
-//       count: 123,
-//       id: 999,
-//     },
-//   ],
-// };

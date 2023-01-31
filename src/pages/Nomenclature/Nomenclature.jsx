@@ -81,7 +81,7 @@ export const Nomenclature = () => {
         <MyButton type="send" title="Добавить" action={() => {dispatch( setActive({active: true}) )}}/>
       </div>
       
-      <MyTable titleColumn={titleColumn} content={tableContent} />
+      <MyTable titleColumn={titleColumn} content={tableContent} resultCount = {nomenclature.length} />
     </MainWrapper>
   );
 };

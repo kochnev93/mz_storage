@@ -11,13 +11,11 @@ import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
 
-
 const RowDropdown = ({ product, count, sn }) => {
   const dispatch = useDispatch();
 
   // Состояние скрытых строк
   const [visible, setVisible] = useState(false);
-
 
   const clickHandler = (e) => {
     e.preventDefault();
@@ -43,7 +41,7 @@ const RowDropdown = ({ product, count, sn }) => {
   const mainRow = () => {
     return (
       <tr>
-        <td>{product?.id}</td>
+        <td> </td>
         <td>{product?.warehouse_title}</td>
         <td>{product?.category_title}</td>
         <td>{product?.name}</td>
@@ -63,18 +61,7 @@ const RowDropdown = ({ product, count, sn }) => {
         <td>{count}</td>
         <td>
           <div className={styles.product_action}>
-            <AiOutlineInfoCircle
-              title="Информация"
-              onClick={(e) => {
-                dispatch(
-                  setActive({
-                    active: true,
-                    product_id: product?.id,
-                    warehouse_id: product?.id_warehouse
-                  })
-                );
-              }}
-            />
+
           </div>
         </td>
       </tr>
@@ -84,26 +71,39 @@ const RowDropdown = ({ product, count, sn }) => {
   const subRow = sn.map((item) => {
     return (
       <tr className={cx(styles.row, { [styles.active]: visible })}>
-        <td> </td>
+        <td>{item.id}</td>
         <td> </td>
         <td> </td>
         <td>{product?.name}</td>
-        <td>{item}</td>
-        <td>{'1'}</td>
+        <td>{item.sn}</td>
+        <td> </td>
         <td>
           <div className={styles.product_action}>
-          <BiTransfer 
-              title="Перемещение" 
+            <AiOutlineInfoCircle
+              title="Информация"
+              onClick={(e) => {
+                dispatch(
+                  setActive({
+                    active: true,
+                    product_id: item?.id,
+                    warehouse_id: product?.id_warehouse,
+                  })
+                );
+              }}
+            />
+
+            <BiTransfer
+              title="Перемещение"
               onClick={(e) => {
                 dispatch(
                   setActiveTransfer({
                     active: true,
-                    activeProductID: product?.id,
-                    product: {...product, sn: item},
+                    activeProductID: item?.id,
+                    product: { ...product, sn: item },
                   })
                 );
               }}
-              />
+            />
           </div>
         </td>
       </tr>

@@ -93,7 +93,6 @@ function ModalAboutProduct() {
 
     if (productSN.data) {
       console.log(productSN.data);
-      setSn(productSN.data);
       //dispatch(setIsLoading({ isLoading: false }));
     } else {
       dispatch(setMessage({ message: productSN.errorMessage, errors: true }));

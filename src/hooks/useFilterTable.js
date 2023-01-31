@@ -15,7 +15,8 @@ const useFilterTable = (arr) => {
             // Если не ведется серийный учет
             if(!item.accounting_sn){
                 result.push({
-                    id: item.id,
+                    id: item.id_product,
+                    id_nomenclature: item.id_nomenclature,
                     name: item.name,
                     id_warehouse: item.id_warehouse,
                     warehouse_title: item.warehouse_title,
@@ -31,20 +32,21 @@ const useFilterTable = (arr) => {
 
             // При наличии серийнного номера
             let index = result.findIndex((el) => {
-                return el?.id == item?.id && el?.id_warehouse == item?.id_warehouse
+                return el?.id_nomenclature == item?.id_nomenclature && el?.id_warehouse == item?.id_warehouse
             })
 
             if(index !== -1){
-                result[index].sn.push(item.sn)
+                result[index].sn.push({id: item.id_product, sn: item.sn})
             } else{
                 result.push({
-                    id: item.id,
+                    id: item.id_product,
+                    id_nomenclature: item.id_nomenclature,
                     name: item.name,
                     id_warehouse: item.id_warehouse,
                     warehouse_title: item.warehouse_title,
                     id_category: item.id_category,
                     category_title: item.category_title,
-                    sn: [item.sn],
+                    sn: [{id: item.id_product, sn: item.sn}],
                     accounting_sn: item.accounting_sn
                 })
             }
