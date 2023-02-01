@@ -1,24 +1,46 @@
-.modalAbout_container{
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
+.modalAbout_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
-.modalAbout_form{
-    min-width: 300px;
-    margin-right: 50px;
+.modalAbout_form {
+  min-width: 300px;
+  margin-right: 50px;
 }
 
-.modalAbout_formItem{
-    margin-bottom: 20px;
+.modalAbout_formItem {
+  margin-bottom: 20px;
 }
 
-.history_list{
-    list-style: none;
+.history_list {
+  padding-left: 20px;
 
-    >li{
-        margin-bottom: 15px;
-        border-bottom: 1px solid grey;
+  > li {
+    margin-bottom: 15px;
+    border-bottom: 1px solid grey;
+  }
+}
+
+.history_title {
+  margin: 0 0 10px 0;
+}
+
+.history_description {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+}
+
+.history_details {
+    color: grey;
+    font-size: 14px;
+
+    ul{
+        transition: all .3s ease;
+        list-style: inside; 
+        li{
+            font-size: 12px;
+        }
     }
+
 }

@@ -35,7 +35,7 @@ function ModalAboutProduct() {
   // Local State
   const [data, setData] = useState(null);
   const [sn, setSn] = useState(null);
-  //const [history, setHistory] = useState(null);
+  const [history, setHistory] = useState(null);
   const [disabled, setDisabled] = useState(
     user.role === 'admin' ? false : true
   );
@@ -56,12 +56,13 @@ function ModalAboutProduct() {
   useEffect(() => {
     if (product_id !== null) {
       fetchData(product_id, warehouse_id);
-      //fetchHistory(product);
+      fetchHistory(product_id);
     }
   }, [product_id, warehouse_id]);
 
   const fetchData = async (product, warehouse) => {
     dispatch(setIsLoading({ isLoading: true }));
+    setData(null);
 
     let data = JSON.stringify({
       product_id: product,
@@ -79,82 +80,71 @@ function ModalAboutProduct() {
     );
 
     if (productInfo.data) {
-      console.log(productInfo.data);
       setData(productInfo.data);
       dispatch(setIsLoading({ isLoading: false }));
     } else {
       dispatch(setMessage({ message: productInfo.errorMessage, errors: true }));
     }
 
-    const productSN = await fetchNow(
-      `http://localhost:3001/api/get_sn_list`,
+    // const productSN = await fetchNow(
+    //   `http://localhost:3001/api/get_sn_list`,
+    //   requestOptions
+    // );
+
+    // if (productSN.data) {
+    //   console.log(productSN.data);
+    //   //dispatch(setIsLoading({ isLoading: false }));
+    // } else {
+    //   dispatch(setMessage({ message: productSN.errorMessage, errors: true }));
+    // }
+  };
+
+  const fetchHistory = async (product_id) => {
+
+    let requestOptions = {
+      method: 'GET',
+    };
+
+    const history = await fetchNow(
+      `http://localhost:3001/api/get_product_history/${product_id}`,
       requestOptions
     );
 
-    if (productSN.data) {
-      console.log(productSN.data);
-      //dispatch(setIsLoading({ isLoading: false }));
+    if (history.data) {
+      setHistory(history.data)
+      dispatch(setIsLoading({ isLoading: false }));
     } else {
-      dispatch(setMessage({ message: productSN.errorMessage, errors: true }));
+      dispatch(setMessage({ message: history.errorMessage, errors: true }));
     }
+
+    console.log(history.data)
+
   };
 
-  // const fetchHistory = (product) => {
-  //   let myHeaders = new Headers();
-  //   myHeaders.append('content-type', 'application/json');
-  //   myHeaders.append('Authorization', `${authHeader()}`);
-
-  //   let requestOptions = {
-  //     method: 'GET',
-  //     headers: myHeaders,
-  //   };
-
-  //   fetch(
-  //     `http://localhost:3001/api/get_product_history/${product}`,
-  //     requestOptions
-  //   )
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((result) => {
-  //       console.log(result);
-
-  //       if (result.errorMessage) {
-  //         dispatch(setMessage({ message: result.errorMessage, errors: true }));
-  //         throw Error(result.errorMessage);
-  //       }
-
-  //       setHistory(result.data);
-  //       dispatch(setIsLoading({ isLoading: false }));
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // const getHistory = () => {
-  //   if (history) {
-  //     return history.map((item) => {
-  //       return (
-  //         <li>
-  //           <div>{item.date}</div>
-  //           <p>{item.text}</p>
-  //           <details>
-  //             <summary>Изменения</summary>
-  //             <ul>
-  //               <li>Наименование: {item.change.product_name}</li>
-  //               <li>Категория: {item.change.category_title}</li>
-  //               <li>Склад: {item.change.warehouse_title}</li>
-  //               <li>s/n: {item.change.product_sn}</li>
-  //             </ul>
-  //           </details>
-  //         </li>
-  //       );
-  //     });
-  //   } else {
-  //     return <li>Ничего не найдено...</li>;
-  //   }
-  // };
+  const getHistory = () => {
+    if (history) {
+      return history.map((item) => {
+        return (
+          <li>
+            <h5 className={styles.history_title}>{item.title}</h5>
+            <p className={styles.history_description}>{item.date_receipt} на склад {item.warehouse_receipt}</p>
+            <details className={styles.history_details}>
+              <summary>Подробнее</summary>
+              <ul>
+                <li>ID Receipt - {item.id_receipt}</li>
+                <li>Номер договора - {item.contract}</li>
+                <li>Ссылка на задачу - {item.url_receipt}</li>
+                <li>Автор - {item.author}</li>
+              </ul>
+            </details>
+            <p>{item.mz_user_login}</p>
+          </li>
+        );
+      });
+    } else {
+      return <li>Ничего не найдено...</li>;
+    }
+  };
 
   return (
     <Modal
@@ -178,7 +168,7 @@ function ModalAboutProduct() {
             <div className={styles.modalAbout_formItem}>
               <MyInput
                 title={'ID'}
-                value={data?.id}
+                value={data?.id_product}
                 disabled={true}
                 validation={true}
               />
@@ -213,6 +203,24 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
+                title={'Серийный номер'}
+                value={data?.sn === null ? '-' : data?.sn}
+                disabled={true}
+                validation={true}
+              />
+            </div>
+
+            <div className={styles.modalAbout_formItem}>
+              <MyInput
+                title={'Количество'}
+                value={data?.sn === null ? data?.count : '1'}
+                disabled={true}
+                validation={true}
+              />
+            </div>
+
+            <div className={styles.modalAbout_formItem}>
+              <MyInput
                 title={'Комментарий'}
                 value={data?.comment}
                 disabled={true}
@@ -235,7 +243,7 @@ function ModalAboutProduct() {
               </ol>
             </div>
 
-            <div className={styles.modalAbout_formItem}>
+            {/* <div className={styles.modalAbout_formItem}>
             <h4>Наличие на других филиалах</h4>
               <ol>
                 {sn?.map((el) => {
@@ -244,12 +252,12 @@ function ModalAboutProduct() {
                   }
                 })}
               </ol>
-            </div>
+            </div> */}
           </div>
         </Tab>
         <Tab label={'История'}>
           <div>
-            <ul className={styles.history_list}>{}</ul>
+            <ol className={styles.history_list}>{getHistory()}</ol>
           </div>
         </Tab>
         <Tab label={'Комментарии'}>
