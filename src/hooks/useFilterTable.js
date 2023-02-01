@@ -11,6 +11,7 @@ const useFilterTable = (arr) => {
         const result = [];
 
         arr.map((item) => {
+            console.log(item);
 
             // Если не ведется серийный учет
             if(!item.accounting_sn){
@@ -57,13 +58,14 @@ const useFilterTable = (arr) => {
 
     // Отсортированный список товаров
     let content = getHiddenStr(arr); 
+    console.log('content', content)
 
 
     const bodyContent = useMemo(() => {
         return content.map((item) => {
             if(item.sn.length > 1){
                 return(
-                    <RowDropdown product={item} count={item.sn.length} sn={item.sn}/>
+                    <RowDropdown product={item} />
                 )
             } else{
                 return (

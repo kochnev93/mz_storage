@@ -24,7 +24,7 @@ const Row = ({product}) => {
                 dispatch(
                   setActiveTransfer({
                     active: true,
-                    product: {...product, sn: product.sn[0]},
+                    product: {...product, sn: product.sn[0].sn},
                   })
                 );
               }}
@@ -45,7 +45,7 @@ const Row = ({product}) => {
           <td>{product?.warehouse_title}</td>
           <td>{product?.category_title}</td>
           <td>{product?.name}</td>
-          <td>{product?.sn}</td>
+          <td>{product?.sn[0]?.sn}</td>
           <td>{product?.count ? product.count : product.sn.length}</td>
           <td>
             <div className={styles.product_action}>

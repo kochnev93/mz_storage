@@ -11,7 +11,8 @@ import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
 
-const RowDropdown = ({ product, count, sn }) => {
+const RowDropdown = ({ product }) => {
+  console.log('product', product)
   const dispatch = useDispatch();
 
   // Состояние скрытых строк
@@ -51,24 +52,21 @@ const RowDropdown = ({ product, count, sn }) => {
             onClick={clickHandler}
             className={styles.count_link}
             title={visible ? 'Скрыть' : 'Показать'}
-          >{`${count} ${declination(
-            count,
+          >{`${product?.sn.length} ${declination(
+            product?.sn.length,
             'вариант',
             'варианта',
             'вариантов'
           )}`}</a>
         </td>
-        <td>{count}</td>
-        <td>
-          <div className={styles.product_action}>
-
-          </div>
-        </td>
+        <td>{product?.sn.length}</td>
+        <td> </td>
       </tr>
     );
   };
 
-  const subRow = sn.map((item) => {
+  const subRow = product.sn.map((item) => {
+
     return (
       <tr className={cx(styles.row, { [styles.active]: visible })}>
         <td>{item.id}</td>
@@ -99,7 +97,7 @@ const RowDropdown = ({ product, count, sn }) => {
                   setActiveTransfer({
                     active: true,
                     activeProductID: item?.id,
-                    product: { ...product, sn: item },
+                    product: { ...product, sn: item.sn },
                   })
                 );
               }}

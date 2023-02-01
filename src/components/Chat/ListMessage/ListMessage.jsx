@@ -6,17 +6,17 @@ import styles from './ListMessage.module.scss';
 
 export const ListMessage = (props) => {
 
-    const listMessage = props.messages.map((item, index) => {
+    const listMessage = props.messages.map((item) => {
         return(
-            <li className={styles.messages_item}>
+            <li className={styles.messages_item} key={item.id_comment}>
                 <div className={styles.messages_author}>
                     {item.author}
                 </div>
                 <div className={styles.messages_text}>
-                    {item.text}
+                    {item.comment}
                 </div>
                 <div className={styles.messages_date}>
-                    {item.date}
+                    {new Date(item.date).toLocaleString()}
                 </div>
             </li>
         );

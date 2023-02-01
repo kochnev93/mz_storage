@@ -100,7 +100,6 @@ function ModalAboutProduct() {
   };
 
   const fetchHistory = async (product_id) => {
-
     let requestOptions = {
       method: 'GET',
     };
@@ -111,38 +110,57 @@ function ModalAboutProduct() {
     );
 
     if (history.data) {
-      setHistory(history.data)
+      setHistory(history.data);
       dispatch(setIsLoading({ isLoading: false }));
     } else {
       dispatch(setMessage({ message: history.errorMessage, errors: true }));
     }
 
-    console.log(history.data)
-
+    console.log(history.data);
   };
 
   const getHistory = () => {
     if (history) {
       return history.map((item) => {
-        return (
-          <li>
-            <h5 className={styles.history_title}>{item.title}</h5>
-            <p className={styles.history_description}>{item.date_receipt} на склад {item.warehouse_receipt}</p>
-            <details className={styles.history_details}>
-              <summary>Подробнее</summary>
-              <ul>
-                <li>ID Receipt - {item.id_receipt}</li>
-                <li>Номер договора - {item.contract}</li>
-                <li>Ссылка на задачу - {item.url_receipt}</li>
-                <li>Автор - {item.author}</li>
-              </ul>
-            </details>
-            <p>{item.mz_user_login}</p>
-          </li>
-        );
+        if (item.type === 'receipt') {
+          return (
+            <li>
+              <h5 className={styles.history_title}>{item.title}</h5>
+              <p className={styles.history_description}>
+                {item.date_receipt} на склад {item.warehouse_receipt}
+              </p>
+              <details className={styles.history_details}>
+                <summary>Подробнее</summary>
+                <ul>
+                  <li>ID Receipt - {item.id_receipt}</li>
+                  <li>Номер договора - {item.contract}</li>
+                  <li>Ссылка на задачу - {item.url_receipt}</li>
+                  <li>Автор - {item.author}</li>
+                </ul>
+              </details>
+              <p>{item.mz_user_login}</p>
+            </li>
+          );
+        }
+
+        if (item.type === 'transfer') {
+          return (
+            <li>
+              <h5 className={styles.history_title}>{item.title}</h5>
+              <p className={styles.history_description}>
+                {item.date}: {item.old_warehouse} - {item.new_warehouse}
+              </p>
+              <details className={styles.history_details}>
+                <summary>Подробнее</summary>
+                <ul>
+                  <li>ID Transfer - {item.id_transfer}</li>
+                  <li>Автор - {item.author}</li>
+                </ul>
+              </details>
+            </li>
+          );
+        }
       });
-    } else {
-      return <li>Ничего не найдено...</li>;
     }
   };
 
@@ -232,7 +250,7 @@ function ModalAboutProduct() {
               {data?.accounting_sn ? 'Ведется серийный учет' : null}
             </div>
 
-            <div className={styles.modalAbout_formItem}>
+            {/* <div className={styles.modalAbout_formItem}>
               <h4>Наличие на филиале {data?.warehouse_title}</h4>
               <ol>
                 {sn?.map((el) => {
@@ -241,7 +259,7 @@ function ModalAboutProduct() {
                   }
                 })}
               </ol>
-            </div>
+            </div> */}
 
             {/* <div className={styles.modalAbout_formItem}>
             <h4>Наличие на других филиалах</h4>

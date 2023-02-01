@@ -82,8 +82,10 @@ function ModalTransferProduct() {
       dispatch(setIsLoadingTransfer({ isLoading: true }));
 
       let data = JSON.stringify({
-        warehouse: warehouse,
-        sn: product?.sn,
+        id_product: product.id,
+        new_warehouse: warehouse[0].id,
+        old_warehouse: product.id_warehouse,
+        sn: product.sn,
       });
 
       let requestOptions = {
