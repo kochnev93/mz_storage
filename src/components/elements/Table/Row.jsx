@@ -33,8 +33,16 @@ const Row = ({product}) => {
       } else {
         return(
           <BiTransfer 
-            title="Расход" 
-          />
+          title="Перемещение" 
+          onClick={(e) => {
+            dispatch(
+              setActiveTransfer({
+                active: true,
+                product: {...product, count: product.count},
+              })
+            );
+          }}
+      />
         )
       }
     }

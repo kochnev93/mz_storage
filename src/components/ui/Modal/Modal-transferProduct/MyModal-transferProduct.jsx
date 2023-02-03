@@ -27,7 +27,7 @@ import styles from './MyModal-transferProduct.module.scss';
 import MyDropdown from '../../Dropdown/MyDropdown.jsx';
 import Modal from '../MyModal2.jsx';
 import MyButton from '../../Buttons/ButtonSend.jsx';
-
+import MyInput from '../../Input/MyInput.jsx';
 
 function ModalTransferProduct() {
   const dispatch = useDispatch();
@@ -46,6 +46,8 @@ function ModalTransferProduct() {
   // Local State
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
+  const [count, setCount] = useState(null);
+  const [validationCount, setValidationCount] = useState(true);
 
   const { fetchNow } = useFetch();
 
@@ -70,6 +72,42 @@ function ModalTransferProduct() {
       return false;
     }
 
+    // Проверка при перемещении не серийного товара
+    if (!product?.accounting_sn) {
+      if (count === null || count === '') {
+        dispatch(
+          setMessageTransfer({
+            errors: true,
+            message: 'Введите количество',
+          })
+        );
+        setValidationCount(false);
+        return false;
+      }
+
+      if (count < 1) {
+        dispatch(
+          setMessageTransfer({
+            errors: true,
+            message: 'Некорректное значение (количество >= 1)',
+          })
+        );
+        setValidationCount(false);
+        return false;
+      }
+
+      if (count > product?.count) {
+        dispatch(
+          setMessageTransfer({
+            errors: true,
+            message: 'Количество превышает остаток товара',
+          })
+        );
+        setValidationCount(false);
+        return false;
+      }
+    }
+
     let answerUser = confirm(
       `Переместить товар ${product?.name} (${product?.sn}) на склад ${warehouse[0].title}?`
     );
@@ -82,10 +120,13 @@ function ModalTransferProduct() {
       dispatch(setIsLoadingTransfer({ isLoading: true }));
 
       let data = JSON.stringify({
+        accounting_sn: product?.accounting_sn,
         id_product: product.id,
         new_warehouse: warehouse[0].id,
         old_warehouse: product.id_warehouse,
-        sn: product.sn,
+        sn: product?.sn,
+        transfer_count: count,
+        count: product?.count
       });
 
       let requestOptions = {
@@ -105,14 +146,18 @@ function ModalTransferProduct() {
           dispatch(setIsLoadingTransfer({ isLoading: false }));
         }, 100);
 
-        dispatch(editProduct({unit: product, new_warehouse: warehouse}));
-        dispatch(editProductTransfer({new_warehouse: warehouse}));
+        dispatch(editProduct({ unit: product, new_warehouse: warehouse }));
+        dispatch(editProductTransfer({ new_warehouse: warehouse }));
         setWarehouse([]);
-        dispatch(setResetTransfer({ reset: true }))
-
+        dispatch(setResetTransfer({ reset: true }));
       } else {
         console.warn(result.error);
         dispatch(setMessageTransfer({ errors: true, message: result.error }));
+
+        setTimeout(() => {
+          dispatch(setIsLoadingTransfer({ isLoading: false }));
+        }, 100);
+        
       }
     }
   };
@@ -143,6 +188,18 @@ function ModalTransferProduct() {
         />
       </div>
 
+      {!product?.accounting_sn && (
+        <div className={styles.transfer_item}>
+          <MyInput
+            type="number"
+            title="Количество"
+            changeValue={setCount}
+            validation={validationCount}
+            value={count}
+          />
+        </div>
+      )}
+
       <div className={styles.transfer_item}>
         <h4>Текущее расположение</h4>
         <table className={styles.product_table}>
@@ -158,6 +215,12 @@ function ModalTransferProduct() {
             <th>SN</th>
             <td>{product?.sn}</td>
           </tr>
+          {!product?.accounting_sn && (
+            <tr>
+              <th>Количество</th>
+              <td>{product?.count}</td>
+            </tr>
+          )}
           <tr>
             <th>Склад</th>
             <td>{product?.warehouse_title}</td>
