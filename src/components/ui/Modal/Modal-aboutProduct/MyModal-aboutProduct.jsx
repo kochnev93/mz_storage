@@ -13,6 +13,7 @@ import {
   setErrors,
   setIsLoading,
   setMessage,
+  setDefault,
 } from '../../../../features/modal/about-productSlice';
 
 //Styles
@@ -125,7 +126,7 @@ function ModalAboutProduct() {
         if (item.type === 'receipt') {
           return (
             <li>
-              <h5 className={styles.history_title}>{item.title}</h5>
+              <h5 className={styles.history_title}>&#9989; {item.title}</h5>
               <p className={styles.history_description}>
                 {item.date_receipt} на склад {item.warehouse_receipt}
               </p>
@@ -146,9 +147,9 @@ function ModalAboutProduct() {
         if (item.type === 'transfer') {
           return (
             <li>
-              <h5 className={styles.history_title}>{item.title}</h5>
+              <h5 className={styles.history_title}>&#9193; {item.title}</h5>
               <p className={styles.history_description}>
-                {item.date}: {item.old_warehouse} - {item.new_warehouse}
+                {item.date}: {item.old_warehouse} &rarr; {item.new_warehouse}
               </p>
               <details className={styles.history_details}>
                 <summary>Подробнее</summary>
@@ -169,6 +170,7 @@ function ModalAboutProduct() {
       active={active}
       setActive={() => {
         dispatch(setActive({ active: false }));
+        dispatch(setDefault());
       }}
       title="Информация о товаре"
       message={message}
@@ -183,6 +185,10 @@ function ModalAboutProduct() {
       <Tabs>
         <Tab label={'Общее'}>
           <div className={styles.modalAbout_form}>
+            <div className={cx(styles.modalAbout_form, {[styles.accounting_sn]: data?.accounting_sn})}>
+              {data?.accounting_sn ? 'Ведется серийный учет' : null}
+            </div>
+
             <div className={styles.modalAbout_formItem}>
               <MyInput
                 title={'ID'}
@@ -244,10 +250,6 @@ function ModalAboutProduct() {
                 disabled={true}
                 validation={true}
               />
-            </div>
-
-            <div className={styles.modalAbout_formItem}>
-              {data?.accounting_sn ? 'Ведется серийный учет' : null}
             </div>
 
             {/* <div className={styles.modalAbout_formItem}>

@@ -13,6 +13,15 @@
   margin-bottom: 20px;
 }
 
+.accounting_sn{
+  font-size: 12px;
+  background-color: #ffc1c1;
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
 .history_list {
   padding-left: 20px;
 
@@ -33,6 +42,7 @@
 .history_details {
     color: grey;
     font-size: 14px;
+    cursor: pointer;
 
     ul{
         transition: all .3s ease;

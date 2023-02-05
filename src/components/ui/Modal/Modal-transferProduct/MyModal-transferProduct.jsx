@@ -17,7 +17,6 @@ import {
   editProductTransfer,
   setDefaultTransfer,
 } from '../../../../features/modal/transfer-productSlice';
-
 import { editProduct } from '../../../../features/dashboard/dashboardSlice';
 
 //Styles
@@ -50,6 +49,10 @@ function ModalTransferProduct() {
   const [validationCount, setValidationCount] = useState(true);
 
   const { fetchNow } = useFetch();
+
+  useEffect(() => {
+    resetValidation();
+  }, [product]);
 
   const validation = () => {
     dispatch(setDefaultTransfer());
@@ -115,6 +118,16 @@ function ModalTransferProduct() {
     return answerUser ? true : false;
   };
 
+  const resetValidation = () => {
+    dispatch(setDefaultTransfer());
+    dispatch(setResetTransfer({ reset: true }));
+
+    setWarehouse([]);
+    setValidationWarehouse(true);
+    setCount(null);
+    setValidationCount(true);
+  }
+
   const transfer = async () => {
     if (validation()) {
       dispatch(setIsLoadingTransfer({ isLoading: true }));
@@ -167,6 +180,7 @@ function ModalTransferProduct() {
       active={active}
       setActive={() => {
         dispatch(setActiveTransfer({ active: false }));
+        dispatch(setDefaultTransfer());
       }}
       title={`Перемещение товара`}
       message={message}

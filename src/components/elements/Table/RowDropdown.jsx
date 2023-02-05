@@ -57,7 +57,7 @@ const RowDropdown = ({ product }) => {
             'вариант',
             'варианта',
             'вариантов'
-          )}`}</a>
+          )}`}{visible ? <span>&#9650;</span> : <span>&#9660;</span>}</a>
         </td>
         <td>{product?.sn.length}</td>
         <td> </td>
