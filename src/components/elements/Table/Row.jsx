@@ -3,12 +3,15 @@ import cx from 'classnames';
 
 import { AiOutlineInfoCircle } from 'react-icons/Ai';
 import { BiTransfer } from 'react-icons/Bi';
+import {TiMinus} from 'react-icons/Ti';
 import styles from './Table.module.scss'
 
 //Hooks
 import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
+import { setActiveRate } from '../../../features/modal/rate-productSlice';
+
 
 
 
@@ -70,6 +73,7 @@ const Row = ({product}) => {
                 }}
               />
               {transferIcon()}
+              <TiMinus title="Расход" onClick={(e) => {dispatch(setActiveRate({active: true}))}}/>
             </div>
           </td>
         </tr>

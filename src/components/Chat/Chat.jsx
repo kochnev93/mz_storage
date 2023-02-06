@@ -22,14 +22,7 @@ export const Chat = (props) => {
   );
 
   //State
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      author: 'Антон',
-      date: '28.09.2022',
-      text: 'Это тестовый комментарий',
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [comment, setComment] = useState('');
 
   useEffect(() => {
