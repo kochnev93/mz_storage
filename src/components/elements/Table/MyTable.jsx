@@ -7,16 +7,11 @@ export const MyTable = ({ titleColumn, content = [], resultCount = 0 }) => {
 
   let captionCount;
 
-  const getEmptyLine = () => {
+  const getEmptyLine = (titleColumn) => {
+    const tdCount = titleColumn.map((item) => <td>&nbsp;</td>);
     return (
       <tr className={styles.empty_line}>
-        <td>&nbsp;</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        {tdCount}
       </tr>
     );
   };
@@ -30,8 +25,8 @@ export const MyTable = ({ titleColumn, content = [], resultCount = 0 }) => {
         </thead>
 
         <tbody>
-          {content.length ? content : getEmptyLine() }
-          { getEmptyLine() }
+          {content.length ? content : getEmptyLine(titleColumn) }
+          { getEmptyLine(titleColumn) }
         </tbody>
 
         <tfoot></tfoot>

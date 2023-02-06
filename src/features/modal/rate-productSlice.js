@@ -17,7 +17,6 @@ export const rateProductSlice = createSlice({
         setActiveRate: (state, action) => {
             state.active = action.payload.active
             state.product = action.payload.product
-            state.acitve_product = action.payload.acitve_product
         },
         setErrorsRate: (state, action) => {
             state.errors = action.payload.errors
@@ -38,8 +37,11 @@ export const rateProductSlice = createSlice({
             state.reset = false,
             state.isLoading = false
         },
+        editRateProduct: (state, action) => {
+            state.product.count -= action.payload.rateCount;
+        }
     }
 });
 
-export const {setActiveRate, setErrorsRate, setMessageRate, setResetRate, setIsLoadingRate, setDefaultRate} = rateProductSlice.actions
+export const {setActiveRate, setErrorsRate, setMessageRate, setResetRate, setIsLoadingRate, setDefaultRate, editRateProduct} = rateProductSlice.actions
 export default rateProductSlice.reducer

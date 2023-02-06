@@ -34,9 +34,17 @@
   margin: 0 0 10px 0;
 }
 
+.history_date{
+  color: grey;
+}
+
 .history_description {
   margin: 0 0 10px 0;
   font-size: 14px;
+  ul{
+    font-size: 12px;
+    list-style: none;
+  }
 }
 
 .history_details {

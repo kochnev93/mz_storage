@@ -101,12 +101,19 @@ function ModalAboutProduct() {
   };
 
   const fetchHistory = async (product_id) => {
+
+    let data = JSON.stringify({
+      id_product: product_id,
+      id_warehouse: warehouse_id,
+    });
+
     let requestOptions = {
-      method: 'GET',
+      method: 'POST',
+      body: data,
     };
 
     const history = await fetchNow(
-      `http://localhost:3001/api/get_product_history/${product_id}`,
+      `http://localhost:3001/api/get_history`,
       requestOptions
     );
 
@@ -121,15 +128,21 @@ function ModalAboutProduct() {
   };
 
   const getHistory = () => {
+
     if (history) {
       return history.map((item) => {
         if (item.type === 'receipt') {
           return (
             <li>
               <h5 className={styles.history_title}>&#9989; {item.title}</h5>
-              <p className={styles.history_description}>
-                {item.date_receipt} на склад {item.warehouse_receipt}
-              </p>
+              <div className={styles.history_description}>
+                <ul>
+                  <li>Дата: {item.date_receipt}</li>
+                  <li>Количество: {item.count}</li>
+                  <li>Склад: {item.warehouse_receipt}</li>
+                </ul>
+              </div>
+
               <details className={styles.history_details}>
                 <summary>Подробнее</summary>
                 <ul>
@@ -148,13 +161,40 @@ function ModalAboutProduct() {
           return (
             <li>
               <h5 className={styles.history_title}>&#9193; {item.title}</h5>
-              <p className={styles.history_description}>
-                {item.date}: {item.old_warehouse} &rarr; {item.new_warehouse}
-              </p>
+              <div className={styles.history_description}>
+                <ul>
+                  <li>Дата: {item.date}</li>
+                  <li>Количество: {item.count}</li>
+                  <li>{item.old_warehouse} &rarr;{item.new_warehouse}</li>
+                </ul>
+              </div>
+
               <details className={styles.history_details}>
                 <summary>Подробнее</summary>
                 <ul>
                   <li>ID Transfer - {item.id_transfer}</li>
+                  <li>Автор - {item.author}</li>
+                </ul>
+              </details>
+            </li>
+          );
+        }
+
+        if (item.type === 'rate') {
+          return (
+            <li>
+              <h5 className={styles.history_title}>&#11093; {item.title}</h5>
+              <div className={styles.history_description}>
+                <ul>
+                  <li>Дата: {item.date}</li>
+                  <li>Количество: {item.count}</li>
+                  <li>{item.old_warehouse} &rarr;{item.new_warehouse}</li>
+                </ul>
+              </div>
+              <details className={styles.history_details}>
+                <summary>Подробнее</summary>
+                <ul>
+                  <li>ID Rate - {item.id_rate}</li>
                   <li>Автор - {item.author}</li>
                 </ul>
               </details>
@@ -185,7 +225,11 @@ function ModalAboutProduct() {
       <Tabs>
         <Tab label={'Общее'}>
           <div className={styles.modalAbout_form}>
-            <div className={cx(styles.modalAbout_form, {[styles.accounting_sn]: data?.accounting_sn})}>
+            <div
+              className={cx(styles.modalAbout_form, {
+                [styles.accounting_sn]: data?.accounting_sn,
+              })}
+            >
               {data?.accounting_sn ? 'Ведется серийный учет' : null}
             </div>
 
