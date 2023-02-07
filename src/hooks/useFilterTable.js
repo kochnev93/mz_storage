@@ -11,7 +11,6 @@ const useFilterTable = (arr) => {
         const result = [];
 
         arr.map((item) => {
-            console.log(item);
 
             // Если не ведется серийный учет
             if(!item.accounting_sn){
@@ -58,7 +57,7 @@ const useFilterTable = (arr) => {
 
     // Отсортированный список товаров
     let content = getHiddenStr(arr); 
-    console.log('content', content)
+    console.info('CONTENT_AFTER_useFilter', content)
 
 
     const bodyContent = useMemo(() => {

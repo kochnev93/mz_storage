@@ -10,8 +10,6 @@ import ModalRateProduct from '../../components/ui/Modal/Modal-rateProduct/MyModa
 import styles from '../style.module.scss';
 
 
-
-
 export const Dashboard = () => {
 
   return (

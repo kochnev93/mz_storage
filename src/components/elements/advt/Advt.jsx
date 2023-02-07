@@ -25,7 +25,7 @@ useEffect(() => {
 }, []);
 
 const ping = () => {
-    fetch(`http://localhost:3001/api/test`)
+    fetch(`${process.env.REACT_APP_API_SERVER}/test`)
     .then(res => res.ok ? res.json() : Promise.reject(res))
     .then(data => {
         dispatch(setStatus({ status: true, error: null }));

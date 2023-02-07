@@ -43,7 +43,7 @@ export const Nomenclature = () => {
     };
 
     const result = await fetchNow(
-      `http://localhost:3001/api/get_nomenclature`,
+      `${process.env.REACT_APP_API_SERVER}/get_nomenclature`,
       requestOptions
     );
 

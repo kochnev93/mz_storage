@@ -127,7 +127,7 @@ function Modal({ active, setActive }) {
         body: data,
       };
 
-      fetch('http://localhost:3001/api/addProduct', requestOptions)
+      fetch(`http://localhost:3001/api/addProduct`, requestOptions)
         .then((res) => {
           if (res.status >= 200 && res.status < 300) {
             return res.json();

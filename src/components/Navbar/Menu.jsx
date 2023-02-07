@@ -9,6 +9,7 @@ import { MdOutlineSpaceDashboard } from 'react-icons/Md';
 import { MdOutlineAdminPanelSettings } from 'react-icons/Md';
 import { AiOutlineInfoCircle } from 'react-icons/Ai';
 import { BsClipboardCheck } from 'react-icons/Bs';
+import { MdReceipt } from 'react-icons/Md';
 
 
 function Menu() {
@@ -17,6 +18,7 @@ function Menu() {
       case 'MdOutlineSpaceDashboard': return <MdOutlineSpaceDashboard />
       case 'MdOutlineAdminPanelSettings': return <MdOutlineAdminPanelSettings />
       case 'BsClipboardCheck': return <BsClipboardCheck />
+      case 'MdReceipt': return <MdReceipt />
       default: return <AiOutlineInfoCircle />
     }
   }
@@ -35,4 +37,4 @@ function Menu() {
   return <ul>{menuItems}</ul>;
 }
 
-export default Menu;
+export default Menu; 

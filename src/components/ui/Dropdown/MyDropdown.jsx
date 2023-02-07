@@ -56,9 +56,7 @@ class MyDropdown extends Component {
       headers: myHeaders,
     };
 
-    console.log(`${this.state.id}---fetch(${this.state.url})`);
-
-    fetch(`http://localhost:3001/api/${this.props.url}`, requestOptions)
+    fetch(`${process.env.REACT_APP_API_SERVER}/${this.props.url}`, requestOptions)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`${res.status}. ${res.statusText}`);

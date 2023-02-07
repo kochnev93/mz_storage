@@ -89,7 +89,7 @@ export const DashboardTable = () => {
   };
 
   // Записываем список товаров в state
-  const data = useSelector((state) => state.dashboard.products);
+const data = useSelector((state) => state.dashboard.products);
 
   // let data = [
   //   {
@@ -139,7 +139,6 @@ export const DashboardTable = () => {
   //   },
   // ];
 
-  console.log(data);
 
   // Сортировка данных для отображения в таблице
   let bodyContent = useFilterTable(data);

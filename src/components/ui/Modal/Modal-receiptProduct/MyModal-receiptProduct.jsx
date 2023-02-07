@@ -99,7 +99,7 @@ function ModalReceiptProduct() {
     };
 
     const result = await fetchNow(
-      'http://localhost:3001/api/receipt_product',
+      `${process.env.REACT_APP_API_SERVER}/receipt_product`,
       requestOptions
     );
 
@@ -115,33 +115,6 @@ function ModalReceiptProduct() {
       dispatch(setErrorsReceipt({ errors: true }));
     }
 
-    // fetch('http://localhost:3001/api/receipt_product', requestOptions)
-    //   .then((res) => {
-    //     if (res.ok) {
-    //       return res.json();
-    //     } else {
-    //       let error = new Error(res.statusText);
-    //       error.response = res;
-    //       throw error;
-    //     }
-    //   })
-    //   .then((result) => {
-    //     if (result.error) {
-    //       dispatch(setMessageReceipt({ message: result.error }));
-    //       dispatch(setErrorsReceipt({ errors: true }));
-    //     } else {
-    //       dispatch(setMessageReceipt({ message: result.message }));
-    //     }
-
-    //     setTimeout(() => {
-    //       dispatch(setIsLoadingReceipt({ isLoading: false }));
-    //     }, 100);
-    //   })
-    //   .catch((err) => {
-    //     dispatch(setMessageReceipt({ message: 'Ошибка сервера' }));
-    //     dispatch(setErrorsReceipt({ errors: true }));
-    //     dispatch(setIsLoadingReceipt({ isLoading: false }));
-    //   });
   };
 
   const getComponentReceipt = () => {

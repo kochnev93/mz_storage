@@ -37,7 +37,7 @@ export const Chat = (props) => {
     };
 
     const comments = await fetchNow(
-      `http://localhost:3001/api/get_comments/${product_id}`,
+      `${process.env.REACT_APP_API_SERVER}/get_comments/${product_id}`,
       requestOptions
     );
 
@@ -61,7 +61,7 @@ export const Chat = (props) => {
     };
 
     const sendingComment = await fetchNow(
-      `http://localhost:3001/api/add_comment`,
+      `${process.env.REACT_APP_API_SERVER}/add_comment`,
       requestOptions
     );
 

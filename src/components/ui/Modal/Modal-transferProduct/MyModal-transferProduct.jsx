@@ -148,7 +148,7 @@ function ModalTransferProduct() {
       };
 
       const result = await fetchNow(
-        'http://localhost:3001/api/transfer_product',
+        `${process.env.REACT_APP_API_SERVER}/transfer_product`,
         requestOptions
       );
 

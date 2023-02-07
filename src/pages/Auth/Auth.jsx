@@ -69,7 +69,7 @@ export const Auth = () => {
     };
 
     const response = await fetch(
-      'http://localhost:3001/api/auth',
+      `${process.env.REACT_APP_API_SERVER}/auth`,
       requestOptions
     );
 
@@ -120,92 +120,6 @@ export const Auth = () => {
 
     if (isValidate) {
       load();
-      //loginFetch();
-      // fetch('http://localhost:3001/api/auth', requestOptions)
-      //   .then((res) => {
-      //     if (!res.ok) {
-      //       let error = new Error(res.statusText);
-      //       error.response = res;
-      //       res.json().then(json => error.responseJSON = json);
-      //       throw error;
-      //     }
-      //     return res.json();
-      //   })
-      //   .then((result) => {
-      //     console.log(res);
-      //     dispatch(setUser({
-      //       id: result.id,
-      //       login: result.login,
-      //       role: result.role,
-      //       accessToken: result.accessToken
-      //     }));
-      //     localStorage.setItem('mz_storage_user', JSON.stringify({
-      //       id: result.id,
-      //       login: result.login,
-      //       role: result.role,
-      //       accessToken: result.accessToken
-      //     }));
-      //     navigate(frompage);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     setError(true);
-      //     setErrorMessage('err');
-      //     console.log(err.response);
-      //     console.log(err.responseJSON)
-      //   });
-      /////////////////////////////////
-      // let myHeaders = new Headers();
-      // myHeaders.append('content-type', 'application/json');
-      // let data = JSON.stringify({
-      //   login: login,
-      //   password: password,
-      // });
-      // let requestOptions = {
-      //   method: 'POST',
-      //   headers: myHeaders,
-      //   body: data,
-      // };
-      // fetch('http://localhost:3001/api/auth', requestOptions)
-      //   .then((res) => {
-      //     if (!res.ok) {
-      //       //let error = new Error();
-      //       //error.response = res;
-      //       return res.text().then(data => throw Error(data))
-      //     } else{
-      //       return res.json()
-      //     }
-      //   })
-      //   .then((result) => {
-      //     //console.log(res);
-      //     console.log(result);
-      //     if(result.errorMessage){
-      //       setErrorMessage(result.errorMessage);
-      //     }
-      //     dispatch(
-      //       setUser({
-      //         id: result.id,
-      //         login: result.login,
-      //         role: result.role,
-      //         accessToken: result.accessToken,
-      //       })
-      //     );
-      //     localStorage.setItem(
-      //       'mz_storage_user',
-      //       JSON.stringify({
-      //         id: result.id,
-      //         login: result.login,
-      //         role: result.role,
-      //         accessToken: result.accessToken,
-      //       })
-      //     );
-      //     navigate(frompage);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     setError(true);
-      //     setErrorMessage('err');
-      //   });
     }
   }
 

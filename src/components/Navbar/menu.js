@@ -12,6 +12,12 @@ export const menu = [
         desc: 'Номенклатура'
     },
     {
+        icon: 'MdReceipt',
+        title: 'Приход',
+        url: '/receipt',
+        desc: 'Приход'
+    },
+    {
         icon: 'AiOutlineInfoCircle',
         title: 'О нас',
         url: '/about',

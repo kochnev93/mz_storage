@@ -76,7 +76,7 @@ function ModalAboutProduct() {
     };
 
     const productInfo = await fetchNow(
-      `http://localhost:3001/api/get_product/${product}`,
+      `${process.env.REACT_APP_API_SERVER}/get_product/${product}`,
       requestOptions
     );
 
@@ -113,7 +113,7 @@ function ModalAboutProduct() {
     };
 
     const history = await fetchNow(
-      `http://localhost:3001/api/get_history`,
+      `${process.env.REACT_APP_API_SERVER}/api/get_history`,
       requestOptions
     );
 
@@ -296,27 +296,6 @@ function ModalAboutProduct() {
               />
             </div>
 
-            {/* <div className={styles.modalAbout_formItem}>
-              <h4>Наличие на филиале {data?.warehouse_title}</h4>
-              <ol>
-                {sn?.map((el) => {
-                  if (el.id_warehouse == warehouse_id) {
-                    return <li>{el.sn}</li>;
-                  }
-                })}
-              </ol>
-            </div> */}
-
-            {/* <div className={styles.modalAbout_formItem}>
-            <h4>Наличие на других филиалах</h4>
-              <ol>
-                {sn?.map((el) => {
-                  if (el.id_warehouse != warehouse_id) {
-                    return <li>{el.sn} - {el.warehouse_title}</li>;
-                  }
-                })}
-              </ol>
-            </div> */}
           </div>
         </Tab>
         <Tab label={'История'}>
@@ -325,7 +304,6 @@ function ModalAboutProduct() {
           </div>
         </Tab>
         <Tab label={'Комментарии'}>
-          {/* Скоро здесь будут комментарии.. */}
           <Chat />
         </Tab>
       </Tabs>

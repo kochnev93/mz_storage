@@ -131,7 +131,7 @@ function ModalRateProduct() {
       };
 
       const result = await fetchNow(
-        'http://localhost:3001/api/rate_product',
+        `${process.env.REACT_APP_API_SERVER}/rate_product`,
         requestOptions
       );
 

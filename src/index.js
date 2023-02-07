@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { RequireAuth } from './hoc/RequireAuth.jsx';
 import Advt from './components/elements/advt/Advt.jsx';
 
+
 //Pages
 import { About } from './pages/About/About.jsx';
 import { Dashboard } from './pages/Dashboard/Dashboard.jsx';
@@ -11,6 +12,7 @@ import { Admin } from './pages/Admin/Admin.jsx';
 import { Auth } from './pages/Auth/Auth.jsx';
 import { Error } from './pages/Error/Error.jsx';
 import { Nomenclature } from './pages/Nomenclature/Nomenclature.jsx';
+import { Receipt } from './pages/Receipt/Receipt.jsx';
 
 //Pages for Admin
 //import { Nomenclature } from './components/Admin/Nomenclature/Nomenclature.jsx';
@@ -43,6 +45,15 @@ ReactDOM.render(
             element={
               <RequireAuth>
                 <Nomenclature />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="receipt"
+            element={
+              <RequireAuth>
+                <Receipt />
               </RequireAuth>
             }
           />

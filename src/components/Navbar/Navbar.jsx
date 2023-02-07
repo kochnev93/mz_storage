@@ -11,6 +11,7 @@ import { IoIosArrowBack } from 'react-icons/Io';
 import { FaRegUserCircle } from 'react-icons/Fa';
 import { TiWarningOutline } from 'react-icons/Ti';
 
+
 // Hooks
 import { useAuth } from '../../hooks/use-auth';
 
@@ -24,7 +25,6 @@ function Navbar(props) {
   const dispatch = useDispatch();
   const classButton = useSelector((state) => state.button_menu.ButtonMenuOpen);
   const statusApp = useSelector((state) => state.appStatus);
-  console.log(statusApp);
   const user = useAuth();
 
   return (

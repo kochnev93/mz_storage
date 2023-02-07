@@ -297,7 +297,7 @@ const [property, setProperty] = useState([]);
         body: data,
       };
 
-      fetch('http://localhost:3001/api/addProduct', requestOptions)
+      fetch(`${process.env.REACT_APP_API_SERVER}/addProduct`, requestOptions)
         .then((res) => {
           if (res.status >= 200 && res.status < 300) {
             return res.json();
