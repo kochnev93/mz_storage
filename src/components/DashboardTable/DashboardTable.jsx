@@ -7,14 +7,13 @@ import styles from './DashboardTable.module.scss';
 import { MyTable } from '../elements/Table/MyTable.jsx';
 import MyButton from '../ui/Buttons/ButtonSend.jsx';
 import MyDropdown from '../ui/Dropdown/MyDropdown.jsx';
-
+import { MyInputSearch } from '../elements/Form/InputSearch/MyInputSearch.jsx';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts } from '../../features/dashboard/dashboardSlice';
 import useFilterTable from '../../hooks/useFilterTable';
-
 
 export const DashboardTable = () => {
   const dispatch = useDispatch();
@@ -24,6 +23,7 @@ export const DashboardTable = () => {
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
   const [validationCategory, setValidationCategory] = useState(true);
+  const [search, setSearch] = useState(null);
   const [validationFilter, setValidationFilter] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [titleColumn, setTitleColumn] = useState([
@@ -69,11 +69,11 @@ export const DashboardTable = () => {
   const getProducts = async (e) => {
     e.preventDefault();
 
-    if(!validationForm()){
-      return;
-    }
+    // if (!validationForm()) {
+    //   return;
+    // }
 
-    const data = JSON.stringify({ warehouse: warehouse, category: category });
+    const data = JSON.stringify({ warehouse: warehouse, category: category, search: search });
 
     let requestOptions = {
       method: 'POST',
@@ -81,15 +81,19 @@ export const DashboardTable = () => {
     };
 
     const result = await fetchNow(
-      `http://localhost:3001/api/get_products`,
+      `${process.env.REACT_APP_API_SERVER}/get_products`,
       requestOptions
     );
 
-    dispatch(addProducts({ products: result.data }));
+    if(result.data){
+      dispatch(addProducts({ products: result.data }));
+    }
+
+    
   };
 
   // Записываем список товаров в state
-const data = useSelector((state) => state.dashboard.products);
+  const data = useSelector((state) => state.dashboard.products);
 
   // let data = [
   //   {
@@ -139,10 +143,8 @@ const data = useSelector((state) => state.dashboard.products);
   //   },
   // ];
 
-
   // Сортировка данных для отображения в таблице
   let bodyContent = useFilterTable(data);
-
 
   return (
     <div className="dashboard">
@@ -171,6 +173,10 @@ const data = useSelector((state) => state.dashboard.products);
           />
         </div>
 
+        <div className={styles.MyDropdown}>
+          <MyInputSearch value={search} changeValue={setSearch} />
+        </div>
+
         <div className={styles.MyButton}>
           <MyButton
             type="send"
@@ -181,9 +187,15 @@ const data = useSelector((state) => state.dashboard.products);
         </div>
       </form>
 
-      <div className={styles.message_error}>{validationFilter ? '' : errorMessage}</div>
+      <div className={styles.message_error}>
+        {validationFilter ? '' : errorMessage}
+      </div>
 
-      <MyTable titleColumn={titleColumn} content={bodyContent} resultCount={data.length} />
+      <MyTable
+        titleColumn={titleColumn}
+        content={bodyContent}
+        resultCount={data.length}
+      />
     </div>
   );
 };

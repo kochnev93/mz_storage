@@ -12,7 +12,7 @@ import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
 
 const RowDropdown = ({ product }) => {
-  console.log('product', product)
+  console.log('ROWDROPDOWN-product', product)
   const dispatch = useDispatch();
 
   // Состояние скрытых строк
@@ -66,6 +66,7 @@ const RowDropdown = ({ product }) => {
   };
 
   const subRow = product.sn.map((item) => {
+    console.log('ROWDROPDOWN-item', item)
 
     return (
       <tr className={cx(styles.row, { [styles.active]: visible })}>
@@ -83,8 +84,7 @@ const RowDropdown = ({ product }) => {
                 dispatch(
                   setActive({
                     active: true,
-                    product_id: item?.id,
-                    warehouse_id: product?.id_warehouse,
+                    product: { ...product, id: item.id, sn: item.sn },
                   })
                 );
               }}
@@ -96,8 +96,7 @@ const RowDropdown = ({ product }) => {
                 dispatch(
                   setActiveTransfer({
                     active: true,
-                    activeProductID: item?.id,
-                    product: { ...product, sn: item.sn },
+                    product: { ...product, id: item.id, sn: item.sn },
                   })
                 );
               }}

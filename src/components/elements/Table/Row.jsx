@@ -15,34 +15,73 @@ import { setActiveRate } from '../../../features/modal/rate-productSlice';
 const Row = ({ product }) => {
   const dispatch = useDispatch();
 
-  const transferIcon = () => {
+  const getIcon = () => {
     if (product?.accounting_sn) {
       return (
-        <BiTransfer
-          title="Перемещение"
-          onClick={(e) => {
-            dispatch(
-              setActiveTransfer({
-                active: true,
-                product: { ...product, sn: product.sn[0].sn },
-              })
-            );
-          }}
-        />
+        <>
+          <AiOutlineInfoCircle
+            title="Информация"
+            onClick={(e) => {
+              dispatch(
+                setActive({
+                  active: true,
+                  product: { ...product, sn: product.sn[0].sn },
+                })
+              );
+            }}
+          />
+          <BiTransfer
+            title="Перемещение"
+            onClick={(e) => {
+              dispatch(
+                setActiveTransfer({
+                  active: true,
+                  product: { ...product, sn: product.sn[0].sn },
+                })
+              );
+            }}
+          />
+        </>
       );
     } else {
       return (
-        <BiTransfer
-          title="Перемещение"
-          onClick={(e) => {
-            dispatch(
-              setActiveTransfer({
-                active: true,
-                product: { ...product, count: product.count },
-              })
-            );
-          }}
-        />
+        <>
+          <AiOutlineInfoCircle
+            title="Информация"
+            onClick={(e) => {
+              dispatch(
+                setActive({
+                  active: true,
+                  product: { ...product, count: product.count },
+                })
+              );
+            }}
+          />
+
+          <BiTransfer
+            title="Перемещение"
+            onClick={(e) => {
+              dispatch(
+                setActiveTransfer({
+                  active: true,
+                  product: { ...product, count: product.count },
+                })
+              );
+            }}
+          />
+
+          <TiMinus
+            title="Расход"
+            onClick={(e) => {
+              dispatch(
+                setActiveRate({
+                  active: true,
+                  product: { ...product, count: product.count },
+                })
+              );
+            }}
+          />
+        </>
       );
     }
   };
@@ -57,30 +96,7 @@ const Row = ({ product }) => {
       <td>{product?.count ? product.count : product.sn.length}</td>
       <td>
         <div className={styles.product_action}>
-          <AiOutlineInfoCircle
-            title="Информация"
-            onClick={(e) => {
-              dispatch(
-                setActive({
-                  active: true,
-                  product_id: product?.id,
-                  warehouse_id: product?.id_warehouse,
-                })
-              );
-            }}
-          />
-          {transferIcon()}
-          <TiMinus
-            title="Расход"
-            onClick={(e) => {
-              dispatch(
-                setActiveRate({ 
-                  active: true, 
-                  product: { ...product, count: product.count }
-                })
-              );
-            }}
-          />
+          {getIcon()}
         </div>
       </td>
     </tr>

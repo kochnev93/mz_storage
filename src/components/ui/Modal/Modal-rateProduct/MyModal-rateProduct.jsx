@@ -17,6 +17,8 @@ import {
   setDefaultRate,
   editRateProduct,
 } from '../../../../features/modal/rate-productSlice';
+import { removeProductAbout } from '../../../../features/modal/about-productSlice';
+
 
 //Styles
 import styles from './MyModal-rateProduct.module.scss';
@@ -144,6 +146,7 @@ function ModalRateProduct() {
 
         dispatch(editRateProduct({ rateCount: rateCount }));
         dispatch(setResetRate({ reset: true }));
+        dispatch(removeProductAbout());
 
         setWarehouse([]);
         setRateCount(null);

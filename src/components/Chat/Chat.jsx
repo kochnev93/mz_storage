@@ -17,8 +17,8 @@ export const Chat = (props) => {
   const { fetchNow } = useFetch();
 
   // Redux
-  const product_id = useSelector(
-    (state) => state.modal_about_product.product_id
+  const product = useSelector(
+    (state) => state.modal_about_product.product
   );
 
   //State
@@ -26,18 +26,18 @@ export const Chat = (props) => {
   const [comment, setComment] = useState('');
 
   useEffect(() => {
-    if (product_id !== null) {
-      getComments(product_id);
+    if (product?.id !== null) {
+      getComments();
     }
-  }, [product_id]);
+  }, [product?.id]);
 
-  const getComments = async (product_id) => {
+  const getComments = async () => {
     let requestOptions = {
       method: 'GET',
     };
 
     const comments = await fetchNow(
-      `${process.env.REACT_APP_API_SERVER}/get_comments/${product_id}`,
+      `${process.env.REACT_APP_API_SERVER}/get_comments/${product?.id}`,
       requestOptions
     );
 
@@ -51,7 +51,7 @@ export const Chat = (props) => {
     console.log(`Message: ${comment} - is sending`);
 
     let data = JSON.stringify({
-      product_id: product_id,
+      product_id: product?.id,
       comment: comment,
     });
 
@@ -66,7 +66,7 @@ export const Chat = (props) => {
     );
 
     if (sendingComment.data) {
-      getComments(product_id);
+      getComments();
       setComment('')
     }
   };

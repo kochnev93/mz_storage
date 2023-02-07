@@ -8,7 +8,17 @@ import { AiOutlineClose } from 'react-icons/Ai';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 
-function Modal({ active, setActive, title, footer, message, errors, isLoading, children }) {
+function Modal({
+  active,
+  setActive,
+  title,
+  subtitle = null,
+  footer,
+  message,
+  errors,
+  isLoading,
+  children,
+}) {
   const dispatch = useDispatch();
   const statusApp = useSelector((state) => state.appStatus);
   /*
@@ -30,12 +40,17 @@ function Modal({ active, setActive, title, footer, message, errors, isLoading, c
       <div className={styles.myModal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.myModal_wrapper}>
           <div className={styles.myModal_header}>
-            <div>{title || 'Модальное окно'}</div>
+            <div>
+              <div>{title || 'Модальное окно'}</div>
+              {subtitle && <div className={styles.subtitle}>{subtitle}</div> }
+            </div>
 
             <div className={styles.myModal_toolbar}>
               <div
                 className={cx(styles.myModal_message, {
-                  [styles.succses]: statusApp.status ? !errors : statusApp.error,
+                  [styles.succses]: statusApp.status
+                    ? !errors
+                    : statusApp.error,
                   [styles.error]: statusApp.status ? errors : statusApp.error,
                 })}
               >
@@ -55,9 +70,7 @@ function Modal({ active, setActive, title, footer, message, errors, isLoading, c
             {children}
           </div>
 
-          <div className={styles.myModal_footer}>
-            {footer}
-          </div>
+          <div className={styles.myModal_footer}>{footer}</div>
         </div>
       </div>
     </div>

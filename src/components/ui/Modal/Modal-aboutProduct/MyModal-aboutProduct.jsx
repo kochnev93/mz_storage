@@ -43,11 +43,8 @@ function ModalAboutProduct() {
 
   // Redux
   const active = useSelector((state) => state.modal_about_product.active);
-  const product_id = useSelector(
-    (state) => state.modal_about_product.product_id
-  );
-  const warehouse_id = useSelector(
-    (state) => state.modal_about_product.warehouse_id
+  const product = useSelector(
+    (state) => state.modal_about_product.product
   );
   const errors = useSelector((state) => state.modal_about_product.errors);
   const message = useSelector((state) => state.modal_about_product.message);
@@ -55,19 +52,19 @@ function ModalAboutProduct() {
   const isLoading = useSelector((state) => state.modal_about_product.isLoading);
 
   useEffect(() => {
-    if (product_id !== null) {
-      fetchData(product_id, warehouse_id);
-      fetchHistory(product_id);
+    if (product?.id !== null) {
+      fetchData();
+      fetchHistory();
     }
-  }, [product_id, warehouse_id]);
+  }, [product?.id, product?.id_warehouse]);
 
-  const fetchData = async (product, warehouse) => {
+  const fetchData = async () => {
     dispatch(setIsLoading({ isLoading: true }));
     setData(null);
 
     let data = JSON.stringify({
-      product_id: product,
-      warehouse_id: warehouse,
+      product_id: product?.id,
+      warehouse_id: product?.id_warehouse,
     });
 
     let requestOptions = {
@@ -76,7 +73,7 @@ function ModalAboutProduct() {
     };
 
     const productInfo = await fetchNow(
-      `${process.env.REACT_APP_API_SERVER}/get_product/${product}`,
+      `${process.env.REACT_APP_API_SERVER}/get_product/${product?.id}`,
       requestOptions
     );
 
@@ -87,24 +84,14 @@ function ModalAboutProduct() {
       dispatch(setMessage({ message: productInfo.errorMessage, errors: true }));
     }
 
-    // const productSN = await fetchNow(
-    //   `http://localhost:3001/api/get_sn_list`,
-    //   requestOptions
-    // );
-
-    // if (productSN.data) {
-    //   console.log(productSN.data);
-    //   //dispatch(setIsLoading({ isLoading: false }));
-    // } else {
-    //   dispatch(setMessage({ message: productSN.errorMessage, errors: true }));
-    // }
   };
 
-  const fetchHistory = async (product_id) => {
+  const fetchHistory = async () => {
 
     let data = JSON.stringify({
-      id_product: product_id,
-      id_warehouse: warehouse_id,
+      sn_accounting: product?.accounting_sn,
+      id_product: product?.id,
+      id_warehouse: product?.id_warehouse,
     });
 
     let requestOptions = {
@@ -113,7 +100,7 @@ function ModalAboutProduct() {
     };
 
     const history = await fetchNow(
-      `${process.env.REACT_APP_API_SERVER}/api/get_history`,
+      `${process.env.REACT_APP_API_SERVER}/get_history`,
       requestOptions
     );
 
@@ -213,6 +200,7 @@ function ModalAboutProduct() {
         dispatch(setDefault());
       }}
       title="Информация о товаре"
+      subtitle={`${product?.name} (${product?.accounting_sn ? product?.sn : ''})`}
       message={message}
       errors={errors}
       isLoading={isLoading}
