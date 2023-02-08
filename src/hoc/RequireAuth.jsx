@@ -10,8 +10,6 @@ const RequireAuth = ({children, onlyAdmin = false}) => {
     const location = useLocation();
     const {isAuth, role} = useAuth();
 
-    console.log(isAuth, role)
-
     if(isAuth){
 
         if(onlyAdmin){

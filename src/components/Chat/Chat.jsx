@@ -5,6 +5,7 @@ import styles from './Chat.module.scss';
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
+import { addComment, setComments, setInputComment } from '../../features/modal/about-productSlice';
 
 //Components
 import { ListMessage } from './ListMessage/ListMessage.jsx';
@@ -15,15 +16,18 @@ import useFetch from '../../hooks/useFetch';
 
 export const Chat = (props) => {
   const { fetchNow } = useFetch();
+  const dispatch = useDispatch();
 
   // Redux
+  const messages = useSelector(
+    (state) => state.modal_about_product.comments
+  );
+  const comment = useSelector(
+    (state) => state.modal_about_product.inputComment
+  );
   const product = useSelector(
     (state) => state.modal_about_product.product
   );
-
-  //State
-  const [messages, setMessages] = useState([]);
-  const [comment, setComment] = useState('');
 
   useEffect(() => {
     if (product?.id !== null) {
@@ -42,13 +46,14 @@ export const Chat = (props) => {
     );
 
     if (comments.data) {
-      setMessages(comments.data);
+      dispatch(setComments({comments: comments.data}));
+      dispatch(setInputComment({inputComment: null}));
     }
   };
 
   const addComment = async () => {
 
-    console.log(`Message: ${comment} - is sending`);
+    console.log('Message sending---', comment)
 
     let data = JSON.stringify({
       product_id: product?.id,
@@ -67,7 +72,9 @@ export const Chat = (props) => {
 
     if (sendingComment.data) {
       getComments();
-      setComment('')
+      dispatch(setInputComment({inputComment: null}));
+    } else {
+      console.warn('Кооментарий не был отправлен: ', comment)
     }
   };
 
@@ -75,7 +82,7 @@ export const Chat = (props) => {
     <div className={styles.chat}>
       <SendMessage
         onClick={addComment}
-        onChange={setComment}
+        onChange={(value) => {dispatch(setInputComment({inputComment: value}))}}
         value={comment}
       />
       <ListMessage messages={messages} />

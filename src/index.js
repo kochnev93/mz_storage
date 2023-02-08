@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { RequireAuth } from './hoc/RequireAuth.jsx';
 import Advt from './components/elements/advt/Advt.jsx';
 
+import Favicon from 'react-favicon';
 
-//Pages
+// Pages
 import { About } from './pages/About/About.jsx';
 import { Dashboard } from './pages/Dashboard/Dashboard.jsx';
 import { Admin } from './pages/Admin/Admin.jsx';
@@ -21,6 +22,7 @@ import { Receipt } from './pages/Receipt/Receipt.jsx';
 import { store } from './store/store';
 import { Provider } from 'react-redux';
 
+// Styles
 import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
@@ -28,6 +30,7 @@ import './index.css';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
+    <Favicon url="favicon.ico"/>
       <Advt />
       <BrowserRouter>
         <Routes>

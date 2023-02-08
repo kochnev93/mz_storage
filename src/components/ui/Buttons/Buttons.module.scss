@@ -20,6 +20,9 @@
 
     &.send{
         background-color: var(--main-color);
+		&:hover{
+			background-color: lighten(#0dc6bf,2%);
+		}
 		&.loading:after{
 			content: '';
 			width: 15px;

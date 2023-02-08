@@ -5,8 +5,18 @@ import PropTypes from 'prop-types';
 // Styles
 import styles from './Tabs.module.scss';
 
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveTab } from '../../features/modal/about-productSlice';
+
+
+
 export const Tabs = (props) => {
-  const [activeTab, setActiveTab] = useState(0);
+  const dispatch = useDispatch();
+  //const [activeTab, setActiveTab] = useState(0);
+
+  // Redux
+  const activeTab = useSelector((state) => state.modal_about_product.indexActiveTab);
 
   let array = Array.prototype.slice.call(props.children, 0);
 
@@ -19,7 +29,8 @@ export const Tabs = (props) => {
           [styles.active]: activeTab === index,
         })}
         onClick={() => {
-          setActiveTab(index);
+          //setActiveTab(index);
+          dispatch(setActiveTab({activeTab: index}));
         }}
       >
         {item.props.label}
@@ -45,12 +56,7 @@ export const Tabs = (props) => {
       <div className={styles.tabs_header}>
         <ul className={styles.tabs_menu}>{tabMenu}</ul>
       </div>
-
       <div className={styles.tabs_content}>{tabContent}</div>
     </div>
   );
 };
-
-Tabs.PropTypes = {};
-
-Tabs.defaultProps = {};

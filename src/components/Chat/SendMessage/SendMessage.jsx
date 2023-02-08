@@ -10,7 +10,7 @@ export const SendMessage = ({onChange, onClick, value}) => {
         <div className={styles.sendMessage}>
             <textarea 
                 value={value} 
-                onChange={(e) => {onChange(e.target.value)}} 
+                onChange={(e) => onChange(e.target.value)} 
                 placeholder={'Напишите комментарий'}
             >
             </textarea>

@@ -46,19 +46,17 @@ export const DashboardTable = () => {
     setValidationFilter(true);
     setErrorMessage('');
 
-    if (warehouse.length === 0) {
+    if(search !== null && search !== ""){
+      return true;
+    } else if(warehouse.length === 0){
       setValidationWarehouse(false);
       setValidationFilter(false);
       setErrorMessage('Выберите склад');
-
       countError++;
-    }
-
-    if (category.length === 0) {
+    } else if(category.length === 0){
       setValidationCategory(false);
       setValidationFilter(false);
       setErrorMessage('Выберите категорию');
-
       countError++;
     }
 
@@ -69,9 +67,9 @@ export const DashboardTable = () => {
   const getProducts = async (e) => {
     e.preventDefault();
 
-    // if (!validationForm()) {
-    //   return;
-    // }
+    if (!validationForm()) {
+      return;
+    }
 
     const data = JSON.stringify({ warehouse: warehouse, category: category, search: search });
 

@@ -111,7 +111,6 @@ function ModalAboutProduct() {
       dispatch(setMessage({ message: history.errorMessage, errors: true }));
     }
 
-    console.log(history.data);
   };
 
   const getHistory = () => {
