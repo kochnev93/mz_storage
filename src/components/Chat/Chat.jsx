@@ -33,7 +33,7 @@ export const Chat = (props) => {
     if (product?.id !== null) {
       getComments();
     }
-  }, [product?.id]);
+  }, [product?.id, product?.id_warehouse]);
 
   const getComments = async () => {
     let requestOptions = {
@@ -46,8 +46,9 @@ export const Chat = (props) => {
     );
 
     if (comments.data) {
+      console.log('COMMENTS', comments);
       dispatch(setComments({comments: comments.data}));
-      dispatch(setInputComment({inputComment: null}));
+      dispatch(setInputComment({inputComment: ''}));
     }
   };
 
@@ -72,7 +73,7 @@ export const Chat = (props) => {
 
     if (sendingComment.data) {
       getComments();
-      dispatch(setInputComment({inputComment: null}));
+      dispatch(setInputComment({inputComment: ''}));
     } else {
       console.warn('Кооментарий не был отправлен: ', comment)
     }

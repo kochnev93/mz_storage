@@ -19,6 +19,7 @@ export const DashboardTable = () => {
   const dispatch = useDispatch();
 
   // Dashboard
+  const [isLoading, setIsLoading] = useState(false);
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
   const [category, setCategory] = useState([]);
@@ -71,6 +72,8 @@ export const DashboardTable = () => {
       return;
     }
 
+    setIsLoading(true);
+
     const data = JSON.stringify({ warehouse: warehouse, category: category, search: search });
 
     let requestOptions = {
@@ -86,6 +89,10 @@ export const DashboardTable = () => {
     if(result.data){
       dispatch(addProducts({ products: result.data }));
     }
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
 
     
   };
@@ -181,6 +188,7 @@ export const DashboardTable = () => {
             action={getProducts}
             title="Найти"
             loadingTitle="Загрузка"
+            loading={isLoading}
           />
         </div>
       </form>

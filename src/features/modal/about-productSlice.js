@@ -45,8 +45,8 @@ export const aboutProductSlice = createSlice({
       state.reset = false,
       state.isLoading = false,
       state.indexActiveTab = 0,
-      state.inputComment = '',
-      state.comments = []
+      state.inputComment = ''
+      //state.comments = []
     },
 
     removeProductAbout: (state, action) => {
