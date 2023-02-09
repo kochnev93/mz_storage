@@ -12,6 +12,12 @@ import {
   setMessageReceipt,
   setIsLoadingReceipt,
   setActiveReceipt,
+  setProduct,
+  setProductUrl,
+  setInputSN,
+  setCount,
+  setValidation,
+  setSN,
 } from '../../../../features/modal/receipt-productSlice';
 
 //Styles
@@ -24,11 +30,14 @@ import MyButton from '../../Buttons/ButtonSend.jsx';
 import Modal from '../MyModal2.jsx';
 import InputForSN from './InputForSN/InputForSN.jsx';
 import { IoMdAddCircle } from 'react-icons/Io';
+import Checkbox from '../../Checkbox/Checkbox.jsx';
+
 
 function ModalReceiptProduct() {
   const dispatch = useDispatch();
+  const { fetchNow } = useFetch();
 
-  // Redux
+  // Redux Modal
   const active = useSelector((state) => state.modal_receipt_product.active);
   const errors = useSelector((state) => state.modal_receipt_product.errors);
   const message = useSelector((state) => state.modal_receipt_product.message);
@@ -37,44 +46,71 @@ function ModalReceiptProduct() {
     (state) => state.modal_receipt_product.isLoading
   );
 
+  // Redux Form
+  const category = useSelector((state) => state.modal_receipt_product.category);
+  const warehouse = useSelector((state) => state.modal_receipt_product.warehouse);
+  const product = useSelector((state) => state.modal_receipt_product.product);
+  const urlProduct = useSelector((state) => state.modal_receipt_product.urlProduct);
+  const count = useSelector((state) => state.modal_receipt_product.count);
+  const guarantee = useSelector((state) => state.modal_receipt_product.guarantee);
+  const guaranteeCheckbox = useSelector((state) => state.modal_receipt_product.guaranteeCheckbox);
+  const contract = useSelector((state) => state.modal_receipt_product.contract);
+  const contractCheckbox = useSelector((state) => state.modal_receipt_product.contractCheckbox);
+  const sn = useSelector((state) => state.modal_receipt_product.sn);
+  const inputSN = useSelector((state) => state.modal_receipt_product.inputSN);
+  const contragent = useSelector((state) => state.modal_receipt_product.contragent);
+  const contragentCheckbox = useSelector((state) => state.modal_receipt_product.contragentCheckbox);
+  const newContragentName = useSelector((state) => state.modal_receipt_product.newContragentName);
+  const newContragentINN = useSelector((state) => state.modal_receipt_product.newContragentINN);
+  const url = useSelector((state) => state.modal_receipt_product.url);
+  const validation = useSelector((state) => state.modal_receipt_product.validation);
+
   //State
-  const [category, setCategory] = useState([]);
+  //const [category, setCategory] = useState([]);
 
-  const [warehouse, setWarehouse] = useState([]);
-  const [validationWarehouse, setValidationWarehouse] = useState(true);
+  //const [warehouse, setWarehouse] = useState([]);
+  //const [validationWarehouse, setValidationWarehouse] = useState(true);
 
-  const [product, setProduct] = useState([]);
-  const [validationProduct, setValidationProduct] = useState(true);
-  const [urlProduct, setUrlProduct] = useState(`get_receipt_products/0`);
+  //const [product, setProduct] = useState([]);
+  //const [validationProduct, setValidationProduct] = useState(true);
+  //const [urlProduct, setUrlProduct] = useState(`get_receipt_products/0`);
 
-  const [count, setCount] = useState(null);
-  const [validationCount, setValidationCount] = useState(true);
+ // const [count, setCount] = useState(null);
+ // const [validationCount, setValidationCount] = useState(true);
 
-  const [sn, setSn] = useState([]);
-  const [inputSN, setInputSN] = useState('');
-  const [validationSN, setValidationSN] = useState({
-    status: true,
-    message: null,
-  });
+  //const [guarantee, setGuarantee] = useState(null);
+  //const [validationGuarantee, setValidationGuarantee] = useState(false);
+  //const [guaranteeCheckbox, setGuaranteeCheckbox] = useState(false);
 
-  const [vendor, setVendor] = useState('');
-  const [validationVendor, setValidationVendor] = useState(true);
+  //const [dogovorCheckbox, setDogovorCheckbox] = useState(false);
 
-  const [contract, setСontract] = useState('');
-  const [validationСontract, setValidationСontract] = useState(true);
+  // const [sn, setSn] = useState([]);
+  // const [inputSN, setInputSN] = useState('');
+  // const [validationSN, setValidationSN] = useState({
+  //   status: true,
+  //   message: null,
+  // });
 
-  const [url, setUrl] = useState('');
-  const [validationUrl, setValidationUrl] = useState(true);
+  // const [contragent, setContragent] = useState([]);
+  // const [validationContragent, setValidationContragent] = useState(true);
+  // const [contragentCheckbox, setContragentCheckbox]= useState(false);
+  // const [newContragent, setNewContragent] = useState(null);
 
-  const { fetchNow } = useFetch();
+  // const [contract, setСontract] = useState('');
+  // const [validationСontract, setValidationСontract] = useState(true);
+
+  // const [url, setUrl] = useState('');
+  // const [validationUrl, setValidationUrl] = useState(true);
+
+  
 
   useEffect(() => {
-    setProduct([]);
+    dispatch( setProduct({product: []}) );
 
     if (category.length) {
-      setUrlProduct(`get_receipt_products/${category[0].id}`);
+      dispatch( setProductUrl({urlProduct: `get_receipt_products/${category[0].id}`}) );
     } else {
-      setUrlProduct(`get_receipt_products/0`);
+      dispatch( setProductUrl({urlProduct: `get_receipt_products/0`}) );
     }
   }, [category]);
 
@@ -135,8 +171,8 @@ function ModalReceiptProduct() {
           <InputForSN
             title="Серийный номер"
             type="text"
-            changeValue={setInputSN}
-            validation={validationSN}
+            changeValue={(value) => {dispatch( setInputSN({inputSN: value}) )}}
+            validation={validation.sn.status}
             value={inputSN}
             addSN={addSerialNumber}
             deleteSN={deleteSerialNumber}
@@ -157,8 +193,8 @@ function ModalReceiptProduct() {
           <MyInput
             type="number"
             title="Количество"
-            changeValue={setCount}
-            validation={validationCount}
+            changeValue={(value) => {dispatch( setCount({count: value}) )}}
+            validation={validation.count}
             value={count}
           />
         </>
@@ -169,27 +205,40 @@ function ModalReceiptProduct() {
   const addSerialNumber = (e) => {
     e.preventDefault();
 
-    setValidationSN({
+    dispatch( setValidation({validation: {...validation, sn:{
       status: true,
       message: null,
-    });
+    }}}) );
+
+    // setValidationSN({
+    //   status: true,
+    //   message: null,
+    // });
 
     if (!sn.length) {
-      setSn([...sn, inputSN]);
-      setInputSN('');
+      dispatch( setSN({sn: [...sn, inputSN]}) );
+     // setSn([...sn, inputSN]);
+     dispatch( setInputSN({inputSN: ''}) );
+      //setInputSN('');
       return;
     }
 
     let index = sn.findIndex((item) => item === inputSN);
 
     if (index === -1) {
-      setSn([...sn, inputSN]);
-      setInputSN('');
+      dispatch( setSN({sn: [...sn, inputSN]}) );
+      //setSn([...sn, inputSN]);
+      dispatch( setInputSN({inputSN: ''}) );
+      //setInputSN('');
     } else {
-      setValidationSN({
+      // setValidationSN({
+      //   status: false,
+      //   message: 'Данный серийный номер уже введен',
+      // });
+      dispatch( setValidation({validation: {...validation, sn:{
         status: false,
         message: 'Данный серийный номер уже введен',
-      });
+      }}}) );
     }
   };
 
@@ -201,21 +250,22 @@ function ModalReceiptProduct() {
       return item !== e.target.dataset.value;
     });
 
-    setSn(newState);
+    //setSn(newState);
+    dispatch( setSN({sn: newState}) );
   };
 
   const resetForm = (e) => {
     e.preventDefault();
 
-    setCategory([]);
-    setWarehouse([]);
-    setProduct([]);
-    setCount(null);
-    setSn([]);
-    setInputSN('');
-    setVendor('');
-    setСontract('');
-    setUrl('');
+    // setCategory([]);
+    // setWarehouse([]);
+    // setProduct([]);
+    // setCount(null);
+    // setSn([]);
+    // setInputSN('');
+    // setVendor('');
+    // setСontract('');
+    // setUrl('');
 
     dispatch(setMessageReceipt({ message: '' }));
     dispatch(setErrorsReceipt({ errors: false }));
@@ -240,6 +290,7 @@ function ModalReceiptProduct() {
         <div className={styles.itemsContainer}>
           <div className={styles.item}>
             <h4>1. Выберите категорию</h4>
+            <p className={styles.description} >Поможет отфильтровать товары по Категории. Если не выбрать, то в п.2 будут выводиться все позиции номенклатуры</p>
             <MyDropdown
               id="receiptProductModal_category"
               title="Категория"
@@ -254,7 +305,21 @@ function ModalReceiptProduct() {
           </div>
 
           <div className={styles.item}>
-            <h4>2. Выберите склад, на который осуществляется приход товара</h4>
+            <h4>2. Выберите позицию из номенклатуры</h4>
+            <MyDropdown
+              id="receiptProductModal_product"
+              title="Товар"
+              placeholder="Выберите товар"
+              multiple={false}
+              validation={true}
+              changeValue={setProduct}
+              url={urlProduct}
+            />
+          </div>
+
+          <div className={styles.item}>
+            <h4>3. Выберите склад</h4>
+            <p className={styles.description} > На данный склад будет оформлен Приход</p>
             <MyDropdown
               id="receiptProductModal_warehouse"
               title="Склад"
@@ -268,55 +333,138 @@ function ModalReceiptProduct() {
             />
           </div>
 
-          <div className={styles.item}>
-            <h4>3. Выберите товар, на который необходимо оформить приход</h4>
-            <MyDropdown
-              id="receiptProductModal_product"
-              title="Товар"
-              placeholder="Выберите товар"
-              multiple={false}
-              validation={true}
-              changeValue={setProduct}
-              url={urlProduct}
-            />
-          </div>
+
+
+
 
           <div className={styles.item}>{getComponentReceipt()}</div>
 
-          {product.length !== 0 && (
+          {product.length == 0 && (
             <>
               <div className={styles.item}>
-                <h4>5. Введите номер счета или УПД</h4>
+                <h4>5. Номер счета, УПД</h4>
+                <p className={styles.description} > Пример: E-00543792 от 29.12.2022</p>
                 <MyInput
                   type="text"
                   title="Номер счета"
                   changeValue={setСontract}
                   validation={validationСontract}
                   value={contract}
+                  disabled={dogovorCheckbox}
                 />
+
+                <div className={styles.guaranteeCheckbox}>
+                  <Checkbox
+                    id="contract"
+                    title="Номер счета неизвестен/утерян"
+                    onChange={setDogovorCheckbox}
+                    checked={dogovorCheckbox}
+                  />
+                </div>
+
               </div>
 
               <div className={styles.item}>
-                <h4>6. Введите наименование контрагента</h4>
-                <MyInput
+                <h4>6. Контрагент</h4>
+                {/* <MyInput
                   type="text"
                   title="Контрагент"
                   changeValue={setVendor}
                   validation={validationVendor}
                   value={vendor}
-                />
+                /> */}
+
+            <MyDropdown
+              id="receiptProductModal_contragent"
+              title="Контрагент"
+              placeholder="Контрагент"
+              multiple={false}
+              changeValue={setContragent}
+              validation={validationContragent}
+              reset={reset}
+              setReset={() => dispatch(setResetReceipt({ reset: false }))}
+              url={'get_contragents'}
+              disabled={contragentCheckbox}
+            />
+
+
+                <div className={styles.guaranteeCheckbox}>
+                  <Checkbox
+                    id="contragent"
+                    title="Контрагента нет в списке"
+                    onChange={setContragentCheckbox}
+                    checked={contragentCheckbox}
+                  />
+                </div>
+
+                {contragentCheckbox && (
+                  <>
+                  <div className={styles.new_item}>
+                    <h6>Введите наименование нового Контрагента</h6>
+                    <p className={styles.description} > Пример: ООО "ДНС-Ритейл"</p>
+                    <MyInput
+                      type="text"
+                      title="Контрагент"
+                      changeValue={setNewContragent}
+                      validation={validationContragent}
+                      value={newContragent}
+                    />
+                  </div>
+
+                  <div className={styles.new_item}>
+                    <h6>Введите ИНН нового Контрагента</h6>
+                    <p className={styles.description} > Пример: 2540167061</p>
+                    <MyInput
+                      type="number"
+                      title="ИНН"
+                      changeValue={setNewContragent}
+                      validation={validationContragent}
+                      value={newContragent}
+                    />
+                  </div>
+
+                  </>
+                )}
+
               </div>
 
               <div className={styles.item}>
-                <h4>7. Введите ссылка на задачу в МП (опционально)</h4>
+                <h4>7. Ссылка</h4>
+                <p className={styles.description} >Ссылка на задачу в МП (опционально)</p>
                 <MyInput
                   type="url"
-                  title="Ссылка на задачу в МП"
+                  title="URL"
                   changeValue={setUrl}
                   validation={validationUrl}
                   value={url}
                 />
               </div>
+
+
+              <div className={styles.item}>
+            <h4>8. Гарантия</h4>
+            <p className={styles.description} > Выберите дату окончания гарантии, если товар не на гарантии, то выберите соответствующий пункт</p>
+                <MyInput
+                  type="date"
+                  title="Гарантия"
+                  changeValue={setGuarantee}
+                  validation={validationСontract}
+                  value={guarantee}
+                  disabled={guaranteeCheckbox}
+                />
+
+                <div className={styles.guaranteeCheckbox}>
+                  <Checkbox
+                    id="guarantee"
+                    title="Не на гарантии"
+                    onChange={setGuaranteeCheckbox}
+                    checked={guaranteeCheckbox}
+                  />
+                </div>
+          </div>
+
+
+
             </>
           )}
         </div>

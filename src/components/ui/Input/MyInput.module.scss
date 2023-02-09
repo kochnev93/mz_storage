@@ -12,6 +12,10 @@
     background: none;
     appearance: none;
     font-size: 14px;
+
+    &:disabled{
+      background: #f1f1f1;
+    }
   }
 
   .myInput_label {

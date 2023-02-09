@@ -9,6 +9,7 @@ class MyDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      statusApp: props.statusApp || true,
       id: props.id,
       title: props.title || 'Название',
       placeholder: props.placeholder || 'Выберите...',
@@ -19,6 +20,7 @@ class MyDropdown extends Component {
       multiple: props.multiple || false,
       isLoaded: false,
       options: [],
+      disabled: props.disabled || false,
     };
 
     this.openDropdown = this.openDropdown.bind(this);
@@ -43,6 +45,10 @@ class MyDropdown extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.url != this.props.url) {
+      this.getContent();
+    }
+
+    if (prevProps.statusApp != this.props.statusApp && this.props.statusApp) {
       this.getContent();
     }
   }
@@ -328,7 +334,7 @@ class MyDropdown extends Component {
     }
 
     return (
-      <div id={this.state.id} className={styles.myDropdown}>
+      <div id={this.state.id} className={cx(styles.myDropdown, {[styles.disabled]: this.props.disabled})}>
         <div className={styles.myDropdown__wrapper}>
           <div
             className={styles.myDropdown__container}

@@ -1,7 +1,17 @@
 .myDropdown {
   width: auto;
+  &.disabled{
+    pointer-events: none;
+  }
 
 }
+
+.myDropdown.disabled .myDropdown_fieldset{
+  background-color: #f1f1f1;
+}
+
+
+
 
 .myDropdown__wrapper {
   position: relative;

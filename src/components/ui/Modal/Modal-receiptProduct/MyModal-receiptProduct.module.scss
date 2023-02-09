@@ -34,6 +34,17 @@
   }
 }
 
+.new_item{
+  h6 {
+    margin: 0;
+    margin-bottom: 15px;
+  }
+  background-color: #d3ffd2;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
 .buttons {
   display: flex;
   justify-content: end;
@@ -44,3 +55,15 @@
     margin-right: 10px;
   }
 }
+
+.description{
+  color: grey;
+  margin: 0;
+  font-size: 12px;
+}
+
+.guaranteeCheckbox{
+  padding: 10px 0;
+}
+
+

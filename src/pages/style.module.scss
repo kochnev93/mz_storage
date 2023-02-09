@@ -14,3 +14,9 @@
     overflow: auto;
     flex-grow: 1;
 }
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   
+}

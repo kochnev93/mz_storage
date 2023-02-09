@@ -11,12 +11,16 @@ import { MyInputSearch } from '../elements/Form/InputSearch/MyInputSearch.jsx';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
+import useFilterTable from '../../hooks/useFilterTable';
+
+// Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts } from '../../features/dashboard/dashboardSlice';
-import useFilterTable from '../../hooks/useFilterTable';
 
 export const DashboardTable = () => {
   const dispatch = useDispatch();
+  const statusApp = useSelector((state) => state.appStatus.status);
+  console.log("APP_STATUS", statusApp);
 
   // Dashboard
   const [isLoading, setIsLoading] = useState(false);
@@ -98,55 +102,55 @@ export const DashboardTable = () => {
   };
 
   // Записываем список товаров в state
-  const data = useSelector((state) => state.dashboard.products);
+  //const data = useSelector((state) => state.dashboard.products);
 
-  // let data = [
-  //   {
-  //     id_product: 1,
-  //     name: 'Монитор Asus P123DF',
-  //     id_nomenclature: 1,
-  //     id_warehouse: 12,
-  //     warehouse_title: '10-я линия В.О., 17к2',
-  //     id_category: 2,
-  //     category_title: 'Монитор',
-  //     sn: '123',
-  //     accounting_sn: true
-  //   },
-  //   {
-  //     id_product: 2,
-  //     name: 'Монитор Asus P123DF',
-  //     id_nomenclature: 1,
-  //     id_warehouse: 12,
-  //     warehouse_title: '10-я линия В.О., 17к2',
-  //     id_category: 2,
-  //     category_title: 'Монитор',
-  //     sn: '123456',
-  //     accounting_sn: true
-  //   },
-  //   {
-  //     id_product: 3033,
-  //     name: 'АДМ Ligat',
-  //     id_nomenclature: 2,
-  //     id_warehouse: 12,
-  //     warehouse_title: '10-я линия В.О., 17к2',
-  //     id_category: 2,
-  //     category_title: 'Монитор',
-  //     sn:[],
-  //     count: 12,
-  //     accounting_sn: false
-  //   },
-  //   {
-  //     id_product: 3036,
-  //     name: 'АДМ Ligat66',
-  //     id_nomenclature: 3,
-  //     id_warehouse: 12,
-  //     warehouse_title: '10-я линия В.О., 17к2',
-  //     id_category: 2,
-  //     category_title: 'Монитор',
-  //     sn: '123321123',
-  //     accounting_sn: true
-  //   },
-  // ];
+  let data = [
+    {
+      id_product: 1,
+      name: 'Монитор Asus P123DF',
+      id_nomenclature: 1,
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn: '123',
+      accounting_sn: true
+    },
+    {
+      id_product: 2,
+      name: 'Монитор Asus P123DF',
+      id_nomenclature: 1,
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn: '123456',
+      accounting_sn: true
+    },
+    {
+      id_product: 3033,
+      name: 'АДМ Ligat',
+      id_nomenclature: 2,
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn:[],
+      count: 12,
+      accounting_sn: false
+    },
+    {
+      id_product: 3036,
+      name: 'АДМ Ligat66',
+      id_nomenclature: 3,
+      id_warehouse: 12,
+      warehouse_title: '10-я линия В.О., 17к2',
+      id_category: 2,
+      category_title: 'Монитор',
+      sn: '123321123',
+      accounting_sn: true
+    },
+  ];
 
   // Сортировка данных для отображения в таблице
   let bodyContent = useFilterTable(data);
@@ -163,6 +167,7 @@ export const DashboardTable = () => {
             validation={validationWarehouse}
             changeValue={setWarehouse}
             url={'get_warehouse'}
+            statusApp={statusApp}
           />
         </div>
 
@@ -175,6 +180,7 @@ export const DashboardTable = () => {
             validation={validationCategory}
             changeValue={setCategory}
             url={'get_category'}
+            statusApp={statusApp}
           />
         </div>
 

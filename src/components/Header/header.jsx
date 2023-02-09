@@ -16,8 +16,14 @@ function Header({ title = 'Склад' }) {
   const menuIsOpen = useSelector((state) => state.button_menu.ButtonMenuOpen);
 
   const logout = () => {
-    localStorage.removeItem('mz_storage_user');
-    dispatch( removeUser() );
+    let answerUser = confirm(
+      `Выйти из приложения?`
+    );
+
+    if(answerUser){
+      localStorage.removeItem('mz_storage_user');
+      dispatch( removeUser() );
+    }
   }
 
   return (

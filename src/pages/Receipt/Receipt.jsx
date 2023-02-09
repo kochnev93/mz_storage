@@ -11,6 +11,7 @@ import Navbar from '../../components/Navbar/Navbar.jsx';
 import Header from '../../components/Header/Header.jsx';
 import ModalReceiptProduct from '../../components/ui/Modal/Modal-receiptProduct/MyModal-receiptProduct.jsx';
 import { MyTable } from '../../components/elements/Table/MyTable.jsx';
+import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 
 // Redux
 import { useDispatch } from 'react-redux';
@@ -18,6 +19,7 @@ import { setActiveReceipt } from '../../features/modal/receipt-productSlice.js';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
+
 
 export const Receipt = () => {
   const { fetchNow } = useFetch();
@@ -87,6 +89,14 @@ export const Receipt = () => {
       <Navbar />
       <main className={styles.main}>
         <h1>Приход</h1>
+
+        <div className={styles.header}>
+        <div className={styles.header_filter}>
+          Фильтры
+        </div>
+        <MyButton type="send" title="Добавить" action={() => {dispatch( setActiveReceipt({active: true}) )}}/>
+      </div>
+
         <MyTable titleColumn={titleColumn} content={bodyContent} />
       </main>
     </section>
