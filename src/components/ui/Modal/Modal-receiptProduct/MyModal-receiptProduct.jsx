@@ -18,6 +18,17 @@ import {
   setCount,
   setValidation,
   setSN,
+  setCategory,
+  setWarehouse,
+  setContract,
+  setContractCheckbox,
+  setContragent,
+  setContragentCheckbox,
+  setNewContragentName,
+  setNewContragentINN,
+  setURL,
+  setGuarantee,
+  setGuaranteeCheckbox
 } from '../../../../features/modal/receipt-productSlice';
 
 //Styles
@@ -31,7 +42,6 @@ import Modal from '../MyModal2.jsx';
 import InputForSN from './InputForSN/InputForSN.jsx';
 import { IoMdAddCircle } from 'react-icons/Io';
 import Checkbox from '../../Checkbox/Checkbox.jsx';
-
 
 function ModalReceiptProduct() {
   const dispatch = useDispatch();
@@ -48,22 +58,42 @@ function ModalReceiptProduct() {
 
   // Redux Form
   const category = useSelector((state) => state.modal_receipt_product.category);
-  const warehouse = useSelector((state) => state.modal_receipt_product.warehouse);
+  const warehouse = useSelector(
+    (state) => state.modal_receipt_product.warehouse
+  );
   const product = useSelector((state) => state.modal_receipt_product.product);
-  const urlProduct = useSelector((state) => state.modal_receipt_product.urlProduct);
+  const urlProduct = useSelector(
+    (state) => state.modal_receipt_product.urlProduct
+  );
   const count = useSelector((state) => state.modal_receipt_product.count);
-  const guarantee = useSelector((state) => state.modal_receipt_product.guarantee);
-  const guaranteeCheckbox = useSelector((state) => state.modal_receipt_product.guaranteeCheckbox);
+  const guarantee = useSelector(
+    (state) => state.modal_receipt_product.guarantee
+  );
+  const guaranteeCheckbox = useSelector(
+    (state) => state.modal_receipt_product.guaranteeCheckbox
+  );
   const contract = useSelector((state) => state.modal_receipt_product.contract);
-  const contractCheckbox = useSelector((state) => state.modal_receipt_product.contractCheckbox);
+  const contractCheckbox = useSelector(
+    (state) => state.modal_receipt_product.contractCheckbox
+  );
   const sn = useSelector((state) => state.modal_receipt_product.sn);
   const inputSN = useSelector((state) => state.modal_receipt_product.inputSN);
-  const contragent = useSelector((state) => state.modal_receipt_product.contragent);
-  const contragentCheckbox = useSelector((state) => state.modal_receipt_product.contragentCheckbox);
-  const newContragentName = useSelector((state) => state.modal_receipt_product.newContragentName);
-  const newContragentINN = useSelector((state) => state.modal_receipt_product.newContragentINN);
+  const contragent = useSelector(
+    (state) => state.modal_receipt_product.contragent
+  );
+  const contragentCheckbox = useSelector(
+    (state) => state.modal_receipt_product.contragentCheckbox
+  );
+  const newContragentName = useSelector(
+    (state) => state.modal_receipt_product.newContragentName
+  );
+  const newContragentINN = useSelector(
+    (state) => state.modal_receipt_product.newContragentINN
+  );
   const url = useSelector((state) => state.modal_receipt_product.url);
-  const validation = useSelector((state) => state.modal_receipt_product.validation);
+  const validation = useSelector(
+    (state) => state.modal_receipt_product.validation
+  );
 
   //State
   //const [category, setCategory] = useState([]);
@@ -75,8 +105,8 @@ function ModalReceiptProduct() {
   //const [validationProduct, setValidationProduct] = useState(true);
   //const [urlProduct, setUrlProduct] = useState(`get_receipt_products/0`);
 
- // const [count, setCount] = useState(null);
- // const [validationCount, setValidationCount] = useState(true);
+  // const [count, setCount] = useState(null);
+  // const [validationCount, setValidationCount] = useState(true);
 
   //const [guarantee, setGuarantee] = useState(null);
   //const [validationGuarantee, setValidationGuarantee] = useState(false);
@@ -102,15 +132,15 @@ function ModalReceiptProduct() {
   // const [url, setUrl] = useState('');
   // const [validationUrl, setValidationUrl] = useState(true);
 
-  
-
   useEffect(() => {
-    dispatch( setProduct({product: []}) );
+    //dispatch(setProduct({ product: [] }));
 
-    if (category.length) {
-      dispatch( setProductUrl({urlProduct: `get_receipt_products/${category[0].id}`}) );
+    if (category?.length) {
+      dispatch(
+        setProductUrl({ urlProduct: `get_receipt_products/${category[0].id}` })
+      );
     } else {
-      dispatch( setProductUrl({urlProduct: `get_receipt_products/0`}) );
+      dispatch(setProductUrl({ urlProduct: `get_receipt_products/0` }));
     }
   }, [category]);
 
@@ -144,17 +174,15 @@ function ModalReceiptProduct() {
       setTimeout(() => {
         dispatch(setIsLoadingReceipt({ isLoading: false }));
       }, 100);
-
     } else {
       console.warn(result.error);
       dispatch(setMessageReceipt({ message: result.error }));
       dispatch(setErrorsReceipt({ errors: true }));
     }
-
   };
 
   const getComponentReceipt = () => {
-    if (!product.length) {
+    if (!product?.length) {
       return <></>;
     }
 
@@ -171,7 +199,9 @@ function ModalReceiptProduct() {
           <InputForSN
             title="Серийный номер"
             type="text"
-            changeValue={(value) => {dispatch( setInputSN({inputSN: value}) )}}
+            changeValue={(value) => {
+              dispatch(setInputSN({ inputSN: value }));
+            }}
             validation={validation.sn.status}
             value={inputSN}
             addSN={addSerialNumber}
@@ -193,7 +223,9 @@ function ModalReceiptProduct() {
           <MyInput
             type="number"
             title="Количество"
-            changeValue={(value) => {dispatch( setCount({count: value}) )}}
+            changeValue={(value) => {
+              dispatch(setCount({ count: value }));
+            }}
             validation={validation.count}
             value={count}
           />
@@ -205,10 +237,17 @@ function ModalReceiptProduct() {
   const addSerialNumber = (e) => {
     e.preventDefault();
 
-    dispatch( setValidation({validation: {...validation, sn:{
-      status: true,
-      message: null,
-    }}}) );
+    dispatch(
+      setValidation({
+        validation: {
+          ...validation,
+          sn: {
+            status: true,
+            message: null,
+          },
+        },
+      })
+    );
 
     // setValidationSN({
     //   status: true,
@@ -216,9 +255,9 @@ function ModalReceiptProduct() {
     // });
 
     if (!sn.length) {
-      dispatch( setSN({sn: [...sn, inputSN]}) );
-     // setSn([...sn, inputSN]);
-     dispatch( setInputSN({inputSN: ''}) );
+      dispatch(setSN({ sn: [...sn, inputSN] }));
+      // setSn([...sn, inputSN]);
+      dispatch(setInputSN({ inputSN: '' }));
       //setInputSN('');
       return;
     }
@@ -226,19 +265,26 @@ function ModalReceiptProduct() {
     let index = sn.findIndex((item) => item === inputSN);
 
     if (index === -1) {
-      dispatch( setSN({sn: [...sn, inputSN]}) );
+      dispatch(setSN({ sn: [...sn, inputSN] }));
       //setSn([...sn, inputSN]);
-      dispatch( setInputSN({inputSN: ''}) );
+      dispatch(setInputSN({ inputSN: '' }));
       //setInputSN('');
     } else {
       // setValidationSN({
       //   status: false,
       //   message: 'Данный серийный номер уже введен',
       // });
-      dispatch( setValidation({validation: {...validation, sn:{
-        status: false,
-        message: 'Данный серийный номер уже введен',
-      }}}) );
+      dispatch(
+        setValidation({
+          validation: {
+            ...validation,
+            sn: {
+              status: false,
+              message: 'Данный серийный номер уже введен',
+            },
+          },
+        })
+      );
     }
   };
 
@@ -251,7 +297,7 @@ function ModalReceiptProduct() {
     });
 
     //setSn(newState);
-    dispatch( setSN({sn: newState}) );
+    dispatch(setSN({ sn: newState }));
   };
 
   const resetForm = (e) => {
@@ -274,6 +320,7 @@ function ModalReceiptProduct() {
 
   const resetValidation = () => {};
 
+
   return (
     <Modal
       active={active}
@@ -290,13 +337,16 @@ function ModalReceiptProduct() {
         <div className={styles.itemsContainer}>
           <div className={styles.item}>
             <h4>1. Выберите категорию</h4>
-            <p className={styles.description} >Поможет отфильтровать товары по Категории. Если не выбрать, то в п.2 будут выводиться все позиции номенклатуры</p>
+            <p className={styles.description}>
+              Поможет отфильтровать товары по Категории. Если не выбрать, то в
+              п.2 будут выводиться все позиции номенклатуры
+            </p>
             <MyDropdown
               id="receiptProductModal_category"
               title="Категория"
               placeholder="Категория товара"
               multiple={false}
-              changeValue={setCategory}
+              changeValue={(res) => {dispatch(setCategory(res))}}
               validation={true}
               reset={reset}
               setReset={() => dispatch(setResetReceipt({ reset: false }))}
@@ -311,144 +361,139 @@ function ModalReceiptProduct() {
               title="Товар"
               placeholder="Выберите товар"
               multiple={false}
-              validation={true}
-              changeValue={setProduct}
+              validation={validation.product}
+              changeValue={(res) => {dispatch( setProduct(res) )}}
               url={urlProduct}
             />
           </div>
 
           <div className={styles.item}>
             <h4>3. Выберите склад</h4>
-            <p className={styles.description} > На данный склад будет оформлен Приход</p>
+            <p className={styles.description}>
+              На данный склад будет оформлен Приход
+            </p>
             <MyDropdown
               id="receiptProductModal_warehouse"
               title="Склад"
               placeholder="Выберите склад"
               multiple={false}
-              changeValue={setWarehouse}
-              validation={validationWarehouse}
+              changeValue={(res) => {dispatch( setWarehouse(res) )}}
+              validation={validation.warehouse}
               reset={reset}
               setReset={() => dispatch(setResetReceipt({ reset: false }))}
               url={'get_warehouse'}
             />
           </div>
 
-
-
-
-
           <div className={styles.item}>{getComponentReceipt()}</div>
 
-          {product.length == 0 && (
+          {product && (
             <>
               <div className={styles.item}>
                 <h4>5. Номер счета, УПД</h4>
-                <p className={styles.description} > Пример: E-00543792 от 29.12.2022</p>
+                <p className={styles.description}>
+                  Пример: E-00543792 от 29.12.2022
+                </p>
                 <MyInput
                   type="text"
                   title="Номер счета"
-                  changeValue={setСontract}
-                  validation={validationСontract}
+                  changeValue={(value) => {dispatch( setContract({contract: value}) )}}
+                  validation={validation.contract}
                   value={contract}
-                  disabled={dogovorCheckbox}
+                  disabled={contractCheckbox}
                 />
 
                 <div className={styles.guaranteeCheckbox}>
                   <Checkbox
                     id="contract"
                     title="Номер счета неизвестен/утерян"
-                    onChange={setDogovorCheckbox}
-                    checked={dogovorCheckbox}
+                    onChange={() => {dispatch( setContractCheckbox() )}}
+                    checked={contractCheckbox}
                   />
                 </div>
-
               </div>
 
               <div className={styles.item}>
                 <h4>6. Контрагент</h4>
-                {/* <MyInput
-                  type="text"
+
+                <MyDropdown
+                  id="receiptProductModal_contragent"
                   title="Контрагент"
-                  changeValue={setVendor}
-                  validation={validationVendor}
-                  value={vendor}
-                /> */}
-
-            <MyDropdown
-              id="receiptProductModal_contragent"
-              title="Контрагент"
-              placeholder="Контрагент"
-              multiple={false}
-              changeValue={setContragent}
-              validation={validationContragent}
-              reset={reset}
-              setReset={() => dispatch(setResetReceipt({ reset: false }))}
-              url={'get_contragents'}
-              disabled={contragentCheckbox}
-            />
-
+                  placeholder="Контрагент"
+                  multiple={false}
+                  changeValue={(res) => {dispatch( setContragent(res) )}}
+                  validation={validation.contragent}
+                  reset={reset}
+                  setReset={() => dispatch(setResetReceipt({ reset: false }))}
+                  url={'get_contragents'}
+                  disabled={contragentCheckbox}
+                />
 
                 <div className={styles.guaranteeCheckbox}>
                   <Checkbox
                     id="contragent"
                     title="Контрагента нет в списке"
-                    onChange={setContragentCheckbox}
+                    onChange={() => {dispatch( setContragentCheckbox() )}}
                     checked={contragentCheckbox}
                   />
                 </div>
 
                 {contragentCheckbox && (
                   <>
-                  <div className={styles.new_item}>
-                    <h6>Введите наименование нового Контрагента</h6>
-                    <p className={styles.description} > Пример: ООО "ДНС-Ритейл"</p>
-                    <MyInput
-                      type="text"
-                      title="Контрагент"
-                      changeValue={setNewContragent}
-                      validation={validationContragent}
-                      value={newContragent}
-                    />
-                  </div>
+                    <div className={styles.new_item}>
+                      <h6>Введите наименование нового Контрагента</h6>
+                      <p className={styles.description}>
+                        Пример: ООО "ДНС-Ритейл"
+                      </p>
+                      <MyInput
+                        type="text"
+                        title="Контрагент"
+                        changeValue={(value) => {dispatch( setNewContragentName({name: value}) )}}
+                        validation={validation.newContragentName}
+                        value={newContragentName}
+                      />
+                    </div>
 
-                  <div className={styles.new_item}>
-                    <h6>Введите ИНН нового Контрагента</h6>
-                    <p className={styles.description} > Пример: 2540167061</p>
-                    <MyInput
-                      type="number"
-                      title="ИНН"
-                      changeValue={setNewContragent}
-                      validation={validationContragent}
-                      value={newContragent}
-                    />
-                  </div>
-
+                    <div className={styles.new_item}>
+                      <h6>Введите ИНН нового Контрагента</h6>
+                      <p className={styles.description}> Пример: 2540167061</p>
+                      <MyInput
+                        type="number"
+                        title="ИНН"
+                        changeValue={(value) => {dispatch( setNewContragentINN({inn: value}) )}}
+                        validation={validation.newContragentINN}
+                        value={newContragentINN}
+                      />
+                    </div>
                   </>
                 )}
-
               </div>
 
               <div className={styles.item}>
                 <h4>7. Ссылка</h4>
-                <p className={styles.description} >Ссылка на задачу в МП (опционально)</p>
+                <p className={styles.description}>
+                  Ссылка на задачу в МП (опционально)
+                </p>
                 <MyInput
                   type="url"
                   title="URL"
-                  changeValue={setUrl}
-                  validation={validationUrl}
+                  changeValue={(value) => {dispatch( setURL({url: value}) )}}
+                  validation={validation.url}
                   value={url}
                 />
               </div>
 
-
               <div className={styles.item}>
-            <h4>8. Гарантия</h4>
-            <p className={styles.description} > Выберите дату окончания гарантии, если товар не на гарантии, то выберите соответствующий пункт</p>
+                <h4>8. Гарантия</h4>
+                <p className={styles.description}>
+                  Выберите дату окончания гарантии, если товар не на гарантии,
+                  то выберите соответствующий пункт
+                </p>
                 <MyInput
                   type="date"
                   title="Гарантия"
-                  changeValue={setGuarantee}
-                  validation={validationСontract}
+                  changeValue={(value) => {dispatch( setGuarantee({guarantee: value}) )}}
+                  validation={validation.guarantee}
                   value={guarantee}
                   disabled={guaranteeCheckbox}
                 />
@@ -457,14 +502,11 @@ function ModalReceiptProduct() {
                   <Checkbox
                     id="guarantee"
                     title="Не на гарантии"
-                    onChange={setGuaranteeCheckbox}
+                    onChange={() => {dispatch( setGuaranteeCheckbox() )}}
                     checked={guaranteeCheckbox}
                   />
                 </div>
-          </div>
-
-
-
+              </div>
             </>
           )}
         </div>

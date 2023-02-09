@@ -243,19 +243,23 @@ class MyDropdown extends Component {
       return option.isCheked;
     });
 
+    console.log('selectedOptions', selectedOptions)
+
+    this.props.changeValue([...selectedOptions])
+
     // Если передаются свойства и опции, то передаем готовое состояние
-    if (this.props.property && this.props.options) {
-      for (let i = 0; i < transferredOptions.length; i++) {
-        for (let j = 0; j < transferredOptions[i].value.length; j++) {
-          if (transferredOptions[i].value[j].id === selectedOptions[j]?.id) {
-            transferredOptions[i].value[j].isCheked = true;
-          }
-        }
-      }
-      this.props.changeValue(transferredOptions);
-    } else {
-      this.props.changeValue(selectedOptions);
-    }
+    // if (this.props.property && this.props.options) {
+    //   for (let i = 0; i < transferredOptions.length; i++) {
+    //     for (let j = 0; j < transferredOptions[i].value.length; j++) {
+    //       if (transferredOptions[i].value[j].id === selectedOptions[j]?.id) {
+    //         transferredOptions[i].value[j].isCheked = true;
+    //       }
+    //     }
+    //   }
+    //   this.props.changeValue(transferredOptions);
+    // } else {
+    //   this.props.changeValue(selectedOptions);
+    // }
   };
 
   clearDropdown = () => {
