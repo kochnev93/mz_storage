@@ -1,5 +1,48 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialValidation = {
+  warehouse: {
+    status: true,
+    message: null,
+  },
+  product: {
+    status: true,
+    message: null,
+  },
+  contract: {
+    status: true,
+    message: null,
+  },
+  contragent: {
+    status: true,
+    message: null,
+  },
+  newContragentName: {
+    status: true,
+    message: null,
+  },
+  newContragentINN: {
+    status: true,
+    message: null,
+  },
+  url: {
+    status: true,
+    message: null,
+  },
+  guarantee: {
+    status: true,
+    message: null,
+  },
+  count: {
+    status: true,
+    message: null,
+  },
+  sn: {
+    status: true,
+    message: null,
+  },
+};
+
 const initialState = {
   active: false,
   errors: false,
@@ -11,32 +54,35 @@ const initialState = {
   product: [],
   urlProduct: 'get_receipt_products/0',
   count: null,
+  min_count: null,
   sn: [],
-  inputSN: null,
+  inputSN: '',
   guarantee: null,
   guaranteeCheckbox: false,
-  contract: null,
+  contract: '',
   contractCheckbox: false,
   contragent: [],
   contragentCheckbox: false,
-  newContragentName: null,
-  newContragentINN: null,
+  newContragentName: '',
+  newContragentINN: '',
   url: null,
-  validation: {
-    warehouse: true,
-    product: true,
-    contract: true,
-    contragent: true,
-    newContragentName: true,
-    newContragentINN: true,
-    URL: true,
-    guarantee: true,
-    count: true,
-    sn: {
-      status: true,
-      message: null,
-    },
-  },
+  validation: initialValidation
+  // validation: {
+  //   warehouse: true,
+  //   product: true,
+  //   contract: true,
+  //   contragent: true,
+  //   newContragentName: true,
+  //   newContragentINN: true,
+  //   url: true,
+  //   guarantee: true,
+  //   count: true,
+  //   min_count: true,
+  //   sn: {
+  //     status: true,
+  //     message: null,
+  //   },
+  // },
 };
 
 export const receiptProductSlice = createSlice({
@@ -64,12 +110,32 @@ export const receiptProductSlice = createSlice({
         (state.message = ''),
         (state.reset = false),
         (state.isLoading = false);
+      // state.validation = {
+      //   warehouse: true,
+      //   product: true,
+      //   contract: true,
+      //   contragent: true,
+      //   newContragentName: true,
+      //   newContragentINN: true,
+      //   url: true,
+      //   guarantee: true,
+      //   count: true,
+      //   min_count: true,
+      //   sn: {
+      //     status: true,
+      //     message: null,
+      //   },
+      // };
+      state.validation = initialValidation
     },
 
     //Receipt Form
     setProduct: (state, action) => {
-      //state.product = action.payload.product;
-      state.product = [{...action.payload[0]}]
+      if (action.payload.length == 0) {
+        state.product = [];
+      } else {
+        state.product = [{ ...action.payload[0] }];
+      }
     },
 
     setProductUrl: (state, action) => {
@@ -88,29 +154,21 @@ export const receiptProductSlice = createSlice({
       state.count = action.payload.count;
     },
 
+    setMinCount: (state, action) => {
+      state.min_count = action.payload.min_count;
+    },
+
     setValidation: (state, action) => {
-      state.validation = action.payload.validation;
+      state.validation = action.payload;
     },
 
     setCategory: (state, action) => {
-    //   console.log(action.payload);
-    //   console.log([{...action.payload[0]}]);
-
-    //   state.category = [
-    //     {
-    //       id: action.payload[0].id,
-    //       title: action.payload[0].title,
-    //       isCheked: action.payload[0].isCheked,
-    //     },
-    //   ];
-
-    state.category = [{...action.payload[0]}]
-
+      state.category = [{ ...action.payload[0] }];
     },
 
     setWarehouse: (state, action) => {
       //state.warehouse = action.payload.warehouse;
-      state.warehouse = [{...action.payload[0]}]
+      state.warehouse = [{ ...action.payload[0] }];
     },
 
     setContract: (state, action) => {
@@ -118,18 +176,19 @@ export const receiptProductSlice = createSlice({
     },
 
     setContractCheckbox: (state, action) => {
-      (state.contractCheckbox = !state.contractCheckbox),
-        (state.contract = null);
+      (state.contractCheckbox = !state.contractCheckbox), (state.contract = '');
     },
 
     setContragent: (state, action) => {
       //state.contragent = action.payload.contragent;
-      state.contragent = [{...action.payload[0]}]
+      state.contragent = [{ ...action.payload[0] }];
     },
 
     setContragentCheckbox: (state, action) => {
       (state.contragentCheckbox = !state.contragentCheckbox),
         (state.contragent = []);
+      state.newContragentName = '';
+      state.newContragentINN = '';
     },
 
     setNewContragentName: (state, action) => {
@@ -150,7 +209,7 @@ export const receiptProductSlice = createSlice({
 
     setGuaranteeCheckbox: (state, action) => {
       state.guaranteeCheckbox = !state.guaranteeCheckbox;
-      state.guarantee = null;
+      state.guarantee = '';
     },
   },
 });
@@ -166,6 +225,7 @@ export const {
   setProductUrl,
   setInputSN,
   setCount,
+  setMinCount,
   setValidation,
   setSN,
   setCategory,

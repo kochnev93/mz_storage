@@ -29,11 +29,14 @@ import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
+    <div><Favicon url="../favicon.ico"/></div>
     <Provider store={store}>
-    <Favicon url="favicon.ico"/>
+    
       <Advt />
       <BrowserRouter>
+      
         <Routes>
+        
           <Route
             path="/"
             element={

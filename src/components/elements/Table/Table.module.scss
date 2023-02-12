@@ -48,6 +48,15 @@
     font-size: 14px;
   }
 
+  @media screen and (max-width: 1200px){
+    th,
+    td {
+      padding: 5px;
+      font-size: 12px;
+    }
+  
+  }
+
   th {
     background-color: var(--main-color);
     color: white;

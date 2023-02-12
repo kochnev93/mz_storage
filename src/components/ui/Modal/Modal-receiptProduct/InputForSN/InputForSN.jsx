@@ -30,7 +30,7 @@ const InputForSN = (props) => {
         </label>
         <fieldset
           className={cx(styles.myInputSN_fieldset, {
-            [styles.error]: !props.validation.status,
+            [styles.error]: !props.validation?.status,
           })}
         >
           <legend>
@@ -48,7 +48,7 @@ const InputForSN = (props) => {
       </div>
 
       <div>
-        <span className={styles.warning}>{props.validation.message}</span>
+        <span className={styles.warning}>{props.validation?.message}</span>
         <ul className={styles.selectedItem_menu}>{listSN}</ul>
       </div>
     </>

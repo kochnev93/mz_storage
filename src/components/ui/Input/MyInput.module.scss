@@ -89,3 +89,31 @@
       }
     }
   }
+
+  .disabled_button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  
+    svg {
+      fill: #f1f1f1;
+      width: 30px;
+      height: 20px;
+    }
+  }
+
+  p.validation_message{
+    margin: 0 !important;
+    color: red;
+    font-size: 10px;
+    padding-top: 5px;
+  }
+
