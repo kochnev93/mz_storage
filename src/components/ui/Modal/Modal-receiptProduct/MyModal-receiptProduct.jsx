@@ -140,17 +140,20 @@ function ModalReceiptProduct() {
       dispatch(setIsLoadingReceipt({ isLoading: true }));
 
       let data = JSON.stringify({
-        warehouse: warehouse[0],
-        product: product[0],
+        warehouse: warehouse,
+        product: product,
         contract: contractCheckbox ? null : contract,
-        contragent: contragentCheckbox ? null : contragent[0],
+        contragent: contragentCheckbox ? null : contragent,
         newContragentName: contragentCheckbox ? newContragentName : null,
         newContragentINN: contragentCheckbox ? newContragentINN : null,
         url: url,
         guarantee: guaranteeCheckbox ? null : guarantee,
         count: count,
+        min_count: min_count,
         sn: sn,
       });
+
+      console.log(data);
 
       let requestOptions = {
         method: 'POST',
@@ -285,14 +288,13 @@ function ModalReceiptProduct() {
     } else {
       dispatch(
         setValidation({
-          validation: {
             ...validation,
             sn: {
               status: false,
               message: 'Данный серийный номер уже введен',
             },
           },
-        })
+        )
       );
     }
   };

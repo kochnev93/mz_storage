@@ -45,10 +45,7 @@ export const validationReceiptForm = (tempValidation, values) => {
       tempValidation.count.status = false;
       tempValidation.count.message = 'Количество должно быть >= 1';
       errorCounter++;
-    } else {
-      tempValidation.count.status = true;
-      tempValidation.count.message = null;
-    }
+    } 
 
     // Не серийный учет
     if (!values.product[0]?.accounting_sn && !values.min_count) {
@@ -64,10 +61,7 @@ export const validationReceiptForm = (tempValidation, values) => {
       tempValidation.min_count.status = false;
       tempValidation.min_count.message = 'Минимальный остаток должен быть >= 1';
       errorCounter++;
-    } else {
-      tempValidation.min_count.status = true;
-      tempValidation.min_count.message = null;
-    }
+    } 
 
     if (!values.contract) {
       if (!values.contractCheckbox) {
