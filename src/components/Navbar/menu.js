@@ -18,6 +18,12 @@ export const menu = [
         desc: 'Приход'
     },
     {
+        icon: 'FaWarehouse',
+        title: 'Склады',
+        url: '/warehouses',
+        desc: 'Склады'
+    },
+    {
         icon: 'AiOutlineInfoCircle',
         title: 'О нас',
         url: '/about',

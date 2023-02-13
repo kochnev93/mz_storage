@@ -37,6 +37,10 @@ const initialValidation = {
     status: true,
     message: null,
   },
+   min_count: {
+    status: true,
+    message: null,
+  },
   sn: {
     status: true,
     message: null,
@@ -67,22 +71,6 @@ const initialState = {
   newContragentINN: '',
   url: null,
   validation: initialValidation
-  // validation: {
-  //   warehouse: true,
-  //   product: true,
-  //   contract: true,
-  //   contragent: true,
-  //   newContragentName: true,
-  //   newContragentINN: true,
-  //   url: true,
-  //   guarantee: true,
-  //   count: true,
-  //   min_count: true,
-  //   sn: {
-  //     status: true,
-  //     message: null,
-  //   },
-  // },
 };
 
 export const receiptProductSlice = createSlice({
@@ -92,42 +80,52 @@ export const receiptProductSlice = createSlice({
     setActiveReceipt: (state, action) => {
       state.active = action.payload.active;
     },
+
     setErrorsReceipt: (state, action) => {
       state.errors = action.payload.errors;
     },
+
     setMessageReceipt: (state, action) => {
       state.message = action.payload.message;
       state.errors = action.payload.errors;
     },
+
     setResetReceipt: (state, action) => {
       state.reset = action.payload.reset;
     },
+
     setIsLoadingReceipt: (state, action) => {
       state.isLoading = action.payload.isLoading;
     },
+
     setDefaultReceipt: (state, action) => {
-      (state.errors = false),
-        (state.message = ''),
-        (state.reset = false),
-        (state.isLoading = false);
-      // state.validation = {
-      //   warehouse: true,
-      //   product: true,
-      //   contract: true,
-      //   contragent: true,
-      //   newContragentName: true,
-      //   newContragentINN: true,
-      //   url: true,
-      //   guarantee: true,
-      //   count: true,
-      //   min_count: true,
-      //   sn: {
-      //     status: true,
-      //     message: null,
-      //   },
-      // };
+      state.errors = false,
+        state.message = '',
+        state.reset = false,
+        state.isLoading = false;
       state.validation = initialValidation
     },
+
+    setDefaultValue: (state, action) => {
+        state.validation = initialValidation
+        state.category = [],
+        state.warehouse = [],
+        state.product = [],
+        state.urlProduct =  'get_receipt_products/0',
+        state.count = null,
+        state.min_count = null,
+        state.sn = [],
+        state.inputSN = '',
+        state.guarantee = null,
+        state.guaranteeCheckbox = false,
+        state.contract = '',
+        state.contractCheckbox = false,
+        state.contragent = [],
+        state.contragentCheckbox = false,
+        state.newContragentName = '',
+        state.newContragentINN = '',
+        state.url = ''
+      },
 
     //Receipt Form
     setProduct: (state, action) => {
@@ -167,7 +165,6 @@ export const receiptProductSlice = createSlice({
     },
 
     setWarehouse: (state, action) => {
-      //state.warehouse = action.payload.warehouse;
       state.warehouse = [{ ...action.payload[0] }];
     },
 
@@ -180,7 +177,6 @@ export const receiptProductSlice = createSlice({
     },
 
     setContragent: (state, action) => {
-      //state.contragent = action.payload.contragent;
       state.contragent = [{ ...action.payload[0] }];
     },
 
@@ -221,6 +217,7 @@ export const {
   setResetReceipt,
   setIsLoadingReceipt,
   setDefaultReceipt,
+  setDefaultValue,
   setProduct,
   setProductUrl,
   setInputSN,

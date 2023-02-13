@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 // Hooks
-import authHeader from '../../../../services/auth-header';
 import useFetch from '../../../../hooks/useFetch';
+import { validationReceiptForm } from './validationReceipt.js';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import {
   setMessageReceipt,
   setIsLoadingReceipt,
   setDefaultReceipt,
+  setDefaultValue,
   setActiveReceipt,
   setProduct,
   setProductUrl,
@@ -35,6 +36,7 @@ import {
 
 //Styles
 import styles from './MyModal-receiptProduct.module.scss';
+import { IoMdAddCircle } from 'react-icons/Io';
 
 // Components
 import MyDropdown from '../../Dropdown/MyDropdown.jsx';
@@ -42,21 +44,12 @@ import MyInput from '../../Input/MyInput.jsx';
 import MyButton from '../../Buttons/ButtonSend.jsx';
 import Modal from '../MyModal2.jsx';
 import InputForSN from './InputForSN/InputForSN.jsx';
-import { IoMdAddCircle } from 'react-icons/Io';
 import Checkbox from '../../Checkbox/Checkbox.jsx';
+
 
 function ModalReceiptProduct() {
   const dispatch = useDispatch();
   const { fetchNow } = useFetch();
-
-  // Redux Modal
-  // const active = useSelector((state) => state.modal_receipt_product.active);
-  // const errors = useSelector((state) => state.modal_receipt_product.errors);
-  // const message = useSelector((state) => state.modal_receipt_product.message);
-  // const reset = useSelector((state) => state.modal_receipt_product.reset);
-  // const isLoading = useSelector(
-  //   (state) => state.modal_receipt_product.isLoading
-  // );
 
   const {
     active,
@@ -64,49 +57,7 @@ function ModalReceiptProduct() {
     message,
     reset,
     isLoading
-  } = useSelector((state) => state.modal_receipt_product.isLoading);
-
-  // Redux Form
-  // const category = useSelector((state) => state.modal_receipt_product.category);
-  // const warehouse = useSelector(
-  //   (state) => state.modal_receipt_product.warehouse
-  // );
-  // const product = useSelector((state) => state.modal_receipt_product.product);
-  // const urlProduct = useSelector(
-  //   (state) => state.modal_receipt_product.urlProduct
-  // );
-  // const count = useSelector((state) => state.modal_receipt_product.count);
-  // const min_count = useSelector(
-  //   (state) => state.modal_receipt_product.min_count
-  // );
-  // const guarantee = useSelector(
-  //   (state) => state.modal_receipt_product.guarantee
-  // );
-  // const guaranteeCheckbox = useSelector(
-  //   (state) => state.modal_receipt_product.guaranteeCheckbox
-  // );
-  // const contract = useSelector((state) => state.modal_receipt_product.contract);
-  // const contractCheckbox = useSelector(
-  //   (state) => state.modal_receipt_product.contractCheckbox
-  // );
-  // const sn = useSelector((state) => state.modal_receipt_product.sn);
-  // const inputSN = useSelector((state) => state.modal_receipt_product.inputSN);
-  // const contragent = useSelector(
-  //   (state) => state.modal_receipt_product.contragent
-  // );
-  // const contragentCheckbox = useSelector(
-  //   (state) => state.modal_receipt_product.contragentCheckbox
-  // );
-  // const newContragentName = useSelector(
-  //   (state) => state.modal_receipt_product.newContragentName
-  // );
-  // const newContragentINN = useSelector(
-  //   (state) => state.modal_receipt_product.newContragentINN
-  // );
-  // const url = useSelector((state) => state.modal_receipt_product.url);
-  // const validation = useSelector(
-  //   (state) => state.modal_receipt_product.validation
-  // );
+  } = useSelector((state) => state.modal_receipt_product);
 
   const {
     category,
@@ -129,45 +80,8 @@ function ModalReceiptProduct() {
     validation,
   } = useSelector((state) => state.modal_receipt_product);
 
-  //State
-  //const [category, setCategory] = useState([]);
-
-  //const [warehouse, setWarehouse] = useState([]);
-  //const [validationWarehouse, setValidationWarehouse] = useState(true);
-
-  //const [product, setProduct] = useState([]);
-  //const [validationProduct, setValidationProduct] = useState(true);
-  //const [urlProduct, setUrlProduct] = useState(`get_receipt_products/0`);
-
-  // const [count, setCount] = useState(null);
-  // const [validationCount, setValidationCount] = useState(true);
-
-  //const [guarantee, setGuarantee] = useState(null);
-  //const [validationGuarantee, setValidationGuarantee] = useState(false);
-  //const [guaranteeCheckbox, setGuaranteeCheckbox] = useState(false);
-
-  //const [dogovorCheckbox, setDogovorCheckbox] = useState(false);
-
-  // const [sn, setSn] = useState([]);
-  // const [inputSN, setInputSN] = useState('');
-  // const [validationSN, setValidationSN] = useState({
-  //   status: true,
-  //   message: null,
-  // });
-
-  // const [contragent, setContragent] = useState([]);
-  // const [validationContragent, setValidationContragent] = useState(true);
-  // const [contragentCheckbox, setContragentCheckbox]= useState(false);
-  // const [newContragent, setNewContragent] = useState(null);
-
-  // const [contract, setСontract] = useState('');
-  // const [validationСontract, setValidationСontract] = useState(true);
-
-  // const [url, setUrl] = useState('');
-  // const [validationUrl, setValidationUrl] = useState(true);
-
   useEffect(() => {
-    //dispatch(setProduct({ product: [] }));
+    dispatch(setProduct([]));
 
     if (category?.length) {
       dispatch(
@@ -181,117 +95,41 @@ function ModalReceiptProduct() {
   const validationReceipt = () => {
     dispatch(setDefaultReceipt());
 
-    let errorCounter = 0;
-
+    // Делаем копию текущего состояния
     const tempValidation = JSON.parse(JSON.stringify(validation));
 
-    if (product.length == 0) {
-      tempValidation.product = false;
-      errorCounter++;
-
-      dispatch(setValidation({ ...tempValidation }));
-      dispatch(
-        setMessageReceipt({
-          errors: true,
-          message: `Количество ошибок: ${errorCounter}`,
-        })
-      );
-
-      return false;
-    } else {
-      tempValidation.product = true;
+    // Объект со значениями полей
+    const values = {
+      product,
+      warehouse,
+      count,
+      min_count,
+      sn,
+      guarantee,
+      guaranteeCheckbox,
+      contract,
+      contractCheckbox,
+      contragent,
+      contragentCheckbox,
+      newContragentName,
+      newContragentINN,
+      url
     }
 
-    if (warehouse.length == 0) {
-      tempValidation.warehouse = false;
-      errorCounter++;
-    } else {
-      tempValidation.warehouse = true;
-    }
+    // Валидация формы, возвращает количество ошибок
+    const validationForm = validationReceiptForm(tempValidation, values);
 
-    // Серийный учет
-    if (product[0]?.accounting_sn && sn.length == 0) {
-      tempValidation.sn.status = false;
-      tempValidation.sn.message = 'Введите серийный номер(а)';
-      errorCounter++;
-    } else {
-      tempValidation.sn.status = true;
-      tempValidation.sn.message = null;
-    }
-
-    // Не серийный учет
-    if (!product[0]?.accounting_sn && !count) {
-      tempValidation.count = false;
-      errorCounter++;
-    } else {
-      tempValidation.count = true;
-    }
-
-    // Не серийный учет
-    if (!product[0]?.accounting_sn && !min_count) {
-      tempValidation.min_count = false;
-      errorCounter++;
-    } else {
-      tempValidation.min_count = true;
-    }
-
-    if (!contract) {
-      if (!contractCheckbox) {
-        console.log('++++');
-        tempValidation.contract = false;
-        errorCounter++;
-      } else {
-        tempValidation.contract = true;
-      }
-    } else {
-      tempValidation.contract = true;
-    }
-
-    if (contragent.length == 0) {
-      if (!contragentCheckbox) {
-        tempValidation.contragent = false;
-        errorCounter++;
-      } else {
-        tempValidation.contragent = true;
-      }
-    }
-
-    if (contragentCheckbox && !newContragentName) {
-      tempValidation.newContragentName = false;
-      errorCounter++;
-    } else {
-      tempValidation.newContragentName = true;
-    }
-
-    if (contragentCheckbox && !newContragentINN) {
-      tempValidation.newContragentINN = false;
-      errorCounter++;
-    } else {
-      tempValidation.newContragentINN = true;
-    }
-
-    if (!guarantee) {
-      if (!guaranteeCheckbox) {
-        tempValidation.guarantee = false;
-        errorCounter++;
-      } else {
-        tempValidation.guarantee = true;
-      }
-    } else {
-      tempValidation.guarantee = true;
-    }
-
-    if (errorCounter === 0) {
+    if(validationForm == 0){
       return true;
-    } else {
-      dispatch(setValidation({ ...tempValidation }));
-      dispatch(
-        setMessageReceipt({
-          errors: true,
-          message: `Количество ошибок: ${errorCounter}`,
-        })
-      );
-      return false;
+    } else{
+        dispatch(setValidation({ ...tempValidation }));
+        dispatch(
+          setMessageReceipt({
+            errors: true,
+            message: `Количество ошибок: ${validationForm}`,
+          })
+        );
+        return false;
     }
   };
 
@@ -318,25 +156,29 @@ function ModalReceiptProduct() {
         method: 'POST',
         body: data,
       };
+
+      const result = await fetchNow(
+      `${process.env.REACT_APP_API_SERVER}/receipt_product`,
+      requestOptions
+    );
+
+    if (result.data) {
+      dispatch(setMessageReceipt({ message: result.data }));
     } else {
+      console.warn(result.error);
+      dispatch(setMessageReceipt({ errors: true, message: result.error }));
+    }
+
+    setTimeout(() => {
+      dispatch(setIsLoadingReceipt({ isLoading: false }));
+    }, 200);
+
+
+    } else {
+      console.warn('Не пройдена валидация при оформлении прихода')
       return false;
     }
 
-    // const result = await fetchNow(
-    //   `${process.env.REACT_APP_API_SERVER}/receipt_product`,
-    //   requestOptions
-    // );
-
-    // if (result.data) {
-    //   dispatch(setMessageReceipt({ message: result.data }));
-    //   setTimeout(() => {
-    //     dispatch(setIsLoadingReceipt({ isLoading: false }));
-    //   }, 100);
-    // } else {
-    //   console.warn(result.error);
-    //   dispatch(setMessageReceipt({ message: result.error }));
-    //   dispatch(setErrorsReceipt({ errors: true }));
-    // }
   };
 
   const getComponentReceipt = () => {
@@ -385,9 +227,12 @@ function ModalReceiptProduct() {
               changeValue={(value) => {
                 dispatch(setCount({ count: value }));
               }}
-              validation={validation.count}
+              validation={validation.count.status}
               value={count}
             />
+            {!validation?.count?.status &&
+              <div className={styles.error_message}>{validation.count.message}</div>
+            }
           </div>
 
           <div className={styles.item}>
@@ -401,9 +246,12 @@ function ModalReceiptProduct() {
               changeValue={(value) => {
                 dispatch(setMinCount({ min_count: value }));
               }}
-              validation={validation.min_count}
+              validation={validation.min_count.status}
               value={min_count}
             />
+            {!validation?.min_count?.status &&
+              <div className={styles.error_message}>{validation.min_count.message}</div>
+            }
           </div>
         </>
       );
@@ -423,16 +271,9 @@ function ModalReceiptProduct() {
       })
     );
 
-    // setValidationSN({
-    //   status: true,
-    //   message: null,
-    // });
-
     if (!sn?.length) {
       dispatch(setSN({ sn: [...sn, inputSN] }));
-      // setSn([...sn, inputSN]);
       dispatch(setInputSN({ inputSN: '' }));
-      //setInputSN('');
       return;
     }
 
@@ -440,14 +281,8 @@ function ModalReceiptProduct() {
 
     if (index === -1) {
       dispatch(setSN({ sn: [...sn, inputSN] }));
-      //setSn([...sn, inputSN]);
       dispatch(setInputSN({ inputSN: '' }));
-      //setInputSN('');
     } else {
-      // setValidationSN({
-      //   status: false,
-      //   message: 'Данный серийный номер уже введен',
-      // });
       dispatch(
         setValidation({
           validation: {
@@ -470,29 +305,14 @@ function ModalReceiptProduct() {
       return item !== e.target.dataset.value;
     });
 
-    //setSn(newState);
     dispatch(setSN({ sn: newState }));
   };
 
   const resetForm = (e) => {
     e.preventDefault();
-
-    // setCategory([]);
-    // setWarehouse([]);
-    // setProduct([]);
-    // setCount(null);
-    // setSn([]);
-    // setInputSN('');
-    // setVendor('');
-    // setСontract('');
-    // setUrl('');
-
-    dispatch(setMessageReceipt({ message: '' }));
-    dispatch(setErrorsReceipt({ errors: false }));
-    dispatch(setResetReceipt({ reset: true }));
+    dispatch(setDefaultReceipt());
+    dispatch(setDefaultValue());
   };
-
-  const resetValidation = () => {};
 
   return (
     <Modal
@@ -536,12 +356,15 @@ function ModalReceiptProduct() {
               title="Товар"
               placeholder="Выберите товар"
               multiple={false}
-              validation={validation.product}
+              validation={validation.product.status}
               changeValue={(res) => {
                 dispatch(setProduct(res));
               }}
               url={urlProduct}
             />
+            {!validation?.product?.status &&
+              <div className={styles.error_message}>{validation.product.message}</div>
+            }
           </div>
 
           <div className={styles.item}>
@@ -557,11 +380,14 @@ function ModalReceiptProduct() {
               changeValue={(res) => {
                 dispatch(setWarehouse(res));
               }}
-              validation={validation.warehouse}
+              validation={validation.warehouse.status}
               reset={reset}
               setReset={() => dispatch(setResetReceipt({ reset: false }))}
               url={'get_warehouse'}
             />
+            {!validation?.warehouse?.status &&
+              <div className={styles.error_message}>{validation.warehouse.message}</div>
+             }
           </div>
 
           {getComponentReceipt()}
@@ -579,10 +405,14 @@ function ModalReceiptProduct() {
                   changeValue={(value) => {
                     dispatch(setContract({ contract: value }));
                   }}
-                  validation={validation.contract}
+                  validation={validation.contract.status}
                   value={contract}
                   disabled={contractCheckbox}
                 />
+
+            {!validation?.contract?.status &&
+              <div className={styles.error_message}>{validation.contract.message}</div>
+            }
 
                 <div className={styles.guaranteeCheckbox}>
                   <Checkbox
@@ -607,12 +437,16 @@ function ModalReceiptProduct() {
                   changeValue={(res) => {
                     dispatch(setContragent(res));
                   }}
-                  validation={validation.contragent}
+                  validation={validation.contragent.status}
                   reset={reset}
                   setReset={() => dispatch(setResetReceipt({ reset: false }))}
                   url={'get_contragents'}
                   disabled={contragentCheckbox}
                 />
+
+            {!validation?.contragent?.status &&
+              <div className={styles.error_message}>{validation.contragent.message}</div>
+            }
 
                 <div className={styles.guaranteeCheckbox}>
                   <Checkbox
@@ -638,9 +472,14 @@ function ModalReceiptProduct() {
                         changeValue={(value) => {
                           dispatch(setNewContragentName({ name: value }));
                         }}
-                        validation={validation.newContragentName}
+                        validation={validation.newContragentName.status}
                         value={newContragentName}
                       />
+
+            {!validation?.newContragentName?.status &&
+              <div className={styles.error_message}>{validation.newContragentName.message}</div>
+            }
+
                     </div>
 
                     <div className={styles.new_item}>
@@ -652,9 +491,13 @@ function ModalReceiptProduct() {
                         changeValue={(value) => {
                           dispatch(setNewContragentINN({ inn: value }));
                         }}
-                        validation={validation.newContragentINN}
+                        validation={validation.newContragentINN.status}
                         value={newContragentINN}
                       />
+
+            {!validation?.newContragentINN?.status &&
+              <div className={styles.error_message}>{validation.newContragentINN.message}</div>
+            }
                     </div>
                   </>
                 )}
@@ -671,9 +514,13 @@ function ModalReceiptProduct() {
                   changeValue={(value) => {
                     dispatch(setURL({ url: value }));
                   }}
-                  validation={validation.url}
+                  validation={validation.url.status}
                   value={url}
                 />
+
+            {!validation?.url?.status &&
+              <div className={styles.error_message}>{validation.url.message}</div>
+            }
               </div>
 
               <div className={styles.item}>
@@ -688,10 +535,14 @@ function ModalReceiptProduct() {
                   changeValue={(value) => {
                     dispatch(setGuarantee({ guarantee: value }));
                   }}
-                  validation={validation.guarantee}
+                  validation={validation.guarantee.status}
                   value={guarantee}
                   disabled={guaranteeCheckbox}
                 />
+
+            {!validation?.guarantee?.status &&
+              <div className={styles.error_message}>{validation.guarantee.message}</div>
+            }
 
                 <div className={styles.guaranteeCheckbox}>
                   <Checkbox

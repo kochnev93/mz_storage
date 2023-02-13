@@ -10,6 +10,8 @@ import rateProductSlice from '../features/modal/rate-productSlice';
 import userSlice from '../features/users/userSlice';
 import appSlice from '../features/app/appSlice';
 import dashboard  from '../features/dashboard/dashboardSlice';
+import addWarehouseSlice from '../features/modal/add-warehouseSlice';
+
 
 
 
@@ -26,5 +28,6 @@ export const store = configureStore({
         modal_transfer_product: transferProductSlice,
         modal_rate_product: rateProductSlice,
         dashboard: dashboard,
+        modal_add_warehouse: addWarehouseSlice
     },
 });

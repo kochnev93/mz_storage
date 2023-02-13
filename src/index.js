@@ -14,9 +14,7 @@ import { Auth } from './pages/Auth/Auth.jsx';
 import { Error } from './pages/Error/Error.jsx';
 import { Nomenclature } from './pages/Nomenclature/Nomenclature.jsx';
 import { Receipt } from './pages/Receipt/Receipt.jsx';
-
-//Pages for Admin
-//import { Nomenclature } from './components/Admin/Nomenclature/Nomenclature.jsx';
+import { Warehouses } from './pages/Warehouses/Warehouses.jsx';
 
 // Redux
 import { store } from './store/store';
@@ -26,6 +24,7 @@ import { Provider } from 'react-redux';
 import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
+
 
 ReactDOM.render(
   <React.StrictMode>
@@ -60,6 +59,15 @@ ReactDOM.render(
             element={
               <RequireAuth>
                 <Receipt />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="warehouses"
+            element={
+              <RequireAuth>
+                <Warehouses />
               </RequireAuth>
             }
           />

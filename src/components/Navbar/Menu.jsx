@@ -10,6 +10,7 @@ import { MdOutlineAdminPanelSettings } from 'react-icons/Md';
 import { AiOutlineInfoCircle } from 'react-icons/Ai';
 import { BsClipboardCheck } from 'react-icons/Bs';
 import { MdReceipt } from 'react-icons/Md';
+import { FaWarehouse } from 'react-icons/Fa';
 
 
 function Menu() {
@@ -19,6 +20,7 @@ function Menu() {
       case 'MdOutlineAdminPanelSettings': return <MdOutlineAdminPanelSettings />
       case 'BsClipboardCheck': return <BsClipboardCheck />
       case 'MdReceipt': return <MdReceipt />
+      case 'FaWarehouse': return <FaWarehouse />
       default: return <AiOutlineInfoCircle />
     }
   }

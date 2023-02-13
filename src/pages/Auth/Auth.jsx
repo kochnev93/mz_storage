@@ -161,7 +161,7 @@ export const Auth = () => {
         </div>
 
         <div className={styles.footer}>
-          ООО «Вита», 2021—{new Date().getFullYear()}
+          Склад, 2021—{new Date().getFullYear()}
         </div>
       </form>
     </div>

@@ -42,7 +42,6 @@ const MyInput = (props) => {
         )}
       </div>
 
-      <p className={styles.validation_message}>123</p>
     </>
   );
 };
