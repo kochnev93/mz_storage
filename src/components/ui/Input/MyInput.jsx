@@ -23,7 +23,7 @@ const MyInput = (props) => {
         </label>
         <fieldset
           className={cx(styles.myInput_fieldset, {
-            [styles.error]: !props.validation,
+            [styles.error]: !props.validation ? props.validation : true,
           })}
         >
           <legend>

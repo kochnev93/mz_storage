@@ -9,7 +9,7 @@ import {setActiveWarehouse, setErrorsWarehouse, setMessageWarehouse, setResetWar
 import { useDispatch, useSelector } from 'react-redux';
 
 //Styles
-import styles from './Modal-addWarehouse.module.scss';
+import styles from '../MyModal.module.scss';
 
 // Components
 import MyDropdown from '../../Dropdown/MyDropdown.jsx';
@@ -45,7 +45,61 @@ function ModalAddWarehose() {
       errors={errors}
       isLoading={isLoading}
     >
-        <h1>654987</h1>
+      <form className={styles.form}>
+        <div className={styles.itemsContainer}>
+
+            <div className={styles.item}>
+                <h4>1. Код филиала</h4>
+                <p className={styles.description}>
+                  Например, СПБ: 65, МСК: М5
+                </p>
+                <MyInput
+                  type="text"
+                  title="Код филиала"
+                  //validation={validation.url.status}
+                  //value={url}
+                />
+            </div>
+
+            <div className={styles.item}>
+                <h4>2. Краткое наименование</h4>
+                <p className={styles.description}>
+                  Например, Долгоозёрная, 12к3
+                </p>
+                <MyInput
+                  type="text"
+                  title="Краткое наименование"
+                  //validation={validation.url.status}
+                  //value={url}
+                />
+            </div>
+
+            <div className={styles.item}>
+                <h4>3. Адрес</h4>
+                <p className={styles.description}>
+                  Например, 197373, Санкт-Петербург, улица Долгоозерная, дом 12, корпус 3
+                </p>
+                <MyInput
+                  type="text"
+                  title="Адрес"
+                  //validation={validation.url.status}
+                  //value={url}
+                />
+            </div>
+
+            <div className={styles.buttons}>
+              <MyButton
+                type="send"
+                //action={rate}
+                title="Добавить"
+                loadingTitle="Добавлю"
+                loading={isLoading}
+              />
+            </div>
+
+
+        </div>
+      </form>
     </Modal>
   );
 }

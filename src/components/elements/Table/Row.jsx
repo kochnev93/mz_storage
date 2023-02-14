@@ -1,5 +1,4 @@
 import React from 'react';
-import cx from 'classnames';
 
 import { AiOutlineInfoCircle } from 'react-icons/Ai';
 import { BiTransfer } from 'react-icons/Bi';
@@ -12,7 +11,7 @@ import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
 import { setActiveRate } from '../../../features/modal/rate-productSlice';
 
-const Row = ({ product }) => {
+const Row = ({ product, key }) => {
   const dispatch = useDispatch();
 
   const getIcon = () => {
@@ -87,7 +86,7 @@ const Row = ({ product }) => {
   };
 
   return (
-    <tr>
+    <tr key={key}>
       <td>{product?.id}</td>
       <td>{product?.warehouse_title}</td>
       <td>{product?.category_title}</td>

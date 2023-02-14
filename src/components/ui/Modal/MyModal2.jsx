@@ -18,6 +18,7 @@ function Modal({
   errors,
   isLoading,
   children,
+  size = 'medium'
 }) {
   const dispatch = useDispatch();
   const statusApp = useSelector((state) => state.appStatus);
@@ -34,10 +35,20 @@ function Modal({
 
   return (
     <div
-      className={cx(styles.myModal_overlay, { [styles.active]: active })}
+      className={cx(
+        styles.myModal_overlay, { 
+          [styles.active]: active
+        })}
       onClick={() => setActive()}
     >
-      <div className={styles.myModal} onClick={(e) => e.stopPropagation()}>
+      <div 
+        className={cx(styles.myModal, { 
+            [styles.medium]: size === 'medium',
+            [styles.small]: size === 'small',
+            [styles.big]: size === 'big',
+        })} 
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={styles.myModal_wrapper}>
           <div className={styles.myModal_header}>
             <div>

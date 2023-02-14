@@ -5,8 +5,6 @@ export const MyTable = ({ titleColumn, content = [], resultCount = 0 }) => {
 
   const columns = titleColumn.map((column) => <th>{column}</th>);
 
-  let captionCount;
-
   const getEmptyLine = (titleColumn) => {
     const tdCount = titleColumn.map((item) => <td>&nbsp;</td>);
     return (

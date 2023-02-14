@@ -56,14 +56,13 @@ const useFilterTable = (arr) => {
 
   // Отсортированный список товаров
   let content = getHiddenStr(arr);
-  console.info('CONTENT_AFTER_useFilter', content);
 
   const bodyContent = useMemo(() => {
-    return content.map((item) => {
+    return content.map((item, index) => {
       if (item.sn.length > 1) {
-        return <RowDropdown product={item} />;
+        return <RowDropdown product={item} key={index}/>;
       } else {
-        return <Row product={item} />;
+        return <Row product={item} key={index} />;
       }
     });
   }, [content]);
@@ -74,10 +73,9 @@ export default useFilterTable;
 
 export const useFilterSimpleTable = (arr) => {
   //Возвращает строки для таблицы (без всяких проверок и сортировок)
-
   const bodyContent = useMemo(() => {
-    return arr.map((item) => {
-        return <Row product={item} />;
+    return arr.map((item, index) => {
+        return <Row product={item} key={index} />;
     });
   }, [arr]);
 

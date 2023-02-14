@@ -13,6 +13,7 @@ import ModalReceiptProduct from './ui/Modal/Modal-receiptProduct/MyModal-receipt
 import ModalTransferProduct from './ui/Modal/Modal-transferProduct/MyModal-transferProduct.jsx';
 import ModalAboutProduct from './ui/Modal/Modal-aboutProduct/MyModal-aboutProduct.jsx';
 import ModalAddWarehose from './ui/Modal/Modal-addWarehouse/Modal-addWarehouse.jsx';
+import ModalTransfersSomeProducts from './ui/Modal/Modal-transfersSomeProducts/Modal-transfersSomeProducts.jsx';
 
 
 export const MainWrapper = ({header_title, title = 'Страница без названия', children}) => {
@@ -23,6 +24,7 @@ export const MainWrapper = ({header_title, title = 'Страница без на
       <ModalTransferProduct/>
       <ModalAboutProduct/>
       <ModalAddWarehose/>
+      <ModalTransfersSomeProducts />
 
       <Header title={header_title}/>
 

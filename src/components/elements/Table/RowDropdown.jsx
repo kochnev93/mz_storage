@@ -11,8 +11,7 @@ import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
 
-const RowDropdown = ({ product }) => {
-  console.log('ROWDROPDOWN-product', product)
+const RowDropdown = ({ product, key }) => {
   const dispatch = useDispatch();
 
   // Состояние скрытых строк
@@ -41,7 +40,7 @@ const RowDropdown = ({ product }) => {
 
   const mainRow = () => {
     return (
-      <tr>
+      <tr key={key}>
         <td> </td>
         <td>{product?.warehouse_title}</td>
         <td>{product?.category_title}</td>
@@ -66,7 +65,6 @@ const RowDropdown = ({ product }) => {
   };
 
   const subRow = product.sn.map((item) => {
-    console.log('ROWDROPDOWN-item', item)
 
     return (
       <tr className={cx(styles.row, { [styles.active]: visible })}>

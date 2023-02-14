@@ -7,7 +7,7 @@ const initialState = {
   message: '',
   reset: false,
   isLoading: true,
-  inputComment: null,
+  inputComment: '',
   comments: [],
   indexActiveTab: 0,
 };
@@ -46,7 +46,6 @@ export const aboutProductSlice = createSlice({
       state.isLoading = false,
       state.indexActiveTab = 0,
       state.inputComment = ''
-      //state.comments = []
     },
 
     removeProductAbout: (state, action) => {

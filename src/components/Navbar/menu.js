@@ -18,6 +18,12 @@ export const menu = [
         desc: 'Приход'
     },
     {
+        icon: 'BiTransfer',
+        title: 'Перемещения',
+        url: '/transfers',
+        desc: 'Перемещения'
+    },
+    {
         icon: 'FaWarehouse',
         title: 'Склады',
         url: '/warehouses',

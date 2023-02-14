@@ -45,7 +45,7 @@ function ModalTransferProduct() {
   // Local State
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
-  const [count, setCount] = useState(null);
+  const [count, setCount] = useState('');
   const [validationCount, setValidationCount] = useState(true);
 
   const { fetchNow } = useFetch();

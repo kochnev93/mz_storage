@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import cx from 'classnames';
-import PropTypes from 'prop-types';
 
 // Styles
 import styles from './Tabs.module.scss';
@@ -13,9 +12,8 @@ import { setActiveTab } from '../../features/modal/about-productSlice';
 
 export const Tabs = (props) => {
   const dispatch = useDispatch();
-  //const [activeTab, setActiveTab] = useState(0);
 
-  // Redux
+  // Redux State
   const activeTab = useSelector((state) => state.modal_about_product.indexActiveTab);
 
   let array = Array.prototype.slice.call(props.children, 0);
@@ -29,7 +27,6 @@ export const Tabs = (props) => {
           [styles.active]: activeTab === index,
         })}
         onClick={() => {
-          //setActiveTab(index);
           dispatch(setActiveTab({activeTab: index}));
         }}
       >

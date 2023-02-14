@@ -11,7 +11,7 @@ export const Tab = (props) => {
     );
 }
 
-Tab.PropTypes = {
+Tab.propTypes = {
     label: PropTypes.string.isRequired,
     children: PropTypes.node
 };
