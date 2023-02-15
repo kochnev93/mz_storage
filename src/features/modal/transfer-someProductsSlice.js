@@ -1,13 +1,32 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+const initialValidation = {
+    warehouseFrom: {
+        status: true,
+        message: null,
+    },
+    warehouseTo: {
+        status: true,
+        message: null,
+    },
+    products: {
+        status: true,
+        message: null,
+    }
+}
+
 const initialState = {
     active: false,
-    product: null,
-    acitve_product: null,
     errors: false,
     message: '',
     reset: false,
     isLoading: false,
+    //
+    products: [],
+    warehouseFrom: [],
+    warehouseTo: [],
+    //
+    validation: initialValidation
 }
 
 export const transferSomeProductSlice = createSlice({
@@ -16,9 +35,43 @@ export const transferSomeProductSlice = createSlice({
     reducers: {
         setActiveSomeTransfer: (state, action) => {
             state.active = action.payload.active
-        }
+        },
+
+        setResetSomeTransfer: (state, action) => {
+            state.reset = action.payload.reset;
+        },
+
+        setProductSomeTransfer: (state, action) => {
+            if (action.payload.length == 0) {
+              state.products = [];
+            } else {
+              state.products = [{ ...action.payload[0] }];
+            }
+          },
+
+          setWarehouseFromSomeTransfer: (state, action) => {
+            if (action.payload.length == 0) {
+              state.warehouseFrom = [];
+            } else {
+              state.warehouseFrom = [{ ...action.payload[0] }];
+            }
+          },
+
+          setWarehouseToSomeTransfer: (state, action) => {
+            if (action.payload.length == 0) {
+              state.warehouseTo = [];
+            } else {
+              state.warehouseTo = [{ ...action.payload[0] }];
+            }
+          },
     }
 });
 
-export const {setActiveSomeTransfer} = transferSomeProductSlice.actions
+export const {
+    setActiveSomeTransfer,
+    setProductSomeTransfer,
+    setResetSomeTransfer,
+    setWarehouseFromSomeTransfer,
+    setWarehouseToSomeTransfer,
+} = transferSomeProductSlice.actions
 export default transferSomeProductSlice.reducer
