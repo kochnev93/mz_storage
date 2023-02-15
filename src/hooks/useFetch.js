@@ -1,5 +1,6 @@
 import authHeader from '../services/auth-header';
 
+
 const useFetch = (url, options) => {
 
   async function fetchNow(url, options) {
@@ -14,9 +15,13 @@ const useFetch = (url, options) => {
 
     let response = await fetch(url, options);
 
+    console.log('RESPONSE', response)
+    let result = await response.json();
+    console.log('RESPONSE-JSON', result)
+
     if(response.ok){
       
-      let result = await response.json();
+     // let result = await response.json();
       if(result.data){
         return {data: result.data, error: null}
       } else{

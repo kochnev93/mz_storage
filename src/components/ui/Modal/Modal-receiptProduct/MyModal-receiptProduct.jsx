@@ -153,8 +153,6 @@ function ModalReceiptProduct() {
         sn: sn,
       });
 
-      console.log(data);
-
       let requestOptions = {
         method: 'POST',
         body: data,
@@ -164,6 +162,8 @@ function ModalReceiptProduct() {
       `${process.env.REACT_APP_API_SERVER}/receipt_product`,
       requestOptions
     );
+
+ 
 
     if (result.data) {
       dispatch(setMessageReceipt({ message: result.data }));
@@ -314,6 +314,7 @@ function ModalReceiptProduct() {
     e.preventDefault();
     dispatch(setDefaultReceipt());
     dispatch(setDefaultValue());
+    dispatch(setResetReceipt({reset: true}))
   };
 
   return (
@@ -359,6 +360,8 @@ function ModalReceiptProduct() {
               placeholder="Выберите товар"
               multiple={false}
               validation={validation.product.status}
+              reset={reset}
+              setReset={() => dispatch(setResetReceipt({ reset: false }))}
               changeValue={(res) => {
                 dispatch(setProduct(res));
               }}

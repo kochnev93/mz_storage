@@ -12,7 +12,7 @@ import appSlice from '../features/app/appSlice';
 import dashboard  from '../features/dashboard/dashboardSlice';
 import addWarehouseSlice from '../features/modal/add-warehouseSlice';
 import transferSomeProductSlice from '../features/modal/transfer-someProductsSlice';
-
+import aboutReceiptSlice from '../features/modal/about-receiptSlice';
 
 
 
@@ -30,6 +30,7 @@ export const store = configureStore({
         modal_rate_product: rateProductSlice,
         dashboard: dashboard,
         modal_add_warehouse: addWarehouseSlice,
-        modal_transfer_someProducts: transferSomeProductSlice
+        modal_transfer_someProducts: transferSomeProductSlice,
+        modal_about_receipt: aboutReceiptSlice
     },
 });

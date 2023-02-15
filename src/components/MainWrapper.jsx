@@ -14,6 +14,7 @@ import ModalTransferProduct from './ui/Modal/Modal-transferProduct/MyModal-trans
 import ModalAboutProduct from './ui/Modal/Modal-aboutProduct/MyModal-aboutProduct.jsx';
 import ModalAddWarehose from './ui/Modal/Modal-addWarehouse/Modal-addWarehouse.jsx';
 import ModalTransfersSomeProducts from './ui/Modal/Modal-transfersSomeProducts/Modal-transfersSomeProducts.jsx';
+import ModalAboutReceipt from './ui/Modal/Modal-aboutReceipt/MyModal-aboutreceipt.jsx';
 
 
 export const MainWrapper = ({header_title, title = 'Страница без названия', children}) => {
@@ -25,6 +26,7 @@ export const MainWrapper = ({header_title, title = 'Страница без на
       <ModalAboutProduct/>
       <ModalAddWarehose/>
       <ModalTransfersSomeProducts />
+      <ModalAboutReceipt/>
 
       <Header title={header_title}/>
 
