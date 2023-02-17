@@ -32,7 +32,8 @@ const ping = () => {
         setActive(false);
     })
     .catch((err) => {
-        dispatch(setStatus({ status: false, error: 'Нет соединения с сервером' }));
+        console.log('123', err, err.message)
+        dispatch(setStatus({ status: false, error: 'Нет соединения с сервером', description: err.message }));
         setActive(true);
     });
 }

@@ -3,6 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
     status: true,
     error: null,
+    description: '',
 }
 
 export const appSlice = createSlice({
@@ -11,7 +12,8 @@ export const appSlice = createSlice({
     reducers: {
         setStatus: (state, action) => {
             state.status = action.payload.status,
-            state.error = action.payload.error
+            state.error = action.payload.error,
+            state.description = action.payload.description || state.description
         }
     }
 });

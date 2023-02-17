@@ -11,7 +11,7 @@ const initialState = {
 
 // const initialState = {
 //     id: 1,
-//     login: 'login',
+//     login: 'Testov Test',
 //     role: 'admin',
 //     accessToken: '1234'
 // }

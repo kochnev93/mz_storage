@@ -17,6 +17,7 @@ import { Nomenclature } from './pages/Nomenclature/Nomenclature.jsx';
 import { Receipt } from './pages/Receipt/Receipt.jsx';
 import { Warehouses } from './pages/Warehouses/Warehouses.jsx';
 import { Transfers } from './pages/Transfers/Transfers.jsx';
+import { Profile } from './pages/Profile/Profile.jsx';
 
 // Components
 import Advt from './components/elements/advt/Advt.jsx';
@@ -29,6 +30,7 @@ import { Provider } from 'react-redux';
 import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
+
 
 
 
@@ -95,6 +97,16 @@ export default function App() {
                   </RequireAuth>
                 }
               />
+
+
+              <Route
+                path="profile"
+                element={
+                  <RequireAuth>
+                    <Profile />
+                  </RequireAuth>
+                }
+              />
     
               <Route
                 path="admin/*"
@@ -104,6 +116,8 @@ export default function App() {
                   </RequireAuth>
                 }
               >
+
+                
                 <Route path="products" element={<h1>Hello products</h1>} />
               </Route>
     

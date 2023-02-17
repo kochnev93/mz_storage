@@ -1,28 +1,24 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
 
 // Styles
-import styles from './Navbar.module.scss';
+import styles from "./Navbar.module.scss";
 
 // Component
-import Menu from './Menu.jsx';
+import Menu from "./Menu.jsx";
 
 // Icons
-import { IoIosArrowBack } from 'react-icons/Io';
-import { FaRegUserCircle } from 'react-icons/Fa';
-import { TiWarningOutline } from 'react-icons/Ti';
-
-
-
-
+import { IoIosArrowBack } from "react-icons/Io";
+import { FaRegUserCircle } from "react-icons/Fa";
+import { TiWarningOutline } from "react-icons/Ti";
 
 // Hooks
-import { useAuth } from '../../hooks/use-auth';
-
+import { useAuth } from "../../hooks/use-auth";
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
-import { setStatus } from '../../features/app/appSlice.js';
-import { setHeader } from '../../features/header/headerSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { setStatus } from "../../features/app/appSlice.js";
+import { setHeader } from "../../features/header/headerSlice";
 
 function Navbar(props) {
   const dispatch = useDispatch();
@@ -50,22 +46,30 @@ function Navbar(props) {
         </nav>
 
         <div>
-          {!statusApp.status && <div className={styles.menu_link}>
-            <div className={styles.menu_icon}>
-              <TiWarningOutline style={{fill: '#ff8686'}} title={statusApp.error}/>
+          {!statusApp.status && (
+            <div className={styles.menu_link}>
+              <div className={styles.menu_icon}>
+                <TiWarningOutline
+                  style={{ fill: "#ff8686" }}
+                  title={statusApp.error}
+                />
+              </div>
+              <div style={{ color: "#ff8686", fontSize: "10px" }}>
+                {statusApp.error}
+              </div>
             </div>
-            <div style={{color: '#ff8686', fontSize: '10px'}}>{statusApp.error}</div>
-          </div>
-          }
+          )}
 
-          <div className={styles.menu_link}>
-            <div className={styles.menu_icon}>
-              <FaRegUserCircle />
+          <Link to={"/profile"}>
+            <div className={styles.menu_link}>
+              <div className={styles.menu_icon}>
+                <FaRegUserCircle />
+              </div>
+              <div>Привет, {user.login}</div>
             </div>
-            <div>Привет, {user.login}</div>
-          </div>
+          </Link>
+          
         </div>
-
       </div>
     </div>
   );
