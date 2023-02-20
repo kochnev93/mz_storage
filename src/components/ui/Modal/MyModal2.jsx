@@ -5,6 +5,8 @@ import cx from 'classnames';
 import styles from './myModal.module.scss';
 import { AiOutlineClose } from 'react-icons/Ai';
 
+import MyButton from '../Buttons/ButtonSend.jsx';
+
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,7 +20,8 @@ function Modal({
   errors,
   isLoading,
   children,
-  size = 'medium'
+  size = 'medium',
+  actions,
 }) {
   const dispatch = useDispatch();
   const statusApp = useSelector((state) => state.appStatus);
@@ -35,25 +38,24 @@ function Modal({
 
   return (
     <div
-      className={cx(
-        styles.myModal_overlay, { 
-          [styles.active]: active
-        })}
+      className={cx(styles.myModal_overlay, {
+        [styles.active]: active,
+      })}
       onClick={() => setActive()}
     >
-      <div 
-        className={cx(styles.myModal, { 
-            [styles.medium]: size === 'medium',
-            [styles.small]: size === 'small',
-            [styles.big]: size === 'big',
-        })} 
+      <div
+        className={cx(styles.myModal, {
+          [styles.medium]: size === 'medium',
+          [styles.small]: size === 'small',
+          [styles.big]: size === 'big',
+        })}
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles.myModal_wrapper}>
           <div className={styles.myModal_header}>
             <div>
               <div>{title || 'Модальное окно'}</div>
-              {subtitle && <div className={styles.subtitle}>{subtitle}</div> }
+              {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
             </div>
 
             <div className={styles.myModal_toolbar}>
@@ -81,7 +83,29 @@ function Modal({
             {children}
           </div>
 
-          <div className={styles.myModal_footer}>{footer}</div>
+          <div className={styles.myModal_footer}>
+            <div>{footer}</div>
+
+            {actions?.visible && (
+              <div className={styles.footer_buttons}>
+                <MyButton
+                  type="clear"
+                  action={actions?.buttonClear?.action}
+                  title={actions?.buttonClear?.title}
+                  loadingTitle={actions?.buttonClear?.loadingTitle}
+                  loading={actions?.buttonClear?.loading}
+                />
+
+                <MyButton
+                  type="send"
+                  action={() => {actions?.buttonSend?.action()}}
+                  title={actions?.buttonSend?.title}
+                  loadingTitle={actions?.buttonSend?.loadingTitle}
+                  loading={actions?.buttonSend?.loading}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

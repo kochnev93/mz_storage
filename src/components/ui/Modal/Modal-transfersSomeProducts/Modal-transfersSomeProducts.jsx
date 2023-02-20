@@ -1,32 +1,36 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 // Hooks
-import authHeader from "../../../../services/auth-header";
-import { useAuth } from "../../../../hooks/use-auth";
-import useFetch from "../../../../hooks/useFetch";
+import authHeader from '../../../../services/auth-header';
+import { useAuth } from '../../../../hooks/use-auth';
+import useFetch from '../../../../hooks/useFetch';
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setActiveSomeTransfer,
   setProductSomeTransfer,
   setResetSomeTransfer,
   setDefaultSomeTransfer,
+  setIsLoadingsomeTransfer,
+  setErrorsSomeTransfer,
   setWarehouseFromSomeTransfer,
   setWarehouseToSomeTransfer,
   setCountSomeTransfer,
-} from "../../../../features/modal/transfer-someProductsSlice";
+  setValidationSomeTransfer,
+  setDefaultValidationSomeTransfer,
+} from '../../../../features/modal/transfer-someProductsSlice';
 
 //Styles
-import styles from "./Modal-transfersSomeProducts.module.scss";
-import stylesModal from "../MyModal.module.scss";
-import { ImArrowRight } from "react-icons/Im";
+import styles from './Modal-transfersSomeProducts.module.scss';
+import stylesModal from '../MyModal.module.scss';
+import { ImArrowRight } from 'react-icons/Im';
 
 // Components
-import MyDropdown from "../../Dropdown/MyDropdown.jsx";
-import Modal from "../MyModal2.jsx";
-import MyButton from "../../Buttons/ButtonSend.jsx";
-import MyInput from "../../Input/MyInput.jsx";
+import MyDropdown from '../../Dropdown/MyDropdown.jsx';
+import Modal from '../MyModal2.jsx';
+import MyButton from '../../Buttons/ButtonSend.jsx';
+import MyInput from '../../Input/MyInput.jsx';
 
 function ModalTransfersSomeProducts() {
   const dispatch = useDispatch();
@@ -40,9 +44,14 @@ function ModalTransfersSomeProducts() {
     reset,
     isLoading,
     products,
+    urlProducts,
     warehouseFrom,
     warehouseTo,
     validation,
+    validationWarehouseTo,
+    validationWarehouseFrom,
+    validationProducts
+
   } = useSelector((state) => state.modal_transfer_someProducts);
 
   const { fetchNow } = useFetch();
@@ -52,10 +61,136 @@ function ModalTransfersSomeProducts() {
     dispatch(setDefaultSomeTransfer());
   };
 
+  const validateForm = () => {
+    let errorCounter = 0;
+
+    dispatch(setDefaultValidationSomeTransfer());
+
+    if(warehouseFrom.length == 0){
+      dispatch(setErrorsSomeTransfer({
+        errors: true,
+        message: 'Выберите склад (откуда)',
+        validationWarehouseFrom: false,
+        validationWarehouseTo: true,
+        validationProducts: true
+      }));
+
+      return false;
+    }
+
+    if(warehouseTo.length == 0){
+      dispatch(setErrorsSomeTransfer({
+        errors: true,
+        message: 'Выберите склад (куда)',
+        validationWarehouseTo: false,
+        validationProducts: true,
+        validationWarehouseFrom: true,
+      }));
+
+      return false;
+    }
+
+    if(products.length == 0){
+      dispatch(setErrorsSomeTransfer({
+        errors: true,
+        message: 'Выберите товар / товары',
+        validationProducts: false,
+        validationWarehouseFrom: true,
+        validationWarehouseTo: true,
+      }));
+
+      return false;
+    }
+
+    if (warehouseFrom[0].title === warehouseTo[0].title) {
+      dispatch(setErrorsSomeTransfer({
+        errors: true,
+        message: 'Нельзя перемещать на этот же склад',
+        validationWarehouseTo: false,
+        validationProducts: true,
+        validationWarehouseFrom: true,
+      }));
+
+      return false;
+    }
+
+    products.forEach((product, index) => {
+      if (!product.accounting_sn) {
+        if (product.countTransfer < 1) {
+          errorCounter++;
+          dispatch(
+            setValidationSomeTransfer({
+              id_product: product.id,
+              validationCountTransfer: false,
+              validationMessage: 'Количество должно быть >0',
+            })
+          );
+        }
+
+        if (product.countTransfer > product.count) {
+          errorCounter++;
+          dispatch(
+            setValidationSomeTransfer({
+              id_product: product.id,
+              validationCountTransfer: false,
+              validationMessage: 'Количество превышает остаток',
+            })
+          );
+        }
+      }
+    });
+
+    return errorCounter == 0 ? true : false;
+  };
+
+  const addTransfer = async () => {
+    if (validateForm()){
+
+      dispatch(setIsLoadingsomeTransfer({ isLoading: true }));
+
+      let data = JSON.stringify({
+        warehouseFrom,
+        warehouseTo,
+        products
+      });
+
+      let requestOptions = {
+        method: 'POST',
+        body: data,
+      };
+
+      const result = await fetchNow(
+        `${process.env.REACT_APP_API_SERVER}/transfer_products`,
+        requestOptions
+      );
+
+      if(result.data){
+        //dispatch(setMessageTransfer({ message: result.data }));
+
+        setTimeout(() => {
+          dispatch(setIsLoadingsomeTransfer({ isLoading: false }));
+        }, 100);
+
+      } else{
+        dispatch(setIsLoadingsomeTransfer({ isLoading: false }))
+        dispatch(setErrorsSomeTransfer({
+          errors: true,
+          message: result.error,
+          validationWarehouseTo: true,
+          validationProducts: true,
+          validationWarehouseFrom: true,
+        }));
+      }
+
+    } else{
+      console.warn('Не пройдена валидация формы')
+    }
+  }
+
   return (
     <Modal
       active={active}
-      size={"big"}
+      size={'big'}
       setActive={() => {
         dispatch(setActiveSomeTransfer({ active: false }));
       }}
@@ -63,13 +198,31 @@ function ModalTransfersSomeProducts() {
       message={message}
       errors={errors}
       isLoading={isLoading}
+      actions={
+        {
+          visible: true,
+          buttonSend:{
+            action: addTransfer,
+            title: 'Переместить',
+            loadingTitle: 'Перемещаю',
+            loading: isLoading
+          },
+          buttonClear:{
+            action: resetForm,
+            title: 'Сбросить',
+            loadingTitle: 'Сбросить',
+            loading: isLoading
+          }
+
+        }
+      }
     >
       <form className={stylesModal.form}>
         <div className={stylesModal.itemsContainer}>
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "2fr 1fr 2fr",
+              display: 'grid',
+              gridTemplateColumns: '2fr 1fr 2fr',
             }}
           >
             <div className={stylesModal.item}>
@@ -85,12 +238,12 @@ function ModalTransfersSomeProducts() {
                 changeValue={(res) => {
                   dispatch(setWarehouseFromSomeTransfer(res));
                 }}
-                validation={validation.warehouseFrom.status}
+                validation={validationWarehouseFrom}
                 reset={reset}
                 setReset={() =>
                   dispatch(setResetSomeTransfer({ reset: false }))
                 }
-                url={"get_warehouse"}
+                url={'get_warehouse'}
               />
 
               {!validation?.warehouseFrom?.status && (
@@ -103,13 +256,13 @@ function ModalTransfersSomeProducts() {
             {warehouseFrom.length != 0 && (
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "30px",
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  fontSize: '30px',
                 }}
               >
-                <ImArrowRight style={{ fill: "var(--main-color)" }} />
+                <ImArrowRight style={{ fill: 'var(--main-color)' }} />
               </div>
             )}
 
@@ -127,12 +280,12 @@ function ModalTransfersSomeProducts() {
                   changeValue={(res) => {
                     dispatch(setWarehouseToSomeTransfer(res));
                   }}
-                  validation={validation.warehouseTo.status}
+                  validation={validationWarehouseTo}
                   reset={reset}
                   setReset={() =>
                     dispatch(setResetSomeTransfer({ reset: false }))
                   }
-                  url={"get_warehouse"}
+                  url={'get_warehouse'}
                 />
 
                 {!validation?.warehouseTo?.status && (
@@ -146,11 +299,11 @@ function ModalTransfersSomeProducts() {
 
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "2fr 1fr 2fr",
+              display: 'grid',
+              gridTemplateColumns: '2fr 1fr 2fr',
             }}
           >
-            {warehouseTo.length != 0 && (
+            {warehouseTo.length != 0 && warehouseFrom.length != 0 && (
               <div className={stylesModal.item}>
                 <h4>3. Выберите товар / товары</h4>
                 <p className={stylesModal.description}>
@@ -164,12 +317,12 @@ function ModalTransfersSomeProducts() {
                   changeValue={(res) => {
                     dispatch(setProductSomeTransfer(res));
                   }}
-                  validation={validation.products.status}
+                  validation={validationProducts}
                   reset={reset}
                   setReset={() =>
                     dispatch(setResetSomeTransfer({ reset: false }))
                   }
-                  url={"get_warehouse"}
+                  url={urlProducts}
                 />
 
                 {!validation?.products?.status && (
@@ -180,36 +333,40 @@ function ModalTransfersSomeProducts() {
               </div>
             )}
 
-            {products.length != 0 && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "30px",
-                }}
-              >
-                <ImArrowRight style={{ fill: "var(--main-color)" }} />
-              </div>
-            )}
+            {products.length != 0 &&
+              warehouseTo.length != 0 &&
+              warehouseFrom.length != 0 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '30px',
+                  }}
+                >
+                  <ImArrowRight style={{ fill: 'var(--main-color)' }} />
+                </div>
+              )}
 
-            {products.length != 0 && (
-              <div
-                className={stylesModal.item}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  height: "100%",
-                }}
-              >
-                <h4>4. Укажите количество</h4>
-                <p className={stylesModal.description}>
-                  Проверьте таблицу ниже и укажите количество перемещаемого
-                  товара
-                </p>
-              </div>
-            )}
+            {products.length != 0 &&
+              warehouseTo.length != 0 &&
+              warehouseFrom.length != 0 && (
+                <div
+                  className={stylesModal.item}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    height: '100%',
+                  }}
+                >
+                  <h4>4. Укажите количество</h4>
+                  <p className={stylesModal.description}>
+                    Проверьте таблицу ниже. Укажите количество для товаров без
+                    серийного номера и нажмите "Переместить"
+                  </p>
+                </div>
+              )}
           </div>
         </div>
       </form>
@@ -222,7 +379,7 @@ function ModalTransfersSomeProducts() {
               <th>ID</th>
               <th>Наименование</th>
               <th>SN</th>
-              <th>{`Количество (${warehouseFrom[0]?.warehouse_title})`}</th>
+              <th>{`Количество (${warehouseFrom[0]?.title})`}</th>
               <th>Количество (для перемещения)</th>
             </tr>
           </thead>
@@ -234,12 +391,11 @@ function ModalTransfersSomeProducts() {
                   <td>{item.id}</td>
                   <td>{item.name}</td>
                   <td>{item.sn}</td>
-                  <td>{item.accounting_sn ? "1" : item.count}</td>
+                  <td>{item.accounting_sn ? '1' : item.count}</td>
                   <td>
                     {!item.accounting_sn && (
                       <MyInput
                         type="number"
-                        title="Количество"
                         changeValue={(value) => {
                           dispatch(
                             setCountSomeTransfer({
@@ -248,9 +404,15 @@ function ModalTransfersSomeProducts() {
                             })
                           );
                         }}
-                        validation={item.validationCountTransfer}
-                        value={item.countTransfer}
+                        validation={item?.validationCountTransfer}
+                        value={item?.countTransfer}
                       />
+                    )}
+
+                    {!item?.validationCountTransfer && (
+                      <div className={stylesModal.error_message}>
+                        {item?.validationMessage}
+                      </div>
                     )}
                   </td>
                 </tr>
@@ -260,7 +422,7 @@ function ModalTransfersSomeProducts() {
         </table>
       )}
 
-      <div className={styles.buttons}>
+      {/* <div className={styles.buttons}>
         <MyButton
           type="clear"
           action={resetForm}
@@ -270,12 +432,12 @@ function ModalTransfersSomeProducts() {
         />
         <MyButton
           type="send"
-          //action={}
+          action={addTransfer}
           title="Переместить"
           loadingTitle="Перемещаю"
           loading={isLoading}
         />
-      </div>
+      </div> */}
     </Modal>
   );
 }

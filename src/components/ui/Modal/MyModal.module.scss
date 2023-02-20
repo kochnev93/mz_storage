@@ -52,6 +52,7 @@
 
   &.big{
     height: auto;
+    min-height: 600px;
     max-height: 800px; 
     width: 900px;
     max-width: 1000px; 
@@ -81,6 +82,7 @@
 .myModal_body {
   padding: 20px;
   height: auto;
+  min-height: 500px;
   max-height: 500px;
   overflow-y: scroll;
 
@@ -130,6 +132,8 @@
 }
 
 .myModal_footer {
+  display: flex;
+  justify-content: space-between;
   padding: 20px;
   font-size: 10px;
   color: grey;
@@ -166,11 +170,10 @@
   }
 }
 
-.buttons {
+.footer_buttons{
   display: flex;
   justify-content: end;
   align-items: center;
-  padding-top: 20px;
 
   button:not(:last-child) {
     margin-right: 10px;

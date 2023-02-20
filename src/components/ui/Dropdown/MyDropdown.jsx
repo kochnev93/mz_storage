@@ -45,6 +45,7 @@ class MyDropdown extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.url != this.props.url) {
+      console.log('Я ОБНОВИЛСЯ', this.state.id, this.props.url)
       this.getContent();
     }
 
@@ -139,7 +140,7 @@ class MyDropdown extends Component {
 
     // Находим индекс элемента, который выбрали
     let indexOption = this.state.options.findIndex(
-      (item) => item.title === e.target.dataset.value
+      (item) => item.id == e.target.dataset.id
     );
 
     // Создаем новое состояние
@@ -243,6 +244,8 @@ class MyDropdown extends Component {
       return option.isCheked;
     });
 
+    let result = Object.assign({}, )
+
     console.log('selectedOptions', selectedOptions)
 
     this.props.changeValue([...selectedOptions])
@@ -299,6 +302,7 @@ class MyDropdown extends Component {
             className={cx({ [styles.checked]: option.isCheked })}
             onClick={this.liHandler}
             data-value={option.title}
+            data-id={option.id}
           >
             {option.title}
           </li>

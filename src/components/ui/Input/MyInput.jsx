@@ -19,7 +19,7 @@ const MyInput = (props) => {
           disabled={props.disabled || false}
         />
         <label className={styles.myInput_label}>
-          {props.title || 'Заголовок'}
+          {props.title || ''}
         </label>
         <fieldset
           className={cx(styles.myInput_fieldset, {
@@ -27,7 +27,7 @@ const MyInput = (props) => {
           })}
         >
           <legend>
-            <span>{props.title || 'Заголовок'}</span>
+            <span>{props.title || ''}</span>
           </legend>
         </fieldset>
 
