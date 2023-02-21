@@ -4,6 +4,10 @@ import { AiOutlineClose } from 'react-icons/Ai';
 import { MdKeyboardArrowDown } from 'react-icons/Md';
 import { MdKeyboardArrowUp } from 'react-icons/Md';
 import cx from 'classnames';
+// import { useDispatch, useSelector } from 'react-redux';
+
+// const {warehouses, category} = useSelector((state) => state.app_state)
+// console.log('MY_DROPDOWN_DATA', {warehouses, category})
 
 class MyDropdown extends Component {
   constructor(props) {

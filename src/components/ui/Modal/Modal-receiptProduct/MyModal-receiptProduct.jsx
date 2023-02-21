@@ -328,6 +328,24 @@ function ModalReceiptProduct() {
       errors={errors}
       isLoading={isLoading}
       footer={'Данная форма предназначена для оформления прихода'}
+      actions={
+        {
+          visible: true,
+          buttonSend:{
+            action: addReceipt,
+            title: 'Приход',
+            loadingTitle: 'Приход',
+            loading: isLoading
+          },
+          buttonClear:{
+            action: resetForm,
+            title: 'Сбросить',
+            loadingTitle: 'Сбросить',
+            loading: isLoading
+          }
+
+        }
+      }
     >
       <form className={styles.form}>
         <div className={styles.itemsContainer}>
@@ -563,7 +581,7 @@ function ModalReceiptProduct() {
             </>
           )}
         </div>
-
+{/* 
         <div className={styles.buttons}>
           <MyButton
             type="clear"
@@ -579,7 +597,7 @@ function ModalReceiptProduct() {
             loadingTitle="Сохраняю"
             loading={isLoading}
           />
-        </div>
+        </div> */}
       </form>
     </Modal>
   );
