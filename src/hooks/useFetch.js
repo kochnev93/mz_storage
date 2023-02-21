@@ -17,23 +17,16 @@ const useFetch = (url, options) => {
       let response = await fetch(url, options);
       let result = await response.json();
 
-      console.log('RESPONSE', response)
-      console.log('RESULT', result)
-
       if(!response.ok) throw new Error(result.errorMessage, result.errors)
 
       if(result.data){
-        console.log('data done')
         return {data: result.data, error: null}
       } else{
-        console.log('error done')
         return {data: null, error: result.error}
       }
    
     }
     catch (e){
-      console.log(e)
-      console.error(e.message)
       console.error(e.message)
       return {data: null, error: e.message}
     }

@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setActiveSomeTransfer,
   setProductSomeTransfer,
+  setMessagesomeTransfer,
   setResetSomeTransfer,
   setDefaultSomeTransfer,
   setIsLoadingsomeTransfer,
@@ -165,7 +166,7 @@ function ModalTransfersSomeProducts() {
       );
 
       if(result.data){
-        //dispatch(setMessageTransfer({ message: result.data }));
+        dispatch(setMessagesomeTransfer({ message: result.data }));
 
         setTimeout(() => {
           dispatch(setIsLoadingsomeTransfer({ isLoading: false }));
@@ -393,7 +394,7 @@ function ModalTransfersSomeProducts() {
                   <td>{item.sn}</td>
                   <td>{item.accounting_sn ? '1' : item.count}</td>
                   <td>
-                    {!item.accounting_sn && (
+                    {!item.accounting_sn ? (
                       <MyInput
                         type="number"
                         changeValue={(value) => {
@@ -407,7 +408,7 @@ function ModalTransfersSomeProducts() {
                         validation={item?.validationCountTransfer}
                         value={item?.countTransfer}
                       />
-                    )}
+                    ) : '1'}
 
                     {!item?.validationCountTransfer && (
                       <div className={stylesModal.error_message}>

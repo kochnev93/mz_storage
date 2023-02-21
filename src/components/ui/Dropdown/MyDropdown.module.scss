@@ -181,6 +181,14 @@
   }
 }
 
+@media screen and (max-width: 1200px){
+  .myDropdown__listItems {
+    li{
+      font-size: 10px;
+    }
+  }
+}
+
 .myDropdown_menuSelectedItems{
   list-style: none;
   display: flex;
@@ -229,6 +237,15 @@
   }
 }
 
+@media screen and (max-width: 1200px){
+  .myDropdown_menuSelectedItems{
+    li{
+      font-size: 10px;
+    }
+  }
+}
+
+
 .select_all{
   font-size: 12px;
   background-color: transparent;
@@ -264,3 +281,6 @@
     fill: red;
   }
 }
+
+
+

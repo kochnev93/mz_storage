@@ -1,58 +1,57 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import regeneratorRuntime from "regenerator-runtime"
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import regeneratorRuntime from 'regenerator-runtime';
 
 export const fetchData = createAsyncThunk(
-    'app_state/fetchData',
-    async function () {
+  'app_state/fetchData',
+  async function () {
+    const urls = [
+      `${process.env.REACT_APP_API_SERVER}/get_warehouse`,
+      `${process.env.REACT_APP_API_SERVER}/get_category`,
+    ];
 
-    const response = await Promise.all([
-        fetch(`${process.env.REACT_APP_API_SERVER}/get_warehouse`),
-        fetch(`${process.env.REACT_APP_API_SERVER}/get_category`),
-    ])
-      const data = await response.json();
-      console.log('app_state/fetchData', data);
+    const response = await Promise.all(urls.map(url => fetch(url)))
+      .then(async (res) => {
+        return Promise.all(
+          res.map(async (data) => await data.json())
+        )
+      })
 
-      return data.data;
-    }
-  );
-  
+    return response;
+  }
+);
 
 const initialState = {
-    status: true,
-    error: null,
-    warehouses: [],
-    category: [],
-    description: '',
-}
+  status: true,
+  error: null,
+  warehouses: [],
+  category: [],
+  description: '',
+};
 
 export const appSlice = createSlice({
-    name: 'app_state',
-    initialState,
-    reducers: {
-        setStatus: (state, action) => {
-            state.status = action.payload.status,
-            state.error = action.payload.error,
-            state.description = action.payload.description || state.description
-        }
+  name: 'app_state',
+  initialState,
+  reducers: {
+    setStatus: (state, action) => {
+      (state.status = action.payload.status),
+        (state.error = action.payload.error),
+        (state.description = action.payload.description || state.description);
     },
+  },
 
-    extraReducers: {
-        [fetchData.pending]: (state, action) => {
-
-        },
-        [fetchData.fulfilled]: (state, action) => {
-        console.log(action.payload)
-
-          state.warehouses = action.payload;
-          state.category = action.payload;
-        },
-        [fetchData.rejected]: (state, action) => {
-          state.description = 'Ошибка при загрузке данных о складах и категорий';
-          state.warehouses = [];
-          state.category = [];
-        },
-      },
+  extraReducers: {
+    [fetchData.pending]: (state, action) => {},
+    [fetchData.fulfilled]: (state, action) => {
+      state.warehouses = action.payload[0].data;
+      state.category = action.payload[1].data;
+    },
+    [fetchData.rejected]: (state, action) => {
+      state.description = 'Ошибка при загрузке данных о складах и категорий';
+      state.warehouses = [];
+      state.category = [];
+    },
+  },
 });
 
-export const {setStatus} = appSlice.actions
-export default appSlice.reducer
+export const { setStatus } = appSlice.actions;
+export default appSlice.reducer;

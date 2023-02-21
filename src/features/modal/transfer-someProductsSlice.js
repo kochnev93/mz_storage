@@ -55,6 +55,10 @@ export const transferSomeProductSlice = createSlice({
       state.isLoading = action.payload.isLoading
     },
 
+    setMessagesomeTransfer: (state, action) => {
+      state.message = action.payload.message
+    },
+
     setErrorsSomeTransfer: (state, action) => {
       console.log(action.payload);
       state.errors = action.payload.errors;
@@ -134,6 +138,7 @@ export const transferSomeProductSlice = createSlice({
 
 export const {
   setActiveSomeTransfer,
+  setMessagesomeTransfer,
   setProductSomeTransfer,
   setResetSomeTransfer,
   setDefaultSomeTransfer,

@@ -397,8 +397,6 @@ const [property, setProperty] = useState([]);
 
         {category.length !== 0 ? <Property property={property} changeValue={setProperty} /> : null }
 
-        {/* <Property property={property} changeValue={setProperty} /> */}
-
         <div className={styles.buttons}>
           <MyButton
             type="clear"

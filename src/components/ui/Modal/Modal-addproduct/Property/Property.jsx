@@ -11,7 +11,7 @@ export function Property({property, changeValue}) {
 
   const propertyList = property.map((item, index) => {
     return(
-      <div className={styles.property_item}>
+      <div key={index} className={styles.property_item}>
         <MyDropdown
           id={`property_${index}`}
           title={item.property}

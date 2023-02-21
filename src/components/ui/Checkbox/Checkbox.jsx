@@ -7,7 +7,7 @@ const Checkbox = (props) => {
   return (
     <div className={styles.checkbox}>
       <input type="checkbox" id={props.id} onChange={ () => {props.onChange(!props.checked)} } checked={props.checked}/>
-      <label for={props.id}>{props.title}</label>
+      <label>{props.title}</label>
     </div>
   );
 };
