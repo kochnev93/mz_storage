@@ -23,8 +23,44 @@ export const fetchData = createAsyncThunk(
 const initialState = {
   status: true,
   error: null,
-  warehouses: [],
-  category: [],
+  warehouses: [
+    {
+      isCheked: false,
+      title: "Долгоозёрная",
+      id: 5,
+    },
+
+    {
+      isCheked: false,
+      title: "Кирова",
+      id: 50,
+    },
+
+    {
+      isCheked: false,
+      title: "Яхтенная",
+      id: 115,
+    },
+  ],
+  category: [
+    {
+      isCheked: false,
+      title: "АДМ",
+      id: 5,
+    },
+
+    {
+      isCheked: false,
+      title: "Принтер",
+      id: 54,
+    },
+
+    {
+      isCheked: false,
+      title: "Монитор",
+      id: 52,
+    },
+  ],
   description: '',
 };
 

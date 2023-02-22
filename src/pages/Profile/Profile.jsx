@@ -15,6 +15,7 @@ import { useAuth } from "../../hooks/use-auth.js";
 // redux
 import { useDispatch } from "react-redux";
 import { removeUser } from "../../features/users/userSlice.js";
+import Dropdown from "../../components/ui/Dropdown/MyDropdown-function.jsx";
 
 export const Profile = () => {
   const user = useAuth();
@@ -44,7 +45,6 @@ export const Profile = () => {
       <div className={styles.bio}>
         <div className={styles.bio__img}>
           <img
-            
             src="https://avatars.mds.yandex.net/i?id=997b5be0925d51c5e716e5e3f6f83b948f9ee3f0-8497242-images-thumbs&n=13"
             alt="Аватар поьзователя"
           />
@@ -73,6 +73,20 @@ export const Profile = () => {
       </div>
       <h2>История</h2>
       <MyTable titleColumn={titleColumn} />
+
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <Dropdown id={"1236"} type={"warehouse"} validation={true} />
+
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <Dropdown id={"12367"} type={"category"} validation={true} />
     </MainWrapper>
   );
 };

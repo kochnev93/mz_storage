@@ -1,33 +1,34 @@
 //Компонент в стадии разработки
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import styles from "./MyDropdown.module.scss";
-import { AiOutlineClose } from "react-icons/Ai";
+
 import { MdKeyboardArrowDown } from "react-icons/Md";
 import { MdKeyboardArrowUp } from "react-icons/Md";
 import cx from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import useFetch from "../../../hooks/useFetch.js";
+import { MenuSelectedItems } from "./MenuSelectedItems.jsx";
+import { ListOptions } from "./ListOptions.jsx";
+import { SearchInput } from "./SearchInput.jsx";
 
 const Dropdown = (props) => {
   const dispatch = useDispatch();
-  const dropdownRef = useRef();
+  const dropdownRef = useRef(null);
   const { fetchNow } = useFetch();
 
-  // REdux state
-  const { statusApp, warehouses, category } = useSelector(
-    (state) => state.app_state
-  );
-  console.log("MY_DROPDOWN_DATA", { warehouses, category });
+  //REdux state
+  const { warehouses, category } = useSelector((state) => state.app_state);
+  //console.log("MY_DROPDOWN_DATA", { warehouses, category });
 
   // Local State
   const [type] = useState(props.type);
   const [options, setOptions] = useState([]);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
   const [disabled, setDisabled] = useState(props.disabled || false);
-  const [multiple] = useState(props.multiple || false);
+  const [multiple] = useState(props.multiple || true);
   const [url, setUrl] = useState(props.url);
 
   const [id] = useState(props.id);
@@ -37,7 +38,19 @@ const Dropdown = (props) => {
   const [selectOptionAnyone, setSelectOptionAnyone] = useState(false);
   const [selectOptionAll, setSelectOptionAll] = useState(false);
 
-  const [reset] = useState();
+  const [reset] = useState(props.reset);
+
+  const memoWarehouse = useMemo(() => {
+    return warehouses.map((warehouse) => {
+      return { ...warehouse };
+    });
+  }, [warehouses]);
+
+  const memoCategory = useMemo(() => {
+    return category.map((category) => {
+      return { ...category };
+    });
+  }, [category]);
 
   useEffect(() => {
     getContent();
@@ -47,30 +60,33 @@ const Dropdown = (props) => {
     clearDropdown();
   }, [reset]);
 
-  {
-    this.props.reset ? this.clearDropdown() : null;
-  }
-
   useEffect(() => {
     switch (props.type) {
       case "warehouse":
-        setOptions(warehouses);
+        // let tempWarehouse = warehouses.map((warehouse) => {
+        //   return { ...warehouse };
+        // });
+        setOptions(memoWarehouse);
         break;
       case "category":
-        setOptions(category);
+        // let tempCategory = category.map((category) => {
+        //   return { ...category };
+        // });
+        setOptions(memoCategory);
         break;
+      default:
+        setOptions([]);
     }
   }, []);
 
   useEffect(() => {
-    dropdownRef.current.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      dropdownRef.current.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Отслеживание клика вне компонента
   const handleClickOutside = (e) => {
-    if (!dropdownRef.current.contains(e.target) && isOpen) {
+    if (!dropdownRef.current.contains(e.target)) {
       setIsOpen(false);
     }
   };
@@ -87,7 +103,7 @@ const Dropdown = (props) => {
 
   // Получение контента
   const getContent = async () => {
-    if (options.length === 0) {
+    if (options?.length === 0 && url) {
       let requestOptions = {
         method: "GET",
       };
@@ -98,6 +114,7 @@ const Dropdown = (props) => {
       );
 
       setOptions(result.data);
+      setIsLoaded(true);
     }
   };
 
@@ -105,7 +122,7 @@ const Dropdown = (props) => {
     e.stopPropagation();
 
     // Находим индекс элемента, который выбрали
-    let indexOption = this.state.options.findIndex(
+    let indexOption = options.findIndex(
       (item) => item.id == e.target.dataset.id
     );
 
@@ -216,12 +233,6 @@ const Dropdown = (props) => {
     setSearchInput(e.target.value);
   };
 
-  const getListOptions = (list) => {
-    if (!isLoaded) return "Загрузка...";
-    if (list.length === 0) return "Ничего не найдено";
-    return list;
-  };
-
   return (
     <div
       id={id}
@@ -235,227 +246,73 @@ const Dropdown = (props) => {
             setIsOpen(true);
           }}
         >
-          <ul className={styles.myDropdown_menuSelectedItems}>
-            {countSelected < 2 ? (
-              optionsSelected
-            ) : (
-              <li>
-                <div className={styles.selectedItem_title}>
-                  Выбрано: {countSelected} знач.
-                </div>
-                <div
-                  className={styles.selectedItem_closeIcon}
-                  onClick={this.closeAll}
-                >
-                  <AiOutlineClose />
-                </div>
-              </li>
-            )}
-          </ul>
-          <input
-            className={cx(styles.myDropdown_input, {
-              [styles.empty]:
-                this.state.selectOptionAnyone || this.state.searchInput,
-            })}
-            onChange={this.searchOption}
-            value={this.state.searchInput}
+          <MenuSelectedItems
+            options={options}
+            liHandler={liHandler}
+            closeAll={closeAll}
           />
 
-          {this.state.searchInput && (
+          <SearchInput
+            searchInput={searchInput}
+            onChange={searchOption}
+            selectOptionAnyone={selectOptionAnyone}
+            setSearchInput={() => {
+              setSearchInput("");
+            }}
+          />
+
+          {/* {searchInput && (
             <AiOutlineClose
               className={styles.input_clear}
               title="Очистить"
               onClick={() => {
-                this.setState({ searchInput: "" });
+                setSearchInput("");
+              }}
+            />
+          )} */}
+
+          {isOpen ? (
+            <MdKeyboardArrowUp
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            />
+          ) : (
+            <MdKeyboardArrowDown
+              onClick={() => {
+                setIsOpen(true);
               }}
             />
           )}
 
-          {this.state.isOpen ? (
-            <MdKeyboardArrowUp onClick={this.closeDropdown} />
-          ) : (
-            <MdKeyboardArrowDown onClick={this.openDropdown} />
-          )}
-
           <label className={styles.myDropdown_label}>
-            {this.state.selectOptionAnyone || this.state.searchInput
-              ? this.state.title
-              : this.state.placeholder}
+            {selectOptionAnyone || searchInput ? title : placeholder}
           </label>
 
           <fieldset
             className={cx(styles.myDropdown_fieldset, {
-              [styles.error]: !this.props.validation,
+              [styles.error]: !props.validation,
             })}
           >
             <legend>
-              <span>{this.state.title}</span>
+              <span>{title}</span>
             </legend>
           </fieldset>
         </div>
 
-        <ul
-          className={cx(styles.myDropdown__listItems, {
-            [styles.open]: this.state.isOpen,
-          })}
-        >
-          {buttonSelectAll}
-          {this.getListOptions(listOptions)}
-        </ul>
+        <ListOptions
+          options={options}
+          isOpen={isOpen}
+          liHandler={liHandler}
+          isLoaded={isLoaded}
+          searchInput={searchInput}
+          selectOptionAll={selectOptionAll}
+          selectAll={selectAll}
+          multiple={multiple}
+        />
       </div>
     </div>
   );
 };
 
 export default Dropdown;
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-class MyDropdown extends Component {
-  render() {
-    //Количество выбранных элементов
-    let countSelected = 0;
-
-    // Выборка элементов списка согласно поисковой строки
-    let options = this.state.options.filter((option) =>
-      option.title.toLowerCase().includes(this.state.searchInput.toLowerCase())
-    );
-
-    let listOptions = options
-      .sort((a, b) => b.isCheked - a.isCheked)
-      .map((option) => {
-        return (
-          <li
-            key={option.id}
-            className={cx({ [styles.checked]: option.isCheked })}
-            onClick={this.liHandler}
-            data-value={option.title}
-            data-id={option.id}
-          >
-            {option.title}
-          </li>
-        );
-      });
-
-    let optionsSelected = this.state.options.map((option) => {
-      if (option.isCheked) {
-        countSelected++;
-        return (
-          <li key={option.id} onClick={this.liHandler}>
-            <div className={styles.selectedItem_title}>{option.title}</div>
-            <div
-              className={styles.selectedItem_closeIcon}
-              onClick={this.liHandler}
-              data-value={option.title}
-            >
-              <AiOutlineClose />
-            </div>
-          </li>
-        );
-      }
-    });
-
-    let buttonSelectAll;
-    if (!this.state.searchInput && this.state.multiple && this.state.isLoaded) {
-      buttonSelectAll = (
-        <button
-          className={cx(styles.select_all, {
-            [styles.checked]: this.state.selectOptionAll,
-          })}
-          onClick={this.selectAll}
-        >
-          Выбрать все
-        </button>
-      );
-    }
-
-    return (
-      <div
-        id={this.state.id}
-        className={cx(styles.myDropdown, {
-          [styles.disabled]: this.props.disabled,
-        })}
-      >
-        <div className={styles.myDropdown__wrapper}>
-          <div
-            className={styles.myDropdown__container}
-            onClick={this.openDropdown}
-          >
-            <ul className={styles.myDropdown_menuSelectedItems}>
-              {countSelected < 2 ? (
-                optionsSelected
-              ) : (
-                <li>
-                  <div className={styles.selectedItem_title}>
-                    Выбрано: {countSelected} знач.
-                  </div>
-                  <div
-                    className={styles.selectedItem_closeIcon}
-                    onClick={this.closeAll}
-                  >
-                    <AiOutlineClose />
-                  </div>
-                </li>
-              )}
-            </ul>
-            <input
-              className={cx(styles.myDropdown_input, {
-                [styles.empty]:
-                  this.state.selectOptionAnyone || this.state.searchInput,
-              })}
-              onChange={this.searchOption}
-              value={this.state.searchInput}
-            />
-
-            {this.state.searchInput && (
-              <AiOutlineClose
-                className={styles.input_clear}
-                title="Очистить"
-                onClick={() => {
-                  this.setState({ searchInput: "" });
-                }}
-              />
-            )}
-
-            {this.state.isOpen ? (
-              <MdKeyboardArrowUp onClick={this.closeDropdown} />
-            ) : (
-              <MdKeyboardArrowDown onClick={this.openDropdown} />
-            )}
-
-            <label className={styles.myDropdown_label}>
-              {this.state.selectOptionAnyone || this.state.searchInput
-                ? this.state.title
-                : this.state.placeholder}
-            </label>
-
-            <fieldset
-              className={cx(styles.myDropdown_fieldset, {
-                [styles.error]: !this.props.validation,
-              })}
-            >
-              <legend>
-                <span>{this.state.title}</span>
-              </legend>
-            </fieldset>
-          </div>
-
-          <ul
-            className={cx(styles.myDropdown__listItems, {
-              [styles.open]: this.state.isOpen,
-            })}
-          >
-            {buttonSelectAll}
-            {this.getListOptions(listOptions)}
-          </ul>
-        </div>
-      </div>
-    );
-  }
-}
-
-//export default MyDropdown;

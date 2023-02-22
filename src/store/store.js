@@ -20,7 +20,7 @@ import aboutReceiptSlice from '../features/modal/about-receiptSlice';
 
 export const store = configureStore({
     reducer: {
-        appStatus: appSlice,
+        app_state: appSlice,
         button_menu: headerSlice,
         user: userSlice,
         modal_add_product: addProductSlice,

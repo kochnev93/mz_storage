@@ -23,7 +23,7 @@ import { setHeader } from "../../features/header/headerSlice";
 function Navbar(props) {
   const dispatch = useDispatch();
   const classButton = useSelector((state) => state.button_menu.ButtonMenuOpen);
-  const statusApp = useSelector((state) => state.appStatus);
+  const statusApp = useSelector((state) => state.app_state);
   const user = useAuth();
 
   return (

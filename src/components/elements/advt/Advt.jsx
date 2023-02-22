@@ -13,7 +13,7 @@ import { setStatus } from '../../../features/app/appSlice.js';
 function Advt() {
 const dispatch = useDispatch();
 const [active, setActive] = useState(false);
-const statusApp = useSelector((state) => state.appStatus);
+const statusApp = useSelector((state) => state.app_state);
 
 useEffect(() => {
     ping();

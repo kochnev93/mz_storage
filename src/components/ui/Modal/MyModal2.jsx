@@ -24,7 +24,7 @@ function Modal({
   actions,
 }) {
   const dispatch = useDispatch();
-  const statusApp = useSelector((state) => state.appStatus);
+  const statusApp = useSelector((state) => state.app_state);
   /*
   active - идентификатор видимости
   setActive - функиция, меняет видимость. Передается из родителя
