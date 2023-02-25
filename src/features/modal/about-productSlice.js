@@ -10,6 +10,7 @@ const initialState = {
   inputComment: '',
   comments: [],
   indexActiveTab: 0,
+  loadingNewComent: false
 };
 
 export const aboutProductSlice = createSlice({
@@ -60,8 +61,13 @@ export const aboutProductSlice = createSlice({
       state.comments = action.payload.comments;
     },
 
-    addComment: (state, action) => {
+    addNewComment: (state, action) => {
       state.comments = [...state.comments, action.payload.comment]
+      state.loadingNewComent = false
+    },
+
+    setLoadingNewComment: (state, action) => {
+      state.loadingNewComent = action.payload.loading
     },
 
     setActiveTab: (state, action) => {
@@ -81,7 +87,8 @@ export const {
   setInputComment,
   setActiveTab,
   setComments,
-  addComment,
+  addNewComment,
+  setLoadingNewComment
 } = aboutProductSlice.actions;
 
 export default aboutProductSlice.reducer;

@@ -3,15 +3,18 @@ import authHeader from '../services/auth-header';
 
 const useFetch = (url, options) => {
 
-  async function fetchNow(url, options) {
-    // Заголовки запроса
-    //if(options.body){
-      let myHeaders = new Headers();
+  async function fetchNow(url, options, contentType=true) {
+    let myHeaders = new Headers();
+    console.log('contenttype', contentType)
+
+    if(contentType){
       myHeaders.append('content-type', 'application/json');
       myHeaders.append('Authorization', `${authHeader()}`);
-      
       options.headers = myHeaders;
-    //}
+    } else{
+      myHeaders.append('Authorization', `${authHeader()}`);
+      options.headers = myHeaders;
+    }
 
     try{
       let response = await fetch(url, options);
@@ -20,9 +23,9 @@ const useFetch = (url, options) => {
       if(!response.ok) throw new Error(result.errorMessage, result.errors)
 
       if(result.data){
-        return {data: result.data, error: null}
+        return {...result, error: null}
       } else{
-        return {data: null, error: result.error}
+        return {data: null, ...result}
       }
    
     }
@@ -30,26 +33,6 @@ const useFetch = (url, options) => {
       console.error(e.message)
       return {data: null, error: e.message}
     }
- 
-
-    // let response = await fetch(url, options);
-
-    // console.log('RESPONSE', response)
-    // let result = await response.json();
-    // console.log('RESPONSE-JSON', result)
-
-    // if(response.ok){
-      
-    //  // let result = await response.json();
-    //   if(result.data){
-    //     return {data: result.data, error: null}
-    //   } else{
-    //     return {data: null, error: result.error}
-    //   }
-
-    // } else{
-    //   console.warn(`Ошибка при запросе ${url}`)
-    // }
   }
 
   return { fetchNow };

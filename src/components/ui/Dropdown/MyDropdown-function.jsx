@@ -18,8 +18,8 @@ const Dropdown = (props) => {
   const { fetchNow } = useFetch();
 
   //REdux state
-  const { warehouses, category } = useSelector((state) => state.app_state);
-  //console.log("MY_DROPDOWN_DATA", { warehouses, category });
+  // const { warehouses, category } = useSelector((state) => state.app_state);
+  // console.log("MY_DROPDOWN_DATA", { warehouses, category });
 
   // Local State
   const [type] = useState(props.type);
@@ -40,44 +40,42 @@ const Dropdown = (props) => {
 
   const [reset] = useState(props.reset);
 
-  const memoWarehouse = useMemo(() => {
-    return warehouses.map((warehouse) => {
-      return { ...warehouse };
+  const memoOptions = useMemo(() => {
+    return props?.options?.map((item) => {
+      return { ...item };
     });
-  }, [warehouses]);
-
-  const memoCategory = useMemo(() => {
-    return category.map((category) => {
-      return { ...category };
-    });
-  }, [category]);
+  }, [props.options]);
 
   useEffect(() => {
     getContent();
   }, [url]);
 
   useEffect(() => {
+    setOptions(memoOptions);
+  }, [memoOptions]);
+
+  useEffect(() => {
     clearDropdown();
   }, [reset]);
 
-  useEffect(() => {
-    switch (props.type) {
-      case "warehouse":
-        // let tempWarehouse = warehouses.map((warehouse) => {
-        //   return { ...warehouse };
-        // });
-        setOptions(memoWarehouse);
-        break;
-      case "category":
-        // let tempCategory = category.map((category) => {
-        //   return { ...category };
-        // });
-        setOptions(memoCategory);
-        break;
-      default:
-        setOptions([]);
-    }
-  }, []);
+  // useEffect(() => {
+  //   switch (props.type) {
+  //     case "warehouse":
+  //       let tempWarehouse = warehouses.map((warehouse) => {
+  //         return { ...warehouse };
+  //       });
+  //       setOptions(tempWarehouse);
+  //       break;
+  //     case "category":
+  //       let tempCategory = category.map((category) => {
+  //         return { ...category };
+  //       });
+  //       setOptions(tempCategory);
+  //       break;
+  //     default:
+  //       setOptions([]);
+  //   }
+  // }, []);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -90,6 +88,15 @@ const Dropdown = (props) => {
       setIsOpen(false);
     }
   };
+
+  const openDropdown = () => {
+    setIsOpen(true)
+  }
+
+  const closeDropdown = () => {
+    setIsOpen(false);
+    setSearchInput("");
+  }
 
   const isSelectedAll = (arr) => {
     // Проверяем все ли элементы выделены
@@ -144,6 +151,7 @@ const Dropdown = (props) => {
     setOptions(newOptions);
     setSelectOptionAnyone(selectedAnyone);
     setSelectOptionAll(selectedAll);
+    setSearchInput("")
 
     // Передача значений родителю
     if (props.changeValue) {

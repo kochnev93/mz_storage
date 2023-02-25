@@ -5,7 +5,7 @@ import styles from './Chat.module.scss';
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { addComment, setComments, setInputComment } from '../../features/modal/about-productSlice';
+import { addNewComment, setComments, setInputComment, setLoadingNewComment } from '../../features/modal/about-productSlice';
 
 //Components
 import { ListMessage } from './ListMessage/ListMessage.jsx';
@@ -19,18 +19,12 @@ export const Chat = (props) => {
   const dispatch = useDispatch();
 
   // Redux
-  const messages = useSelector(
-    (state) => state.modal_about_product.comments
-  );
-  const comment = useSelector(
-    (state) => state.modal_about_product.inputComment
-  );
-  const product = useSelector(
-    (state) => state.modal_about_product.product
+  const {messages, inputComment, product, comments, loadingNewComent} = useSelector(
+    (state) => state.modal_about_product
   );
 
   useEffect(() => {
-    if (product?.id !== null) {
+    if (product?.id) {
       getComments();
     }
   }, [product?.id, product?.id_warehouse]);
@@ -53,12 +47,11 @@ export const Chat = (props) => {
   };
 
   const addComment = async () => {
-
-    console.log('Message sending---', comment)
+   dispatch(setLoadingNewComment({loading: true}))
 
     let data = JSON.stringify({
       product_id: product?.id,
-      comment: comment,
+      comment: inputComment,
     });
 
     let requestOptions = {
@@ -72,10 +65,10 @@ export const Chat = (props) => {
     );
 
     if (sendingComment.data) {
-      getComments();
+      dispatch(addNewComment({comment: sendingComment.data}))
       dispatch(setInputComment({inputComment: ''}));
     } else {
-      console.warn('Кооментарий не был отправлен: ', comment)
+      console.warn('Комментарий не был отправлен: ', sendingComment.error)
     }
   };
 
@@ -84,9 +77,9 @@ export const Chat = (props) => {
       <SendMessage
         onClick={addComment}
         onChange={(value) => {dispatch(setInputComment({inputComment: value}))}}
-        value={comment}
+        value={inputComment}
       />
-      <ListMessage messages={messages} />
+      <ListMessage messages={comments} loadingNewComent={loadingNewComent} />
     </div>
   );
 };

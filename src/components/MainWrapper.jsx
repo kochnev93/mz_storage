@@ -23,7 +23,7 @@ export const MainWrapper = ({header_title, title = 'Страница без на
       <ModalAddProduct/>
       <ModalReceiptProduct/>
       <ModalTransferProduct/>
-      <ModalAboutProduct/>
+      {/* <ModalAboutProduct/> */}
       <ModalAddWarehose/>
       <ModalTransfersSomeProducts />
       <ModalAboutReceipt/>

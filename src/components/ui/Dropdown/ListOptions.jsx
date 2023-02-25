@@ -42,7 +42,7 @@ export const ListOptions = ({
     });
 
   let buttonSelectAll;
-  if (!searchInput && multiple && isLoaded) {
+  if (!searchInput && multiple && isLoaded && options?.length !== 0) {
     buttonSelectAll = (
       <button
         className={cx(styles.select_all, {

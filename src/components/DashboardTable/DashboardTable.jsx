@@ -19,8 +19,7 @@ import { addProducts } from '../../features/dashboard/dashboardSlice';
 
 export const DashboardTable = () => {
   const dispatch = useDispatch();
-  const statusApp = useSelector((state) => state.appStatus.status);
-  console.log("APP_STATUS", statusApp);
+  const statusApp = useSelector((state) => state.app_state.status);
 
   // Dashboard
   const [isLoading, setIsLoading] = useState(false);

@@ -87,6 +87,7 @@ export const Auth = () => {
           id: result.id,
           login: result.login,
           role: result.role,
+          img: result.img,
           accessToken: result.accessToken,
         })
       );
@@ -97,6 +98,7 @@ export const Auth = () => {
           id: result.id,
           login: result.login,
           role: result.role,
+          img: result.img,
           accessToken: result.accessToken,
         })
       );
