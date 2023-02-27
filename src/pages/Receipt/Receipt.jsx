@@ -17,7 +17,10 @@ import ModalAboutReceipt from '../../components/ui/Modal/Modal-aboutReceipt/MyMo
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveReceipt } from '../../features/modal/receipt-productSlice.js';
-import { setActiveAboutReceipt, fetchReceiptProducts } from '../../features/modal/about-receiptSlice';
+import {
+  setActiveAboutReceipt,
+  fetchReceiptProducts,
+} from '../../features/modal/about-receiptSlice';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
@@ -37,16 +40,15 @@ export const Receipt = () => {
     'Дата',
   ]);
 
-  const {id_receipt} = useSelector((state) => state.modal_about_receipt);
-
+  const { id_receipt } = useSelector((state) => state.modal_about_receipt);
 
   useEffect(() => {
     getReceipt();
   }, []);
 
   useEffect(() => {
-    if(id_receipt){
-      dispatch(fetchReceiptProducts(id_receipt))
+    if (id_receipt) {
+      dispatch(fetchReceiptProducts(id_receipt));
     }
   }, [id_receipt]);
 
@@ -93,27 +95,34 @@ export const Receipt = () => {
   };
 
   return (
-    <section className={styles.main_section}>
+    <>
       <ModalReceiptProduct />
-      <Header title="Приход" />
-      <Navbar />
-      <main className={styles.main}>
-        <ModalAboutReceipt/>
-        <h1>Приход</h1>
+      <ModalAboutReceipt />
+      <section className={styles.main_section}>
+        <Header title="Приход" />
+        <Navbar />
+        <main className={styles.main}>
+          
+          <h1>Приход</h1>
 
-        <div className={styles.header}>
-          <div className={styles.header_filter}>Фильтры</div>
-          <MyButton
-            type="send"
-            title="Добавить"
-            action={() => {
-              dispatch(setActiveReceipt({ active: true }));
-            }}
+          <div className={styles.header}>
+            <div className={styles.header_filter}>Фильтры</div>
+            <MyButton
+              type="send"
+              title="Добавить"
+              action={() => {
+                dispatch(setActiveReceipt({ active: true }));
+              }}
+            />
+          </div>
+
+          <MyTable
+            titleColumn={titleColumn}
+            content={bodyContent}
+            resultCount={receiptData.length}
           />
-        </div>
-
-        <MyTable titleColumn={titleColumn} content={bodyContent} resultCount={receiptData.length} />
-      </main>
-    </section>
+        </main>
+      </section>
+    </>
   );
 };

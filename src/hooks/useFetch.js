@@ -1,7 +1,11 @@
+import { useDispatch } from 'react-redux';
+import { removeUser } from '../features/users/userSlice';
 import authHeader from '../services/auth-header';
 
 
 const useFetch = (url, options) => {
+
+  const dispatch = useDispatch()
 
   async function fetchNow(url, options, contentType=true) {
     let myHeaders = new Headers();
@@ -18,6 +22,9 @@ const useFetch = (url, options) => {
 
     try{
       let response = await fetch(url, options);
+      
+      if(response.status === 401) dispatch(removeUser())
+
       let result = await response.json();
 
       if(!response.ok) throw new Error(result.errorMessage, result.errors)

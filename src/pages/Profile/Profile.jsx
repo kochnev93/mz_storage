@@ -138,7 +138,7 @@ export const Profile = () => {
       <h2>История</h2>
       <MyTable titleColumn={titleColumn} />
 
-      <input type="file" onChange={sendFile} accept="image/*,.png,.jpg,.jpeg" />
+      {/* <input type="file" onChange={sendFile} accept="image/*,.png,.jpg,.jpeg" />
       <button onClick={send}>Отправить</button>
 
       <br />
@@ -153,7 +153,7 @@ export const Profile = () => {
       <br />
       <br />
 
-      <Dropdown id={'12367'} validation={true} options={category} />
+      <Dropdown id={'12367'} validation={true} options={category} /> */}
     </MainWrapper>
   );
 };

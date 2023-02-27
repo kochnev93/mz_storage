@@ -17,15 +17,31 @@ export const Warehouses = () => {
 
   const [titleColumn] = useState([
     'id',
-    'Код',
     'Наименование',
-    'Адрес'
+    'Адрес',
+    'Код'
   ]);
   const [warehouses, setWarehouses] = useState([]);
 
   useEffect(() => {
-    
+    getWarehouses();
   }, []);
+
+  // Получение списка скалдов
+  const getWarehouses = async () => {
+    let requestOptions = {
+      method: 'GET',
+    };
+
+    const result = await fetchNow(
+      `${process.env.REACT_APP_API_SERVER}/get_warehouse/all`,
+      requestOptions
+    );
+
+    setWarehouses(result.data);
+
+    return result.data;
+  };
 
 
   const tableContent = useMemo(() => {
@@ -34,9 +50,9 @@ export const Warehouses = () => {
         return (
           <tr>
             <td>{item?.id}</td>
-            <td>{item?.name}</td>
             <td>{item?.warehouse_title}</td>
-            <td>{item?.adress}</td>
+            <td>{item?.warehouse_adress}</td>
+            <td>{item?.warehouse_number}</td>
           </tr>
         );
       });

@@ -34,6 +34,8 @@ export const userSlice = createSlice({
             state.role = null,
             state.img = null,
             state.accessToken = null
+
+            localStorage.removeItem('mz_storage_user')
         },
 
         refreshImgUser: (state, action) => {
