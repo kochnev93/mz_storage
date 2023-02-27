@@ -1,57 +1,30 @@
 import React, { Component } from 'react';
 import styles from './MyDropdown.module.scss';
-import {AiOutlineClose} from 'react-icons/Ai'
+import { AiOutlineClose } from 'react-icons/Ai';
+import { MdKeyboardArrowDown } from 'react-icons/Md';
+import { MdKeyboardArrowUp } from 'react-icons/Md';
+import cx from 'classnames';
+// import { useDispatch, useSelector } from 'react-redux';
+
+// const {warehouses, category} = useSelector((state) => state.app_state)
+// console.log('MY_DROPDOWN_DATA', {warehouses, category})
 
 class MyDropdown extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: '',
+      statusApp: props.statusApp || true,
+      id: props.id,
+      title: props.title || 'Название',
+      placeholder: props.placeholder || 'Выберите...',
+      searchInput: '',
       isOpen: false,
-      options: [
-        {
-          id: 1,
-          title: 'Дунайский',
-          isCheked: false
-        },
-        {
-          id: 2,
-          title: 'Крыленко',
-          isCheked: false
-        },
-        {
-          id: 3,
-          title: 'Яхтенная',
-          isCheked: false
-        },
-        {
-          id: 4,
-          title: 'Бухарестская',
-          isCheked: false
-        },
-        {
-          id: 5,
-          title: 'Победы',
-          isCheked: false
-        },
-        {
-          id: 6,
-          title: 'Лаврики',
-          isCheked: false
-        },
-        {
-          id: 7,
-          title: 'Стачек 28',
-          isCheked: false
-        },
-        {
-          id: 8,
-          title: 'Стачек 92',
-          isCheked: false
-        },
-      ],
-      select_value: 'Выберите...',
+      selectOptionAnyone: false,
       selectOptionAll: false,
+      multiple: props.multiple || false,
+      isLoaded: false,
+      options: [],
+      disabled: props.disabled || false,
     };
 
     this.openDropdown = this.openDropdown.bind(this);
@@ -59,161 +32,393 @@ class MyDropdown extends Component {
 
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
+
+    if (this.props.options) {
+      this.setState({
+        isLoaded: true,
+        options: this.props.options,
+      });
+    } else {
+      this.getContent();
+    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  isSelectedAll = () =>{
-    // Проверяем все ли элементы выделены
-    // true - все элементы выделены
-    // false - не все элементы выделены
-    return this.state.options.every((option) => option.isCheked === true);
-  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.url != this.props.url) {
+      console.log('Я ОБНОВИЛСЯ', this.state.id, this.props.url)
+      this.getContent();
+    }
 
-  handleClickOutside = (e) => {
-    // Отслеживаем клик вне компонента
-    const dropdown = document.querySelector(`.${styles.myDropdown}`);
-    if ( !dropdown.contains(e.target) && this.state.isOpen){
-      this.openDropdown();
+    if (prevProps.statusApp != this.props.statusApp && this.props.statusApp) {
+      this.getContent();
     }
   }
 
-  openDropdown = () => {
-    // Открытие/закрытие дропдауна
-    const dropdown_list = document.getElementById('my_dropdown__list');
-    dropdown_list.classList.toggle(`${styles.myDropdown__list_open}`);
-    this.setState({isOpen: !this.state.isOpen});
+  getContent = () => {
+    let myHeaders = new Headers();
+    myHeaders.append('content-type', 'application/json');
 
+    let requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+    };
+
+    fetch(`${process.env.REACT_APP_API_SERVER}/${this.props.url}`, requestOptions)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`${res.status}. ${res.statusText}`);
+        } else {
+          return res.json();
+        }
+      })
+      .then((result) => {
+        if (!result.error) {
+          const fetchOptions = result.data;
+          const checkedOptions = JSON.parse(
+            localStorage.getItem(`mz_${this.state.id}`)
+          );
+
+          if (checkedOptions !== null && checkedOptions.length !== 0) {
+            checkedOptions.forEach((item) => {
+              const indexOption = fetchOptions.findIndex(
+                (fetchItem) => item.id === fetchItem.id
+              );
+              fetchOptions[indexOption].isCheked = true;
+            });
+
+            this.setState({
+              isLoaded: true,
+              options: fetchOptions,
+              selectOptionAnyone: true,
+              selectOptionAll: checkedOptions.length === fetchOptions.length,
+            });
+          } else {
+            this.setState({
+              isLoaded: true,
+              options: fetchOptions,
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  isSelectedAll = (arr) => {
+    // Проверяем все ли элементы выделены
+    // true - все элементы выделены
+    // false - не все элементы выделены
+    return arr.every((option) => option.isCheked === true);
+  };
+
+  isSelectedAnyone = (arr) => {
+    // Проверяем выделен ли какой нибудь элемент списка
+    return arr.some((option) => option.isCheked === true);
+  };
+
+  handleClickOutside = (e) => {
+    // Отслеживаем клик вне компонента
+    const dropdown = document.getElementById(this.state.id);
+    if (!dropdown.contains(e.target) && this.state.isOpen) {
+      this.closeDropdown();
+    }
+  };
+
+  openDropdown = () => {
+    if (!this.state.isOpen) {
+      this.setState({ isOpen: true });
+    }
+  };
+
+  closeDropdown = () => {
+    this.setState({ isOpen: false, searchInput: '' });
   };
 
   liHandler = (e) => {
     e.stopPropagation();
 
     // Находим индекс элемента, который выбрали
-    let indexOption = this.state.options.findIndex(item => item.title === e.target.dataset.value);
+    let indexOption = this.state.options.findIndex(
+      (item) => item.id == e.target.dataset.id
+    );
 
     // Создаем новое состояние
-    let newOptions = this.state.options.map( (option, index) => {
-      if(index === indexOption){
+    let newOptions = this.state.options.map((option, index) => {
+      if (index === indexOption) {
         option.isCheked = !option.isCheked;
+        return option;
+      } else if (!this.state.multiple) {
+        option.isCheked = false;
         return option;
       } else return option;
     });
 
     // Обновляем состояние
-    if( this.isSelectedAll() ){
-      this.setState({
-        options: newOptions,
-        selectOptionAll: true,
-        search: '',
-      });
-    } else {
-      this.setState({
-        options: newOptions,
-        selectOptionAll: false,
-        search: '',
-      });
+    let selectedAnyone = this.isSelectedAnyone(newOptions);
+    let selectedAll = this.isSelectedAll(newOptions);
+
+    this.setState({
+      options: newOptions,
+      selectOptionAll: selectedAll,
+      selectOptionAnyone: selectedAnyone,
+    });
+
+    // Передача значений родителю
+    if (this.props.changeValue) {
+      this.getSelectedOptions();
     }
 
-  }
+    // Если не выбран множественный выбор, то меню закрывается при выборе элемента
+    if (!this.state.multiple) {
+      this.closeDropdown();
+    }
+  };
 
   selectAll = (e) => {
+    // Обработчик кнопки - Выбрать все
+    e.preventDefault();
     e.stopPropagation();
-    
+
     // Создаем новое состояние
-    let newOptions = this.state.options.map( (option) => {
-      if(!this.state.selectOptionAll){
+    let newOptions = this.state.options.map((option) => {
+      if (!this.state.selectOptionAll) {
         option.isCheked = true;
         return option;
-      } else{
+      } else {
         option.isCheked = false;
         return option;
       }
     });
 
+    let selectedAll = this.state.selectOptionAll ? false : true;
+    let selectedAnyone = selectedAll;
+
     // Обновляем состояние
     this.setState({
       options: newOptions,
-      selectOptionAll: !this.state.selectOptionAll
+      selectOptionAll: selectedAll,
+      selectOptionAnyone: selectedAnyone,
     });
-  }
+
+    if (this.props.changeValue) {
+      this.getSelectedOptions();
+    }
+  };
 
   closeAll = (e) => {
     e.stopPropagation();
-    
+
     // Создаем новое состояние
-    let newOptions = this.state.options.map( (option) => {
-        option.isCheked = false;
-        return option;
+    let newOptions = this.state.options.map((option) => {
+      option.isCheked = false;
+      return option;
     });
 
     // Обновляем состояние
     this.setState({
       options: newOptions,
-      selectOptionAll: false
+      selectOptionAll: false,
+      selectOptionAnyone: false,
     });
-  }
+
+    if (this.props.changeValue) {
+      this.getSelectedOptions();
+    }
+  };
 
   searchOption = (e) => {
-    this.setState({search: e.target.value});
-  }
+    this.setState({
+      searchInput: e.target.value,
+    });
+  };
+
+  getListOptions = (list) => {
+    if (!this.state.isLoaded) return 'Загрузка...';
+    if (list.length === 0) return 'Ничего не найдено';
+    return list;
+  };
+
+  getSelectedOptions = () => {
+    let selectedOptions = this.state.options.filter((option) => {
+      return option.isCheked;
+    });
+
+    let result = Object.assign({}, )
+
+    console.log('selectedOptions', selectedOptions)
+
+    this.props.changeValue([...selectedOptions])
+
+    // Если передаются свойства и опции, то передаем готовое состояние
+    // if (this.props.property && this.props.options) {
+    //   for (let i = 0; i < transferredOptions.length; i++) {
+    //     for (let j = 0; j < transferredOptions[i].value.length; j++) {
+    //       if (transferredOptions[i].value[j].id === selectedOptions[j]?.id) {
+    //         transferredOptions[i].value[j].isCheked = true;
+    //       }
+    //     }
+    //   }
+    //   this.props.changeValue(transferredOptions);
+    // } else {
+    //   this.props.changeValue(selectedOptions);
+    // }
+  };
+
+  clearDropdown = () => {
+    let newOptions = this.state.options.map((option) => {
+      option.isCheked = false;
+      return option;
+    });
+
+    this.props.setReset();
+
+    this.setState({
+      options: newOptions,
+      selectOptionAll: false,
+      selectOptionAnyone: false,
+    });
+  };
 
   render() {
+    {
+      this.props.reset ? this.clearDropdown() : null;
+    }
+
     //Количество выбранных элементов
     let countSelected = 0;
 
     // Выборка элементов списка согласно поисковой строки
-    let options = this.state.options.filter( option => option.title.includes(this.state.search));
+    let options = this.state.options.filter((option) =>
+      option.title.toLowerCase().includes(this.state.searchInput.toLowerCase())
+    );
 
-    let listOptions = options.map( (option) => {
-      if(option.isCheked){
-        return <li key={option.id} className={styles.checked} onClick={this.liHandler} data-value={option.title}>{option.title}</li>;
-      } else return <li key={option.id} onClick={this.liHandler} data-value={option.title}>{option.title}</li>;
-    });
+    let listOptions = options
+      .sort((a, b) => b.isCheked - a.isCheked)
+      .map((option) => {
+        return (
+          <li
+            key={option.id}
+            className={cx({ [styles.checked]: option.isCheked })}
+            onClick={this.liHandler}
+            data-value={option.title}
+            data-id={option.id}
+          >
+            {option.title}
+          </li>
+        );
+      });
 
-    let optionsSelected = this.state.options.map( (option) => {
-      if(option.isCheked){
+    let optionsSelected = this.state.options.map((option) => {
+      if (option.isCheked) {
         countSelected++;
         return (
-        <li key={option.id} onClick={this.liHandler}>
-          <div className={styles.selected_title}>{option.title}</div>
-          <div className={styles.selected_closeIcon} onClick={this.liHandler} data-value={option.title}><AiOutlineClose /></div>
-        </li>);
+          <li key={option.id} onClick={this.liHandler}>
+            <div className={styles.selectedItem_title}>{option.title}</div>
+            <div
+              className={styles.selectedItem_closeIcon}
+              onClick={this.liHandler}
+              data-value={option.title}
+            >
+              <AiOutlineClose />
+            </div>
+          </li>
+        );
       }
     });
 
     let buttonSelectAll;
-    if(this.state.selectOptionAll){
-      buttonSelectAll = <button className={`${styles.select_all} ${styles.select_all_checked}`} onClick={this.selectAll}>Выбрать все</button>
-    } else{
-      buttonSelectAll = <button className={styles.select_all} onClick={this.selectAll}>Выбрать все</button>
+    if (!this.state.searchInput && this.state.multiple && this.state.isLoaded) {
+      buttonSelectAll = (
+        <button
+          className={cx(styles.select_all, {
+            [styles.checked]: this.state.selectOptionAll,
+          })}
+          onClick={this.selectAll}
+        >
+          Выбрать все
+        </button>
+      );
     }
 
     return (
-      <div className={styles.myDropdown}>
+      <div id={this.state.id} className={cx(styles.myDropdown, {[styles.disabled]: this.props.disabled})}>
         <div className={styles.myDropdown__wrapper}>
-
-          <div className={styles.myDropdown__button} onClick={this.openDropdown}>
-            <ul className={styles.myDropdown_selected}>
-              { countSelected <= 2 ? optionsSelected : 
+          <div
+            className={styles.myDropdown__container}
+            onClick={this.openDropdown}
+          >
+            <ul className={styles.myDropdown_menuSelectedItems}>
+              {countSelected < 2 ? (
+                optionsSelected
+              ) : (
                 <li>
-                  <div className={styles.selected_title}>Выбрано: {countSelected} знач.</div>
-                  <div className={styles.selected_closeIcon} onClick={this.closeAll}><AiOutlineClose /></div>
+                  <div className={styles.selectedItem_title}>
+                    Выбрано: {countSelected} знач.
+                  </div>
+                  <div
+                    className={styles.selectedItem_closeIcon}
+                    onClick={this.closeAll}
+                  >
+                    <AiOutlineClose />
+                  </div>
                 </li>
-              }
+              )}
             </ul>
+            <input
+              className={cx(styles.myDropdown_input, {
+                [styles.empty]:
+                  this.state.selectOptionAnyone || this.state.searchInput,
+              })}
+              onChange={this.searchOption}
+              value={this.state.searchInput}
+            />
 
-            <input onChange={this.searchOption} value={this.state.search}></input>
+            {this.state.searchInput && (
+              <AiOutlineClose
+                className={styles.input_clear}
+                title="Очистить"
+                onClick={() => {
+                  this.setState({ searchInput: '' });
+                }}
+              />
+            )}
+
+            {this.state.isOpen ? (
+              <MdKeyboardArrowUp onClick={this.closeDropdown} />
+            ) : (
+              <MdKeyboardArrowDown onClick={this.openDropdown} />
+            )}
+
+            <label className={styles.myDropdown_label}>
+              {this.state.selectOptionAnyone || this.state.searchInput
+                ? this.state.title
+                : this.state.placeholder}
+            </label>
+
+            <fieldset
+              className={cx(styles.myDropdown_fieldset, {
+                [styles.error]: !this.props.validation,
+              })}
+            >
+              <legend>
+                <span>{this.state.title}</span>
+              </legend>
+            </fieldset>
           </div>
-         
 
-          <ul id='my_dropdown__list' className={styles.myDropdown__list}>
+          <ul
+            className={cx(styles.myDropdown__listItems, {
+              [styles.open]: this.state.isOpen,
+            })}
+          >
             {buttonSelectAll}
-            {listOptions}
+            {this.getListOptions(listOptions)}
           </ul>
-
         </div>
       </div>
     );

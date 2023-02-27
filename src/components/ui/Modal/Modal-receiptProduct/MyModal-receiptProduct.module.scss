@@ -1,0 +1,73 @@
+.info {
+  font-size: 12px;
+  color: grey;
+}
+
+.warning {
+  max-width: 100%;
+  color: red;
+  font-size: 12px;
+  padding: 15px 0;
+}
+
+.form {
+  width: 100%;
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+
+  height: auto;
+  box-sizing: border-box;
+}
+
+.item {
+  margin-bottom: 30px;
+
+  h4 {
+    margin-bottom: 15px;
+  }
+
+  p {
+    margin-bottom: 15px;
+  }
+}
+
+.new_item{
+  h6 {
+    margin: 0;
+    margin-bottom: 15px;
+  }
+  background-color: #d6fffd;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding-top: 20px;
+
+  button:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+
+.description{
+  color: grey;
+  margin: 0;
+  font-size: 12px;
+}
+
+.guaranteeCheckbox{
+  padding: 10px 0;
+}
+
+.error_message{
+  padding-top: 10px;
+    font-size: 11px;
+    color: red;
+}

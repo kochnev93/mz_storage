@@ -1,6 +1,5 @@
 .myTable {
   border-spacing: 0;
-  text-align: center;
   vertical-align: middle;
   width: 100%;
   color: rgba(0, 0, 0, 0.87);
@@ -11,18 +10,55 @@
     padding: 5px 0;
   }
 
+  .product_action{
+    svg{
+      width: 20px;
+      height: 20px;
+      fill: #a5a5a5;
+
+      path{
+        pointer-events: none;
+      }
+
+      &:not(:last-child){
+        margin-right: 5px;
+      }
+
+      &:hover{
+        fill: var(--main-color);
+      }
+    }
+  }
+
+  tr td:last-child{
+    padding: 5px;
+  }
+
+  tr td:first-child,
+  tr td:last-child{
+    text-align: center;
+  }
 
   th,
   td {
     border: 1px solid rgba(0, 0, 0, 0.23);
-    padding: 5px;
+    padding: 8px;
     position: relative;
     vertical-align: middle;
     font-size: 14px;
   }
 
+  @media screen and (max-width: 1200px){
+    th,
+    td {
+      padding: 5px;
+      font-size: 12px;
+    }
+  
+  }
+
   th {
-    background-color: #0dc6bf;
+    background-color: var(--main-color);
     color: white;
     font-weight: 400;
   }
@@ -40,11 +76,11 @@
     border-radius: 0 0 5px 0;
   }
 
-  tbody tr {
+  tbody tr:not(.empty_line) {
     cursor: pointer;
   }
 
-  tbody tr:hover {
+  tbody tr:not(.empty_line):hover {
     background-color: rgba(0, 0, 0, 0.1);
   }
 
@@ -55,5 +91,21 @@
 
   tr:not(:last-child) td {
     border-bottom: none;
+  }
+}
+
+.row{
+  display: none;
+  background-color: #e9e9e9;
+  &.active{
+    display: table-row;
+  }
+}
+
+.count_link{
+  color: var(--main-color);
+  transition: border-bootom .3s ease;
+  &:hover{
+    border-bottom: 1px solid var(--main-color);
   }
 }

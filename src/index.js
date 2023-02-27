@@ -1,33 +1,27 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-//Pages
-import { About } from './pages/About/About.jsx';
-import { Dashboard } from './pages/Dashboard/Dashboard.jsx';
-import { Admin } from './pages/Admin/Admin.jsx';
-
+import { createRoot } from 'react-dom/client';
+import Favicon from 'react-favicon';
+import Advt from './components/elements/advt/Advt.jsx';
 
 // Redux
 import { store } from './store/store';
 import { Provider } from 'react-redux';
 
-import './style/styles.module.scss';
-import './index.css';
+const container = document.getElementById('root');
+const root = createRoot(container);
 
+import App from './app.js';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="about" element={<About />} />
-          <Route path="admin" element={<Admin />} />
-        </Routes>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+function Root() {
+  return (
+    <React.StrictMode>
+      <Favicon url="../favicon.ico" />
+      <Provider store={store}>
+        <Advt />
+        <App />
+      </Provider>
+    </React.StrictMode>
+  );
+}
 
+root.render(<Root/>);

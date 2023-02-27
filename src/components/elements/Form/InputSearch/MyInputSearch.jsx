@@ -9,6 +9,8 @@ export const MyInputSearch = (props) => {
         type="search"
         name="filter_search"
         placeholder=" "
+        onChange={(e) => {props.changeValue(e.target.value)}}
+        value = {props.value}
       />
       <label className={styles.form_elements_label}>Поиск</label>
       <fieldset className={styles.form_elements_fieldset}>

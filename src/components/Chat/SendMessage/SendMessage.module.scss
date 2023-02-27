@@ -1,0 +1,33 @@
+.sendMessage{
+
+    textarea{
+        width: 100%;
+        min-height: 50px;
+        max-height: 100px;
+        resize: vertical;
+        padding: 5px;
+        font-size: 14px;
+        border-radius: var(--border-radius);
+        &:focus{
+            border: 1px solid grey;
+            transition: border .3s ease;
+        }
+    }
+}
+
+
+.sendMessage_button{
+    font-size: 14px;
+    border-radius: var(--border-radius);
+    outline: none;
+    display: none;
+    border:none;
+    background: var(--main-color);
+    color: white;
+    padding: 5px 10px;
+    float: right;
+
+    &.active{
+        display: block;
+    }
+}

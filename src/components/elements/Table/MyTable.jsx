@@ -1,44 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styles from './Table.module.scss';
 
-export const MyTable = (props) => {
-  const titleColumn = props.titleColumn;
+export const MyTable = ({ titleColumn, content = [], resultCount = 0 }) => {
+
   const columns = titleColumn.map((column) => <th>{column}</th>);
-  
-  const content = props.content;
-  let bodyContent;
-  let captionCount;
 
-  if(content){
-    captionCount = content.length;
-    bodyContent = content.map((item, index) => 
-    <tr>
-      <td>{index + 1}</td>
-      <td>{item.storage}</td>
-      <td>{item.category}</td>
-      <td>{item.name}</td>
-      <td>{item.serial}</td>
-      <td>{item.count}</td>
-      <td>Action</td>
-    </tr>
+  const getEmptyLine = (titleColumn) => {
+    const tdCount = titleColumn.map((item) => <td>&nbsp;</td>);
+    return (
+      <tr className={styles.empty_line}>
+        {tdCount}
+      </tr>
     );
-  }
-
+  };
 
   return (
-    <table className={styles.myTable}>
-      <caption>Найдено записей: {captionCount} </caption>
-      <thead>
-        <tr>{columns}</tr>
-      </thead>
+    <>
+      <table className={styles.myTable}>
+        <caption>Найдено записей: {resultCount} </caption>
+        <thead>
+          <tr>{columns}</tr>
+        </thead>
 
-      <tbody>
-        {bodyContent || ''}
-      </tbody>
+        <tbody>
+          {content.length ? content : getEmptyLine(titleColumn) }
+          { getEmptyLine(titleColumn) }
+        </tbody>
 
-      <tfoot>
-
-      </tfoot>
-    </table>
+        <tfoot></tfoot>
+      </table>
+    </>
   );
 };
+

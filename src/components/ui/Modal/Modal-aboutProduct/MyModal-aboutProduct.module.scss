@@ -1,0 +1,63 @@
+.modalAbout_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modalAbout_form {
+  min-width: 300px;
+ // margin-right: 50px;
+}
+
+.modalAbout_formItem {
+  margin-bottom: 20px;
+}
+
+.accounting_sn{
+  font-size: 12px;
+  background-color: #ffc1c1;
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.history_list {
+  padding-left: 20px;
+
+  > li {
+    margin-bottom: 15px;
+  }
+}
+
+.history_title {
+  margin: 0 0 10px 0;
+}
+
+.history_date{
+  color: grey;
+}
+
+.history_description {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  ul{
+    font-size: 12px;
+    list-style: none;
+  }
+}
+
+.history_details {
+    color: grey;
+    font-size: 14px;
+    cursor: pointer;
+
+    ul{
+        transition: all .3s ease;
+        list-style: inside; 
+        li{
+            font-size: 12px;
+        }
+    }
+
+}

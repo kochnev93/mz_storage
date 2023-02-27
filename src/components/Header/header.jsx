@@ -1,28 +1,43 @@
 import React from 'react';
 import styles from './header.module.scss';
+import cx from 'classnames';
 
 // Redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setHeader } from '../../features/header/headerSlice';
-import { useSelector } from 'react-redux';
+import { removeUser } from '../../features/users/userSlice'; 
 
 import { MdOutlineMenu } from 'react-icons/Md';
+import { IoMdExit } from 'react-icons/Io';
 
-function Header(props) {
+
+function Header({ title = 'Склад' }) {
   const dispatch = useDispatch();
-  const classButton = useSelector((state) => state.button_menu.ButtonMenuOpen);
+  const menuIsOpen = useSelector((state) => state.button_menu.ButtonMenuOpen);
+
+  const logout = () => {
+    let answerUser = confirm(
+      `Выйти из приложения?`
+    );
+
+    if(answerUser){
+      localStorage.removeItem('mz_storage_user');
+      dispatch( removeUser() );
+    }
+  }
 
   return (
-    <header
-      className={
-        classButton ? `${styles.header} ${styles.open}` : styles.header
-      }
-    >
+    <header className={cx(styles.header, { [styles.open]: menuIsOpen })}>
       <div className={styles.wrapperHeader}>
         <div className={styles.logo}>
           <MdOutlineMenu onClick={() => dispatch(setHeader())} />
-          <h3>Склад</h3>
+          <h3>{title}</h3>
         </div>
+        <IoMdExit
+          className={styles.logout_icon}
+          onClick={logout}
+          title = "Выйти"
+        />
       </div>
     </header>
   );

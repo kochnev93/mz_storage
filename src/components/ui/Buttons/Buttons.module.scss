@@ -1,0 +1,68 @@
+.btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 8px 16px;
+	outline: none;
+	border: none;    
+	border-radius: 4px;
+	font-size: 12px;
+	text-transform: uppercase;
+	font-weight: normal;
+	text-decoration: none;
+	color: #fff;
+	cursor: pointer;
+	user-select: none;
+	appearance: none;
+	touch-action: manipulation;  
+	transition: all .2s ease-out;
+
+    &.send{
+        background-color: var(--main-color);
+		&:hover{
+			background-color: lighten(#0dc6bf,2%);
+		}
+		&.loading:after{
+			content: '';
+			width: 15px;
+			height: 15px;
+			background: url('./loading.gif');
+			background-size: cover;
+			background-position: center;
+		}
+    }
+
+	&.clear{
+		border: 1px solid rgba(0, 0, 0, 0.23);
+		background: transparent;
+        color: rgba(0, 0, 0, 0.23);
+    }
+
+}
+
+.btn:disabled {
+	background-color: #dbdbdb;
+	color: #444;
+	pointer-events: none;
+	border: none;
+}
+
+// .btn:focus-visible {
+// 	box-shadow: 0 0 0 3px lightskyblue;
+// }
+
+// .btn:hover {
+// 	box-shadow: 0 1px 1px 0  #cfcfcf, 0 2px 5px 0  #cfcfcf;
+// }
+
+// .btn:active {
+// 	background-color: #efefef !important;
+// }
+
+// .btn:disabled {
+// 	background-color: #eee;
+// 	color: #444;
+// 	pointer-events: none;
+// }
+ 
