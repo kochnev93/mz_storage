@@ -90,7 +90,7 @@ function Modal({
               <div className={styles.footer_buttons}>
                 <MyButton
                   type="clear"
-                  action={() => actions?.buttonClear?.action()}
+                  action={(e) => actions?.buttonClear?.action(e)}
                   title={actions?.buttonClear?.title}
                   loadingTitle={actions?.buttonClear?.loadingTitle}
                   loading={actions?.buttonClear?.loading}
