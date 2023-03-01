@@ -20,3 +20,11 @@
     justify-content: space-between;
     align-items: center;   
 }
+
+.info_message{
+    font-size: inherit;
+    color: green;
+    &.error{
+        color: red;
+    }
+}

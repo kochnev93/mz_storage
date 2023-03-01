@@ -13,9 +13,7 @@ import dashboard  from '../features/dashboard/dashboardSlice';
 import addWarehouseSlice from '../features/modal/add-warehouseSlice';
 import transferSomeProductSlice from '../features/modal/transfer-someProductsSlice';
 import aboutReceiptSlice from '../features/modal/about-receiptSlice';
-
-
-
+import adminUsersSlice from '../features/admin/adminUsersSlice';
 
 
 export const store = configureStore({
@@ -31,6 +29,7 @@ export const store = configureStore({
         dashboard: dashboard,
         modal_add_warehouse: addWarehouseSlice,
         modal_transfer_someProducts: transferSomeProductSlice,
-        modal_about_receipt: aboutReceiptSlice
+        modal_about_receipt: aboutReceiptSlice,
+        modal_about_user: adminUsersSlice
     },
 });
