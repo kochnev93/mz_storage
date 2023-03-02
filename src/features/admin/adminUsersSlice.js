@@ -4,18 +4,45 @@ import regeneratorRuntime from 'regenerator-runtime';
 const initialState = {
   active: false,
   id_user: null,
-  users: [],
+  users: [{
+    id: 999,
+    isBlocked: true,
+    mz_user_login: 'testik',
+    mz_user_role: 'admin'
+  },
+
+  {
+    id: 777,
+    isBlocked: false,
+    mz_user_login: 'testik777',
+    mz_user_role: 'user'
+  }
+
+],
   errors: false,
   message: '',
   reset: false,
   isLoading: true,
 };
 
+
 export const fetchUsers = createAsyncThunk(
   'modal_about_user/fetchUsers',
   async function () {
     const response = await fetch(
       `${process.env.REACT_APP_API_SERVER}/getUsers`
+    );
+    const data = await response.json();
+    return data.data;
+  }
+);
+
+
+export const fetchBlockUser = createAsyncThunk(
+  'modal_about_user/fetchBlockUser',
+  async function () {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_SERVER}/getUsers1`
     );
     const data = await response.json();
     return data.data;
@@ -47,6 +74,23 @@ export const adminUsersSlice = createSlice({
     setIsLoadingAboutUser: (state, action) => {
       state.isLoading = action.payload.isLoading;
     },
+
+    unBlockUser: (state, action) => {
+      let index = state.users.findIndex(item => item.id === action.payload.id)
+
+      if(index !== -1){
+        state.users[index].isBlocked = false;
+      }
+
+    },
+
+    blockUser: (state, action) => {
+      let index = state.users.findIndex(item => item.id === action.payload.id)
+
+      if(index !== -1){
+        state.users[index].isBlocked = true;
+      }
+    }
   },
   extraReducers: {
     [fetchUsers.pending]: (state, action) => {
@@ -63,6 +107,22 @@ export const adminUsersSlice = createSlice({
       state.errors = true;
       state.isLoading = true;
     },
+
+    
+    [fetchBlockUser.pending]: (state, action) => {
+      state.message = 'Обновляю...';
+      state.isLoading = true;
+    },
+    [fetchBlockUser.fulfilled]: (state, action) => {
+      state.message = '';
+      state.isLoading = false;
+      state.users = action.payload;
+    },
+    [fetchBlockUser.rejected]: (state, action) => {
+      state.message = 'Ошибка при блокировке пользователя';
+      state.errors = true;
+      state.isLoading = true;
+    },
   },
 });
 
@@ -72,6 +132,8 @@ export const {
   setMessageAboutUser,
   setResetAboutUser,
   setIsLoadingAboutUser,
+  unBlockUser,
+  blockUser,
 } = adminUsersSlice.actions;
 
 export default adminUsersSlice.reducer;

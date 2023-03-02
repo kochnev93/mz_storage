@@ -1,21 +1,21 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-const user = JSON.parse(localStorage.getItem('mz_storage_user'));
-
-const initialState = {
-    id: user?.id ?? null,
-    login: user?.login ?? null,
-    role: user?.role ?? null,
-    img: user?.img ?? null,
-    accessToken: user?.accessToken ?? null
-}
+// const user = JSON.parse(localStorage.getItem('mz_storage_user'));
 
 // const initialState = {
-//     id: 1,
-//     login: 'Testov Test',
-//     role: 'admin',
-//     accessToken: '1234'
+//     id: user?.id ?? null,
+//     login: user?.login ?? null,
+//     role: user?.role ?? null,
+//     img: user?.img ?? null,
+//     accessToken: user?.accessToken ?? null
 // }
+
+const initialState = {
+    id: 1,
+    login: 'Testov Test',
+    role: 'admin',
+    accessToken: '1234'
+}
 
 export const userSlice = createSlice({
     name: 'user',

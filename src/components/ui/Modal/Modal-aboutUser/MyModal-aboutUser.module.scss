@@ -1,0 +1,69 @@
+.blocked_msg{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-size: 12px;
+    background-color: var(--error-color);
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.unlock_btn button{
+    background: white;
+}
+
+.block_btn{
+    background: var(--error-color);
+    //color: white; 
+    width: 100%;
+}
+
+.unlock_btn button, .block_btn{
+    border-radius: 5px;
+    border: none;
+    padding: 5px 10px;
+}
+
+.user{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    
+
+    &__img{
+        width: 100%;
+        height: 150px;
+    
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: 5px;
+        margin-bottom: 20px;
+
+        img{
+            height: auto;
+            width: 100%; 
+        }
+    }
+
+
+    &__info{
+        padding-right: 10px;
+
+        ul{
+            list-style: none;
+            margin-bottom: 10px;
+            li{
+                font-size: 12px;
+                span{
+                    color: grey;
+                }
+            }
+        }
+    }
+}
+
