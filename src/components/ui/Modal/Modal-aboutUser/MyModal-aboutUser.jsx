@@ -52,7 +52,6 @@ function ModalAboutUser() {
         dispatch(setActiveAboutUser({ active: false }));
       }}
       title="Информация о пользователе"
-      subtitle={currentUser[0]?.mz_user_login}
       message={message}
       errors={errors}
       isLoading={isLoading}

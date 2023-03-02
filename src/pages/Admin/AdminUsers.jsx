@@ -1,16 +1,20 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { MyTable } from "../../components/elements/Table/MyTable.jsx";
+import React, { useState, useMemo, useEffect } from 'react';
+
+import cx from 'classnames';
+import styles from '../style.module.scss';
+import { AiOutlineInfoCircle } from 'react-icons/Ai';
+
+import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
+import { MyTable } from '../../components/elements/Table/MyTable.jsx';
+
+// Redux
+import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchUsers,
   setActiveAboutUser,
-} from "../../features/admin/adminUsersSlice.js";
-import cx from "classnames";
+} from '../../features/admin/adminUsersSlice.js';
+import { setActiveAddUser } from '../../features/modal/add-userSlice.js';
 
-import styles from "../style.module.scss";
-import { AiOutlineInfoCircle } from "react-icons/Ai";
-
-// Redux
-import { useDispatch, useSelector } from "react-redux";
 
 export const AdminUsers = () => {
   const dispatch = useDispatch();
@@ -19,12 +23,12 @@ export const AdminUsers = () => {
     useSelector((state) => state.modal_about_user);
 
   const [titleColumn] = useState([
-    "ID",
-    "Имя",
-    "Логин",
-    "e-mail",
-    "Статус",
-    "Действие",
+    'ID',
+    'Имя',
+    'Логин',
+    'e-mail',
+    'Статус',
+    'Действие',
   ]);
 
   useEffect(() => {
@@ -39,12 +43,16 @@ export const AdminUsers = () => {
             <td>{item?.id}</td>
             <td>{item?.mz_user_login}</td>
             <td>{item?.mz_user_role}</td>
-            <td>{"item?.contract"}</td>
+            <td>{'item?.contract'}</td>
             <td>
               {item?.isBlocked ? (
-                <span title="Заблокирован" style={{color: 'red'}}>&#10060; Заблокирован</span>
+                <span title="Заблокирован" style={{ color: 'red' }}>
+                  &#10060; Заблокирован
+                </span>
               ) : (
-                <span title="Активен" style={{color: 'green'}}>&#9989; Активен</span>
+                <span title="Активен" style={{ color: 'green' }}>
+                  &#9989; Активен
+                </span>
               )}
             </td>
             <td>
@@ -68,10 +76,25 @@ export const AdminUsers = () => {
 
   return (
     <section>
-      <span className={cx(styles.info_message, { [styles.error]: errors })}>
-        {message}
-      </span>
-      <MyTable titleColumn={titleColumn} content={bodyContent} resultCount={users.length}/>
+      <div className={styles.header}>
+        <span className={cx(styles.info_message, { [styles.error]: errors })}>
+          {message}
+        </span>
+
+        <MyButton
+          type="send"
+          title="Добавить пользователя"
+          action={() => {
+            dispatch(setActiveAddUser({active: true}));
+          }}
+        />
+      </div>
+
+      <MyTable
+        titleColumn={titleColumn}
+        content={bodyContent}
+        resultCount={users.length}
+      />
     </section>
   );
 };
