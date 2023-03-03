@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   setActiveAddUser,
   setUser_AddUser,
+  setDefaultAddUser,
 } from "../../../../features/modal/add-userSlice.js";
 import MyInput from "../../Input/MyInput.jsx";
 import { FormItemModal } from "../FormItemModal/FormItemModal.jsx";
@@ -24,7 +25,7 @@ function ModalAddUser() {
   };
 
   const resetForm = () => {
-    console.log("resetForm");
+    dispatch(setDefaultAddUser())
   };
 
   return (
@@ -86,10 +87,11 @@ function ModalAddUser() {
             <MyInput
               type="email"
               title="E-mail"
-              disabled={true}
-              //changeValue={setProduct}
+              changeValue={(value) => {
+                dispatch(setUser_AddUser({ email: value }));
+              }}
               validation={true}
-              //value={currentUser[0]?.id}
+              value={user.email}
             />
           </FormItemModal>
 
@@ -97,10 +99,11 @@ function ModalAddUser() {
             <MyInput
               type="tel"
               title="Номер телефона"
-              disabled={true}
-              //changeValue={setProduct}
+              changeValue={(value) => {
+                dispatch(setUser_AddUser({ phone: value }));
+              }}
               validation={true}
-              //value={currentUser[0]?.id}
+              value={user.phone}
             />
           </FormItemModal>
 
@@ -108,10 +111,11 @@ function ModalAddUser() {
             <MyInput
               type="text"
               title="Логин"
-              disabled={true}
-              //changeValue={setProduct}
+              changeValue={(value) => {
+                dispatch(setUser_AddUser({ login: value }));
+              }}
               validation={true}
-              //value={currentUser[0]?.id}
+              value={user.login}
             />
           </FormItemModal>
 
@@ -119,10 +123,11 @@ function ModalAddUser() {
             <MyInput
               type="password"
               title="Пароль"
-              disabled={false}
-              //changeValue={setProduct}
+              changeValue={(value) => {
+                dispatch(setUser_AddUser({ pass: value }));
+              }}
               validation={true}
-              //value={currentUser[0]?.id}
+              value={user.pass}
             />
           </FormItemModal>
 
@@ -130,10 +135,11 @@ function ModalAddUser() {
             <MyInput
               type="password"
               title="Повторите пароль"
-              disabled={false}
-              //changeValue={setProduct}
+              changeValue={(value) => {
+                dispatch(setUser_AddUser({ repeat_pass: value }));
+              }}
               validation={true}
-              //value={currentUser[0]?.id}
+              value={user.repeat_pass}
             />
           </FormItemModal>
 
@@ -141,12 +147,14 @@ function ModalAddUser() {
             <MyInput
               type="text"
               title="Роль"
-              disabled={true}
-              //changeValue={setProduct}
+              changeValue={(value) => {
+                dispatch(setUser_AddUser({ role: value }));
+              }}
               validation={true}
-              //value={currentUser[0]?.id}
+              value={user.role}
             />
           </FormItemModal>
+
         </FormModal>
       </>
     </Modal>
