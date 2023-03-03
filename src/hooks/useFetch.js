@@ -9,7 +9,7 @@ const useFetch = (url, options) => {
 
   async function fetchNow(url, options, contentType=true) {
     let myHeaders = new Headers();
-    console.log('contenttype', contentType)
+    //console.log('contenttype', contentType)
 
     if(contentType){
       myHeaders.append('content-type', 'application/json');

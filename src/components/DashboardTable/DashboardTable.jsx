@@ -77,7 +77,7 @@ export const DashboardTable = () => {
 
     setIsLoading(true);
 
-    const data = JSON.stringify({ warehouse: warehouse, category: category, search: search });
+    const data = JSON.stringify({ warehouse, category, search });
 
     let requestOptions = {
       method: 'POST',
