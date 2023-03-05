@@ -119,6 +119,7 @@ function ModalReceiptProduct() {
     // Валидация формы, возвращает количество ошибок
     const validationForm = validationReceiptForm(tempValidation, values);
 
+
     if(validationForm == 0){
       return true;
     } else{

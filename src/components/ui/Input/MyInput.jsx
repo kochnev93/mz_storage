@@ -12,6 +12,7 @@ const MyInput = (props) => {
           className={styles.myInput_input}
           type={props.type}
           placeholder=" "
+          onBlur = {() => {if(props.onBlur) props.onBlur()}}
           onChange={(e) => {
             props.changeValue(e.target.value);
           }}

@@ -1,5 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initValidation = {
+  name: {
+    status: true,
+    message: '',
+  },
+  surname: {
+    status: true,
+    message: '',
+  },
+  email: {
+    status: true,
+    message: '',
+  },
+  login: {
+    status: true,
+    message: '',
+  },
+  phone: {
+    status: true,
+    message: '',
+  },
+  role: {
+    status: true,
+    message: '',
+  },
+  pass: {
+    status: true,
+    message: '',
+  },
+  repeat_pass: {
+    status: true,
+    message: '',
+  },
+}
+
 const initialState = {
   active: false,
   errors: false,
@@ -15,7 +50,8 @@ const initialState = {
     role: [],
     pass: '',
     repeat_pass: '',
-  }
+  },
+  validation: initValidation
 };
 
 export const addUserSlice = createSlice({
@@ -30,6 +66,7 @@ export const addUserSlice = createSlice({
     },
     setMessageAddUser: (state, action) => {
       state.message = action.payload.message;
+      state.errors = action.payload.errors;
     },
     setResetAddUser: (state, action) => {
       state.reset = action.payload.reset;
@@ -39,33 +76,63 @@ export const addUserSlice = createSlice({
     },
     setDefaultAddUser: (state, action) => {
       state.errors = false;
-        state.message = '';
-        state.reset = false;
-        state.isLoading = false;
-        state.user = {
-          name: '',
-          surname: '',
-          email: '',
-          login: '',
-          phone: '',
-          role: [],
-          pass: '',
-          repeat_pass: '',
-        }
-
+      state.message = '';
+      state.reset = false;
+      state.isLoading = false;
+      state.user = {
+        name: '',
+        surname: '',
+        email: '',
+        login: '',
+        phone: '',
+        role: [],
+        pass: '',
+        repeat_pass: '',
+      };
+      state.validation = initValidation;
     },
 
     //Add User Form
     setUser_AddUser: (state, action) => {
-      state.user.name = action.payload.hasOwnProperty('name') ? action.payload.name : state.user.name;
-      state.user.surname = action.payload.hasOwnProperty('surname') ? action.payload.surname : state.user.surname;
-      state.user.email = action.payload.hasOwnProperty('email') ? action.payload.email : state.user.email;
-      state.user.phone = action.payload.hasOwnProperty('phone') ? action.payload.phone : state.user.phone;
-      state.user.login = action.payload.hasOwnProperty('login') ? action.payload.login : state.user.login;
-      state.user.role = action.payload.hasOwnProperty('role') ? action.payload.role : state.user.role;
-      state.user.pass = action.payload.hasOwnProperty('pass') ? action.payload.pass : state.user.pass;
-      state.user.repeat_pass = action.payload.hasOwnProperty('repeat_pass') ? action.payload.repeat_pass : state.user.repeat_pass;
+      state.user.name = action.payload.hasOwnProperty('name')
+        ? action.payload.name
+        : state.user.name;
+      state.user.surname = action.payload.hasOwnProperty('surname')
+        ? action.payload.surname
+        : state.user.surname;
+      state.user.email = action.payload.hasOwnProperty('email')
+        ? action.payload.email
+        : state.user.email;
+      state.user.phone = action.payload.hasOwnProperty('phone')
+        ? action.payload.phone
+        : state.user.phone;
+      state.user.login = action.payload.hasOwnProperty('login')
+        ? action.payload.login
+        : state.user.login;
+      state.user.role = action.payload.hasOwnProperty('role')
+        ? action.payload.role
+        : state.user.role;
+      state.user.pass = action.payload.hasOwnProperty('pass')
+        ? action.payload.pass
+        : state.user.pass;
+      state.user.repeat_pass = action.payload.hasOwnProperty('repeat_pass')
+        ? action.payload.repeat_pass
+        : state.user.repeat_pass;
     },
+
+    setValidationAddUser: (state, action) => {
+      state.validation = action.payload
+    },
+
+    setDefaultValidationAddUser: (state, action) => {
+      state.errors = false,
+        state.message = '',
+        state.reset = false,
+        state.isLoading = false;
+      state.validation = initValidation
+    }
+
+
   },
 });
 
@@ -77,5 +144,7 @@ export const {
   setIsLoadingAddUser,
   setDefaultAddUser,
   setUser_AddUser,
+  setValidationAddUser,
+  setDefaultValidationAddUser,
 } = addUserSlice.actions;
 export default addUserSlice.reducer;
