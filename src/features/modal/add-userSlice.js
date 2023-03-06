@@ -33,7 +33,11 @@ const initValidation = {
     status: true,
     message: '',
   },
-}
+  position: {
+    status: true,
+    message: '',
+  }
+};
 
 const initialState = {
   active: false,
@@ -48,10 +52,11 @@ const initialState = {
     login: '',
     phone: '',
     role: [],
+    position: '',
     pass: '',
     repeat_pass: '',
   },
-  validation: initValidation
+  validation: initValidation,
 };
 
 export const addUserSlice = createSlice({
@@ -77,7 +82,7 @@ export const addUserSlice = createSlice({
     setDefaultAddUser: (state, action) => {
       state.errors = false;
       state.message = '';
-      state.reset = false;
+      state.reset = true;
       state.isLoading = false;
       state.user = {
         name: '',
@@ -86,6 +91,7 @@ export const addUserSlice = createSlice({
         login: '',
         phone: '',
         role: [],
+        position: '',
         pass: '',
         repeat_pass: '',
       };
@@ -118,21 +124,26 @@ export const addUserSlice = createSlice({
       state.user.repeat_pass = action.payload.hasOwnProperty('repeat_pass')
         ? action.payload.repeat_pass
         : state.user.repeat_pass;
+      state.user.position = action.payload.hasOwnProperty('position')
+        ? action.payload.position
+        : state.user.position;
+    },
+
+    setRoleAddUser: (state, action) => {
+      state.user.role = [{ ...action.payload[0] }];
     },
 
     setValidationAddUser: (state, action) => {
-      state.validation = action.payload
+      state.validation = action.payload;
     },
 
     setDefaultValidationAddUser: (state, action) => {
-      state.errors = false,
-        state.message = '',
-        state.reset = false,
-        state.isLoading = false;
-      state.validation = initValidation
-    }
-
-
+      (state.errors = false),
+        (state.message = ''),
+        (state.reset = false),
+        (state.isLoading = false);
+      state.validation = initValidation;
+    },
   },
 });
 
@@ -144,6 +155,7 @@ export const {
   setIsLoadingAddUser,
   setDefaultAddUser,
   setUser_AddUser,
+  setRoleAddUser,
   setValidationAddUser,
   setDefaultValidationAddUser,
 } = addUserSlice.actions;

@@ -109,6 +109,34 @@ export const validationAddUsertForm = (tempValidation, values) => {
     tempValidation.repeat_pass.message = '';
     tempValidation.pass.message = '';
   }
+
+
+  if (values.role.length == 0) {
+    tempValidation.role.status = false;
+    tempValidation.role.message = 'Выберите роль';
+    errorCounter++;
+  } else {
+    tempValidation.role.status = true;
+    tempValidation.role.message = '';
+  }
+
+
+  if (values.position.length == 0) {
+    tempValidation.position.status = false;
+    tempValidation.position.message = 'Введите должность';
+    errorCounter++;
+  } else if (values.position.length > 30){
+    tempValidation.position.status = false;
+    tempValidation.position.message = 'Слишком длинное название (максимум 30 символов)';
+    errorCounter++;
+  } else if (!NAME_REGEXP.test(values.position)){
+    tempValidation.position.status = false;
+    tempValidation.position.message = 'Используйте только кириллицу';
+    errorCounter++;
+  } else {
+    tempValidation.position.status = true;
+    tempValidation.position.message = '';
+  }
   
 
   return errorCounter;

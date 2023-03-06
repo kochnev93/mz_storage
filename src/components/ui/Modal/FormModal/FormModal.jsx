@@ -8,7 +8,7 @@ export const FormModal = ({columns = 1, children}) => {
     display: "grid",
     gridTemplateColumns: `repeat(${columns}, auto)`,
     gridColumnGap: '10px',
-    gridRowGap: '15px',
+    gridRowGap: '20px',
     gridAutoRows: 'auto'
   };
 

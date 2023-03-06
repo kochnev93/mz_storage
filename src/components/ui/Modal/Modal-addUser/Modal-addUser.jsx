@@ -1,26 +1,33 @@
-import React from "react";
+import React from 'react';
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setActiveAddUser,
   setUser_AddUser,
+  setRoleAddUser,
   setDefaultAddUser,
   setMessageAddUser,
   setValidationAddUser,
   setDefaultValidationAddUser,
-} from "../../../../features/modal/add-userSlice.js";
+  setResetAddUser,
+  setIsLoadingAddUser,
+} from '../../../../features/modal/add-userSlice.js';
+import { addNewUser } from '../../../../features/admin/adminUsersSlice.js';
+
 
 // Hooks
-import { validationAddUsertForm } from "./validationAddUser.js";
-import { useTranslit } from "../../../../hooks/useTranslit.js";
+import { validationAddUsertForm } from './validationAddUser.js';
+import { useTranslit } from '../../../../hooks/useTranslit.js';
+import useFetch from '../../../../hooks/useFetch.js';
 
 // Components
-import Modal from "../MyModal2.jsx";
-import MyInput from "../../Input/MyInput.jsx";
-import { FormItemError } from "../FormItemModal/FormItemError.jsx";
-import { FormItemModal } from "../FormItemModal/FormItemModal.jsx";
-import { FormModal } from "../FormModal/FormModal.jsx";
+import Modal from '../MyModal2.jsx';
+import MyInput from '../../Input/MyInput.jsx';
+import { FormItemError } from '../FormItemModal/FormItemError.jsx';
+import { FormItemModal } from '../FormItemModal/FormItemModal.jsx';
+import { FormModal } from '../FormModal/FormModal.jsx';
+import Dropdown from '../../Dropdown/MyDropdown-function.jsx';
 
 
 function ModalAddUser() {
@@ -28,6 +35,10 @@ function ModalAddUser() {
 
   const { active, message, errors, isLoading, reset, user, validation } =
     useSelector((state) => state.modal_add_user);
+
+  const { roles } = useSelector((state) => state.app_state);
+
+  const {fetchNow} = useFetch();
 
   const validationForm = () => {
     dispatch(setDefaultValidationAddUser());
@@ -50,25 +61,54 @@ function ModalAddUser() {
     }
   };
 
-  const addUser = () => {
-    if (validationForm()){
-      console.log('User add')
+  const addUser = async (e) => {
+      e.preventDefault();
+
+      if (validationForm()) {
+        dispatch(setIsLoadingAddUser({ isLoading: true }));
+  
+        let data = JSON.stringify({
+          user: user
+        });
+  
+        let requestOptions = {
+          method: 'POST',
+          body: data,
+        };
+  
+        const result = await fetchNow(
+        `${process.env.REACT_APP_API_SERVER}/register`,
+        requestOptions
+      );
+  
+   
+  
+      if (result.data) {
+        console.log('res', result)
+        dispatch(setMessageAddUser({ message: result.data }));
+        dispatch(addNewUser(result.user))
+      } else {
+        console.warn(result.error);
+        dispatch(setMessageAddUser({ errors: true, message: result.error }));
+      }
+  
+      setTimeout(() => {
+        dispatch(setIsLoadingAddUser({ isLoading: false }));
+      }, 200);
+
     } else {
-      console.warn('USer not add')
+      console.warn('USer not add');
     }
 
-    console.log(user)
   };
 
   const resetForm = () => {
     dispatch(setDefaultAddUser());
   };
 
-
   const delSpaseStr = (str) => {
     return str.replace(/\s+/g, ' ').trim();
   };
-
 
   return (
     <Modal
@@ -80,19 +120,19 @@ function ModalAddUser() {
       message={message}
       errors={errors}
       isLoading={isLoading}
-      footer={"Заполните все поля и нажмите Добавить"}
+      footer={'Заполните все поля и нажмите Добавить'}
       actions={{
         visible: true,
         buttonSend: {
           action: addUser,
-          title: "Добавить",
-          loadingTitle: "Добавляю",
+          title: 'Добавить',
+          loadingTitle: 'Добавляю',
           loading: isLoading,
         },
         buttonClear: {
           action: resetForm,
-          title: "Сбросить",
-          loadingTitle: "Сбросить",
+          title: 'Сбросить',
+          loadingTitle: 'Сбросить',
           loading: isLoading,
         },
       }}
@@ -110,8 +150,8 @@ function ModalAddUser() {
               validation={validation?.name.status}
               value={user.name}
               onBlur={() => {
-                let temp = delSpaseStr(user.name) 
-                let str = temp.charAt(0).toUpperCase() + temp.slice(1)
+                let temp = delSpaseStr(user.name);
+                let str = temp.charAt(0).toUpperCase() + temp.slice(1);
                 dispatch(setUser_AddUser({ name: str }));
               }}
             />
@@ -131,8 +171,8 @@ function ModalAddUser() {
                 dispatch(setUser_AddUser({ surname: value }));
               }}
               onBlur={() => {
-                let temp = delSpaseStr(user.surname) 
-                let str = temp.charAt(0).toUpperCase() + temp.slice(1)
+                let temp = delSpaseStr(user.surname);
+                let str = temp.charAt(0).toUpperCase() + temp.slice(1);
                 dispatch(setUser_AddUser({ surname: str }));
 
                 if (!user.login) {
@@ -141,7 +181,7 @@ function ModalAddUser() {
                       login: useTranslit(temp).toLowerCase(),
                     })
                   );
-                } 
+                }
               }}
               validation={validation?.surname.status}
               value={user.surname}
@@ -241,12 +281,39 @@ function ModalAddUser() {
           <FormItemModal>
             <MyInput
               type="text"
-              title="Роль"
+              title="Должность"
+              disabled={false}
               changeValue={(value) => {
-                dispatch(setUser_AddUser({ role: value }));
+                dispatch(setUser_AddUser({ position: value }));
               }}
+              validation={validation?.position.status}
+              value={user.position}
+              onBlur={() => {
+                let temp = delSpaseStr(user.position);
+                let str = temp.charAt(0).toUpperCase() + temp.slice(1);
+                dispatch(setUser_AddUser({ position: str }));
+              }}
+            />
+
+            <FormItemError
+              status={validation?.position.status}
+              message={validation?.position.message}
+            />
+          </FormItemModal>
+
+          <FormItemModal>
+            <Dropdown
+              id="addUserModal_role"
+              title="Роль"
+              placeholder="Выберите роль"
+              multiple={false}
+              changeValue={(value) => {
+                dispatch(setRoleAddUser(value));
+              }}
+              reset={reset}
+              setReset={() => dispatch(setResetAddUser({ reset: false }))}
+              options={roles}
               validation={validation?.role.status}
-              value={user.role}
             />
 
             <FormItemError

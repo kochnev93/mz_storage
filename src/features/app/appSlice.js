@@ -7,6 +7,7 @@ export const fetchData = createAsyncThunk(
     const urls = [
       `${process.env.REACT_APP_API_SERVER}/get_warehouse`,
       `${process.env.REACT_APP_API_SERVER}/get_category`,
+      `${process.env.REACT_APP_API_SERVER}/get_roles`,
     ];
 
     const response = await Promise.all(urls.map(url => fetch(url)))
@@ -23,6 +24,7 @@ export const fetchData = createAsyncThunk(
 const initialState = {
   status: true,
   error: null,
+  roles: [],
   warehouses: [
     // {
     //   isCheked: false,
@@ -80,11 +82,13 @@ export const appSlice = createSlice({
     [fetchData.fulfilled]: (state, action) => {
       state.warehouses = action.payload[0].data;
       state.category = action.payload[1].data;
+      state.roles = action.payload[2].data;
     },
     [fetchData.rejected]: (state, action) => {
       state.description = 'Ошибка при загрузке данных о складах и категорий';
       state.warehouses = [];
       state.category = [];
+      state.roles = [];
     },
   },
 });

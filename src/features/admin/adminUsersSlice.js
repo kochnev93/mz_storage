@@ -4,19 +4,20 @@ import regeneratorRuntime from 'regenerator-runtime';
 const initialState = {
   active: false,
   id_user: null,
-  users: [{
-    id: 999,
-    isBlocked: true,
-    mz_user_login: 'testik',
-    mz_user_role: 'admin'
-  },
+  users: [
+  //   {
+  //   id: 999,
+  //   isBlocked: true,
+  //   mz_user_login: 'testik',
+  //   mz_user_role: 'admin'
+  // },
 
-  {
-    id: 777,
-    isBlocked: false,
-    mz_user_login: 'testik777',
-    mz_user_role: 'user'
-  }
+  // {
+  //   id: 777,
+  //   isBlocked: false,
+  //   mz_user_login: 'testik777',
+  //   mz_user_role: 'user'
+  // }
 
 ],
   errors: false,
@@ -90,6 +91,10 @@ export const adminUsersSlice = createSlice({
       if(index !== -1){
         state.users[index].isBlocked = true;
       }
+    },
+
+    addNewUser: (state, action) => {
+      state.users = [...state.users, action.payload]
     }
   },
   extraReducers: {
@@ -134,6 +139,7 @@ export const {
   setIsLoadingAboutUser,
   unBlockUser,
   blockUser,
+  addNewUser,
 } = adminUsersSlice.actions;
 
 export default adminUsersSlice.reducer;

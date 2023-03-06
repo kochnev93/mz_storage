@@ -28,7 +28,7 @@ const Dropdown = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(true);
   const [disabled, setDisabled] = useState(props.disabled || false);
-  const [multiple] = useState(props.multiple || true);
+  const [multiple] = useState(props.multiple);
   const [url, setUrl] = useState(props.url);
 
   const [id] = useState(props.id);

@@ -26,13 +26,14 @@ export const AdminUsers = () => {
     'ID',
     'Имя',
     'Логин',
+    'Роль',
     'e-mail',
     'Статус',
     'Действие',
   ]);
 
   useEffect(() => {
-    // dispatch(fetchUsers());
+     dispatch(fetchUsers());
   }, []);
 
   const bodyContent = useMemo(() => {
@@ -41,11 +42,12 @@ export const AdminUsers = () => {
         return (
           <tr key={item?.id}>
             <td>{item?.id}</td>
+            <td>{`${item?.mz_user_name} ${item?.mz_user_surname}`}</td>
             <td>{item?.mz_user_login}</td>
             <td>{item?.mz_user_role}</td>
-            <td>{'item?.contract'}</td>
+            <td>{item?.mz_user_email}</td>
             <td>
-              {item?.isBlocked ? (
+              {item?.mz_user_isBlocked ? (
                 <span title="Заблокирован" style={{ color: 'red' }}>
                   &#10060; Заблокирован
                 </span>
