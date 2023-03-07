@@ -1,49 +1,74 @@
-export const validationAddUsertForm = (tempValidation, values) => {
+const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+const NAME_REGEXP = /^[а-яА-ЯёЁ\s]+$/;
+const LOGIN_REGEXP = /^[_a-zA-Z0-9]+$/;
+
+export const validationNameAddUser = (tempValidation, inputValue) => {
   let errorCounter = 0;
 
-  const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
-  const NAME_REGEXP = /^[а-яА-ЯёЁ\s]+$/;
-  const LOGIN_REGEXP = /^[_a-zA-Z0-9]+$/;
-
-  if (values.name.length == 0) {
+  if (inputValue.trim().length == 0) {
     tempValidation.name.status = false;
     tempValidation.name.message = 'Введите имя';
     errorCounter++;
-  } else if (values.name.length > 50){
+  } else if (!NAME_REGEXP.test(inputValue.trim())){
     tempValidation.name.status = false;
-    tempValidation.name.message = 'Слишком длинное имя (максимум 50 символов)';
+    tempValidation.name.message = 'Недопустимые символы (используйте кириллицу)';
     errorCounter++;
-  } else if (!NAME_REGEXP.test(values.name)){
+  } else if (inputValue.trim().length < 2){
     tempValidation.name.status = false;
-    tempValidation.name.message = 'Используйте только кириллицу';
+    tempValidation.name.message = 'Слишком короткое имя (минимум 2 символа)';
     errorCounter++;
-  } else {
+  } else if (inputValue.trim().length > 30){
+    tempValidation.name.status = false;
+    tempValidation.name.message = 'Слишком длинное имя (максимум 30 символов)';
+    errorCounter++;
+  }  else {
     tempValidation.name.status = true;
     tempValidation.name.message = '';
   }
 
-  if (values.surname.length == 0) {
+
+  return errorCounter;
+}
+
+
+export const validationSurnameAddUser = (tempValidation, inputValue) => {
+  let errorCounter = 0;
+
+  if (inputValue.trim().length == 0) {
     tempValidation.surname.status = false;
     tempValidation.surname.message = 'Введите фамилию';
     errorCounter++;
-  } else if (values.surname.length > 50){
+  } else if (!NAME_REGEXP.test(inputValue.trim())){
     tempValidation.surname.status = false;
-    tempValidation.surname.message = 'Слишком длинная фамилия (максимум 50 символов)';
+    tempValidation.surname.message = 'Недопустимые символы (используйте кириллицу)';
     errorCounter++;
-  } else if (!NAME_REGEXP.test(values.surname)){
+  } else if (inputValue.trim().length < 2){
     tempValidation.surname.status = false;
-    tempValidation.surname.message = 'Используйте только кириллицу';
+    tempValidation.surname.message = 'Слишком короткая фамилия (минимум 2 символа)';
     errorCounter++;
-  } else {
+  } else if (inputValue.trim().length > 30){
+    tempValidation.surname.status = false;
+    tempValidation.surname.message = 'Слишком длинная фамилия (максимум 30 символов)';
+    errorCounter++;
+  }  else {
     tempValidation.surname.status = true;
     tempValidation.surname.message = '';
   }
 
-  if (values.email.length == 0) {
+
+  return errorCounter;
+}
+
+
+export const validationEmailAddUser = (tempValidation, inputValue) => {
+  let errorCounter = 0;
+
+
+  if (inputValue.trim().length == 0) {
     tempValidation.email.status = false;
     tempValidation.email.message = 'Введите e-mail';
     errorCounter++;
-  } else if (!EMAIL_REGEXP.test(values.email)) {
+  } else if (!EMAIL_REGEXP.test(inputValue.trim())) {
     tempValidation.email.status = false;
     tempValidation.email.message = 'Неверный формат e-mail';
     errorCounter++;
@@ -53,11 +78,19 @@ export const validationAddUsertForm = (tempValidation, values) => {
   }
 
 
-  if (values.phone.length == 0) {
+  return errorCounter;
+}
+
+
+export const validationPhoneAddUser = (tempValidation, inputValue) => {
+  let errorCounter = 0;
+
+
+  if (inputValue.length == 0) {
     tempValidation.phone.status = false;
     tempValidation.phone.message = 'Введите номер телефона';
     errorCounter++;
-  } else if(values.phone.trim().length != 11){
+  } else if(inputValue.length != 11){
     tempValidation.phone.status = false;
     tempValidation.phone.message = 'Неверный формат номера телефона';
     errorCounter++;
@@ -66,23 +99,79 @@ export const validationAddUsertForm = (tempValidation, values) => {
     tempValidation.phone.message = '';
   }
 
+  return errorCounter;
+}
 
-  if (values.login.length == 0) {
+
+export const validationLoginAddUser = (tempValidation, inputValue) => {
+  let errorCounter = 0;
+
+  if (inputValue.trim().length == 0) {
     tempValidation.login.status = false;
     tempValidation.login.message = 'Введите логин';
     errorCounter++;
-  } else if (values.login.length > 15){
+  } else if (!LOGIN_REGEXP.test(inputValue.trim())){
+    tempValidation.login.status = false;
+    tempValidation.login.message = 'Недопустимые символы (используйте латиницу и цифры, без пробелов, кроме "_")';
+    errorCounter++;
+  } else if (inputValue.trim().length < 3){
+    tempValidation.login.status = false;
+    tempValidation.login.message = 'Слишком короткий логин (минимум 3 символа)';
+    errorCounter++;
+  } else if (inputValue.trim().length > 15){
     tempValidation.login.status = false;
     tempValidation.login.message = 'Слишком длинный логин (максимум 15 символов)';
-    errorCounter++;
-  } else if (!LOGIN_REGEXP.test(values.login)){
-    tempValidation.login.status = false;
-    tempValidation.login.message = 'Используйте только латиницу и цифры';
     errorCounter++;
   } else {
     tempValidation.login.status = true;
     tempValidation.login.message = '';
   }
+
+  return errorCounter;
+}
+
+
+export const validationPositionAddUser = (tempValidation, inputValue) => {
+  let errorCounter = 0;
+
+  if (inputValue.trim().length == 0) {
+    tempValidation.position.status = false;
+    tempValidation.position.message = 'Введите должность';
+    errorCounter++;
+  } else if (!NAME_REGEXP.test(inputValue.trim())){
+    tempValidation.position.status = false;
+    tempValidation.position.message = 'Недопустимые символы (используйте кириллицу)';
+    errorCounter++;
+  } else if (inputValue.trim().length < 5){
+    tempValidation.position.status = false;
+    tempValidation.position.message = 'Слишком короткое название (минимум 5 символов)';
+    errorCounter++;
+  } else if (inputValue.trim().length > 30){
+    tempValidation.position.status = false;
+    tempValidation.position.message = 'Слишком длинное название (максимум 30 символов)';
+    errorCounter++;
+  }  else {
+    tempValidation.position.status = true;
+    tempValidation.position.message = '';
+  }
+
+  return errorCounter;
+}
+
+
+
+
+export const validationAddUsertForm = (tempValidation, values) => {
+  let errorCounter = 0;
+
+
+
+
+
+
+
+
+
 
   if (values.pass.length == 0) {
     tempValidation.pass.status = false;
@@ -121,22 +210,7 @@ export const validationAddUsertForm = (tempValidation, values) => {
   }
 
 
-  if (values.position.length == 0) {
-    tempValidation.position.status = false;
-    tempValidation.position.message = 'Введите должность';
-    errorCounter++;
-  } else if (values.position.length > 30){
-    tempValidation.position.status = false;
-    tempValidation.position.message = 'Слишком длинное название (максимум 30 символов)';
-    errorCounter++;
-  } else if (!NAME_REGEXP.test(values.position)){
-    tempValidation.position.status = false;
-    tempValidation.position.message = 'Используйте только кириллицу';
-    errorCounter++;
-  } else {
-    tempValidation.position.status = true;
-    tempValidation.position.message = '';
-  }
+ 
   
 
   return errorCounter;

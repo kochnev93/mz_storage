@@ -16,6 +16,7 @@ const MyInput = (props) => {
           onChange={(e) => {
             props.changeValue(e.target.value);
           }}
+          onKeyDown = {(e) => {if(props.onKeyDown) props.onKeyDown(e.target.value)}}
           value={props.value}
           disabled={props.disabled || false}
         />
