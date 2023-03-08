@@ -1,71 +1,167 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react';
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
-import { fetchBlockUser, setActiveAboutUser, unBlockUser, blockUser } from "../../../../features/admin/adminUsersSlice.js";
-import MyInput from "../../Input/MyInput.jsx";
-import { FormItemModal } from "../FormItemModal/FormItemModal.jsx";
-import { FormModal } from "../FormModal/FormModal.jsx";
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setActiveAboutUser,
+  setDefaultAboutUser,
+  setErrorsAboutUser,
+  setMessageAboutUser,
+  setResetAboutUser,
+  setIsLoadingAboutUser,
+  setEditAboutUser,
+  cancelChangesAboutUser,
+  setValidationAboutUser,
+} from '../../../../features/modal/about-userSlice.js';
 
 // Components
-import Modal from "../MyModal2.jsx";
+import Modal from '../MyModal2.jsx';
+import MyInput from '../../Input/MyInput.jsx';
+import { FormItemModal } from '../FormItemModal/FormItemModal.jsx';
+import { FormItemError } from '../FormItemModal/FormItemError.jsx';
+import { FormModal } from '../FormModal/FormModal.jsx';
+import Dropdown from '../../Dropdown/MyDropdown-function.jsx';
 
-import styles from "./MyModal-aboutUser.module.scss";
+// Service
+import {
+  validationNameUser,
+  validationSurnameUser,
+  validationEmailUser,
+  validationPhoneUser,
+  validationLoginUser,
+  validationPositionUser,
+} from '../../../../services/validation/validationUserFields.js';
+
+import styles from './MyModal-aboutUser.module.scss';
 
 function ModalAboutUser() {
   const dispatch = useDispatch();
 
-  const { active, id_user, users, errors, message, reset, isLoading } =
-    useSelector((state) => state.modal_about_user);
+  const {
+    active,
+    user,
+    editUser,
+    validation,
+    errors,
+    message,
+    reset,
+    isEdit,
+    isLoading,
+  } = useSelector((state) => state.modal_about_user);
 
-  const currentUser = useMemo(() => {
-    return users.filter((item) => item.id === id_user);
-  }, [id_user, users]);
+  const { roles } = useSelector((state) => state.app_state);
 
-  const unlockUser = () => {
-    let answer = confirm(`Разблокировать пользователя ${currentUser[0]?.mz_user_login}?`)
-
-    if(answer){
-      dispatch(unBlockUser({id: currentUser[0]?.id}))
+  const currentRoles = roles.map((item) => {
+    if (item.title == user.role){
+      return {...item, isCheked: true};
     }
 
-    return answer ? console.log('unlock') : console.log('no unlock')
-  }
+    return {...item};
+  });
 
+  const validationForm = (obj) => {
+    //const values = { ...user };
+    const tempValidation = JSON.parse(JSON.stringify(validation));
+    let validateError;
 
-  const lockUser = () => {
-    let answer = confirm(`Заблокировать пользователя ${currentUser[0]?.mz_user_login}?`)
+    switch (obj?.inputName) {
+      case 'name':
+        validateError = validationNameUser(tempValidation, obj.inputValue);
+        break;
 
-    if(answer){
-      dispatch(blockUser({id: currentUser[0]?.id}))
-      //dispatch(fetchBlockUser())
+      case 'surname':
+        validateError = validationSurnameUser(tempValidation, obj.inputValue);
+        break;
+
+      case 'login':
+        validateError = validationLoginUser(tempValidation, obj.inputValue);
+        break;
+
+      case 'phone':
+        validateError = validationPhoneUser(tempValidation, obj.inputValue);
+        break;
+
+      case 'email':
+        validateError = validationEmailUser(tempValidation, obj.inputValue);
+        break;
+
+      case 'position':
+        validateError = validationPositionUser(tempValidation, obj.inputValue);
+        break;
     }
 
-    return answer ? console.log('unlock') : console.log('no unlock')
-  }
+    if (validateError == 0) {
+      dispatch(setValidationAboutUser({ ...tempValidation }));
+      dispatch(
+        setMessageAboutUser({
+          errors: false,
+          message: ``,
+        })
+      );
+      return true;
+    } else {
+      dispatch(setValidationAboutUser({ ...tempValidation }));
+      dispatch(
+        setMessageAboutUser({
+          errors: true,
+          message: `В документе присутствуют ошибки`,
+        })
+      );
+      return false;
+    }
+  };
+
+  const saveUser = () => {
+    console.log('save');
+  };
+
+  const resetUser = () => {
+    dispatch(cancelChangesAboutUser());
+  };
+
+  const delSpaseStr = (str) => {
+    return str.replace(/\s+/g, ' ').trim();
+  };
 
   return (
     <Modal
       active={active}
-      size={"big"}
+      size={'big'}
       setActive={() => {
         dispatch(setActiveAboutUser({ active: false }));
+        dispatch(setDefaultAboutUser());
       }}
       title="Информация о пользователе"
       message={message}
       errors={errors}
       isLoading={isLoading}
-      footer={"Внесите изменения и нажмите сохранить"}
+      footer={'Внесите изменения и нажмите Сохранить'}
+      actions={{
+        visible: true,
+        buttonSend: {
+          action: saveUser,
+          title: 'Сохранить',
+          loadingTitle: 'Сохраняю',
+          loading: isLoading,
+          disabled: !isEdit || errors,
+        },
+        buttonClear: {
+          action: resetUser,
+          title: 'Отменить изменения',
+          loadingTitle: 'Отменить',
+          loading: isLoading,
+        },
+      }}
     >
       <>
-        {currentUser[0]?.isBlocked && (
+        {Boolean(user?.isBlocked) && (
           <div className={styles.blocked_msg}>
             <div>
               <strong>Пользователь заблокирован</strong>
             </div>
 
             <div className={styles.unlock_btn}>
-              <button onClick={unlockUser}>Разблокировать</button>
+              <button>Разблокировать</button>
             </div>
           </div>
         )}
@@ -74,8 +170,12 @@ function ModalAboutUser() {
           <div className={styles.user__info}>
             <div className={styles.user__img}>
               <img
-                src="https://cojo.ru/wp-content/uploads/2023/01/muzhskoi-siluet-8.webp"
-                alt=""
+                src={
+                  user?.img
+                    ? `${process.env.REACT_APP_SERVER}/images/${user?.img}`
+                    : 'https://iglit.ru/dist/no-image.jpg'
+                }
+                alt="Аватар пользователя"
               />
             </div>
 
@@ -88,22 +188,19 @@ function ModalAboutUser() {
               </li>
             </ul>
 
-            {
-              !currentUser[0]?.isBlocked && (
-                <button className={styles.block_btn} onClick={lockUser}>Заблокировать</button>
-              )
-            }
+            {!user?.isBlocked && (
+              <button className={styles.block_btn}>Заблокировать</button>
+            )}
           </div>
 
-          <FormModal columns={1}>
+          <FormModal columns={2}>
             <FormItemModal>
               <MyInput
                 type="text"
                 title="ID"
                 disabled={true}
-                //changeValue={setProduct}
                 validation={true}
-                value={currentUser[0]?.id}
+                value={user?.id}
               />
             </FormItemModal>
 
@@ -111,9 +208,22 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="Логин"
-                changeValue={() => {}}
-                validation={true}
-                value={currentUser[0]?.mz_user_login}
+                changeValue={(value) => {
+                  dispatch(setEditAboutUser({ login: value }));
+                  validationForm({ inputName: 'login', inputValue: value });
+                }}
+                validation={validation?.login.status}
+                value={editUser?.login}
+                onBlur={() => {
+                  let temp = delSpaseStr(editUser?.login);
+                  dispatch(setEditAboutUser({ login: temp.toLowerCase() }));
+                  validationForm({ inputName: 'login', inputValue: temp });
+                }}
+              />
+
+              <FormItemError
+                status={validation?.login.status}
+                message={validation?.login.message}
               />
             </FormItemModal>
 
@@ -121,9 +231,24 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="Фамилия"
-                changeValue={() => {}}
-                validation={true}
-                value={''}
+                changeValue={(value) => {
+                  dispatch(setEditAboutUser({ surname: value }));
+                  validationForm({ inputName: 'surname', inputValue: value });
+                }}
+                validation={validation?.surname.status}
+                value={editUser?.surname}
+                onBlur={() => {
+                  let temp = delSpaseStr(editUser.surname);
+                  let str =
+                    temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
+                  dispatch(setEditAboutUser({ surname: str }));
+                  validationForm({ inputName: 'surname', inputValue: str });
+                }}
+              />
+
+              <FormItemError
+                status={validation?.surname.status}
+                message={validation?.surname.message}
               />
             </FormItemModal>
 
@@ -131,9 +256,24 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="Имя"
-                changeValue={() => {}}
-                validation={true}
-                value={''}
+                changeValue={(value) => {
+                  dispatch(setEditAboutUser({ name: value }));
+                  validationForm({ inputName: 'name', inputValue: value });
+                }}
+                validation={validation?.name.status}
+                value={editUser?.name}
+                onBlur={() => {
+                  let temp = delSpaseStr(editUser.name);
+                  let str =
+                    temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
+                  dispatch(setEditAboutUser({ name: str }));
+                  validationForm({ inputName: 'name', inputValue: str });
+                }}
+              />
+
+              <FormItemError
+                status={validation?.name.status}
+                message={validation?.name.message}
               />
             </FormItemModal>
 
@@ -141,58 +281,91 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="E-mail"
-                changeValue={() => {}}
-                validation={true}
-                value={''}
+                changeValue={(value) => {
+                  dispatch(setEditAboutUser({ email: value }));
+                  validationForm({ inputName: 'email', inputValue: value });
+                }}
+                validation={validation?.email.status}
+                value={editUser?.email}
+                onBlur={() => {
+                  let str = delSpaseStr(editUser?.email);
+                  dispatch(setEditAboutUser({ email: str }));
+                  validationForm({ inputName: 'email', inputValue: str });
+                }}
+              />
+
+              <FormItemError
+                status={validation?.email.status}
+                message={validation?.email.message}
               />
             </FormItemModal>
 
+            <FormItemModal>
+              <MyInput
+                type="number"
+                title="Номер телефона"
+                changeValue={(value) => {
+                  dispatch(setEditAboutUser({ phone: value }));
+                  validationForm({ inputName: 'phone', inputValue: value });
+                }}
+                validation={validation?.phone.status}
+                value={editUser?.phone}
+              />
+
+              <FormItemError
+                status={validation?.phone.status}
+                message={validation?.phone.message}
+              />
+            </FormItemModal>
+
+            <FormItemModal>
+              <MyInput
+                type="text"
+                title="Должность"
+                changeValue={(value) => {
+                  dispatch(setEditAboutUser({ position: value }));
+                  validationForm({ inputName: 'position', inputValue: value });
+                }}
+                validation={validation?.position.status}
+                value={editUser?.position}
+                onBlur={() => {
+                  let temp = delSpaseStr(editUser?.position);
+                  let str =
+                    temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
+                  dispatch(setEditAboutUser({ position: str }));
+                  validationForm({ inputName: 'position', inputValue: str });
+                }}
+              />
+
+              <FormItemError
+                status={validation?.position.status}
+                message={validation?.position.message}
+              />
+            </FormItemModal>
+
+            <FormItemModal>
+              <Dropdown
+                id="aboutUserModal_role"
+                title="Роль"
+                placeholder="Выберите роль"
+                multiple={false}
+                changeValue={(value) => {
+                  dispatch(setEditAboutUser(value));
+                }}
+                reset={reset}
+                setReset={() => dispatch(setResetAboutUser({ reset: false }))}
+                options={currentRoles}
+                validation={validation?.role.status}
+              />
+
+              <FormItemError
+                status={validation?.role.status}
+                message={validation?.role.message}
+              />
+
+            </FormItemModal>
           </FormModal>
         </div>
-
-        {/* <FormModal columns={4}>
-          <FormItemModal>
-            <MyInput
-              type="text"
-              title="ID"
-              disabled={true}
-              //changeValue={setProduct}
-              validation={true}
-              value={currentUser[0]?.id}
-            />
-          </FormItemModal>
-
-          <FormItemModal>
-            <MyInput
-              type="text"
-              title="ID"
-              disabled={true}
-              //changeValue={setProduct}
-              validation={true}
-              value={currentUser[0]?.id}
-            />
-          </FormItemModal>
-          <FormItemModal>
-            <MyInput
-              type="text"
-              title="ID"
-              disabled={true}
-              //changeValue={setProduct}
-              validation={true}
-              value={currentUser[0]?.id}
-            />
-          </FormItemModal>
-          <FormItemModal>
-            <MyInput
-              type="text"
-              title="ID"
-              disabled={true}
-              //changeValue={setProduct}
-              validation={true}
-              value={currentUser[0]?.id}
-            />
-          </FormItemModal>
-        </FormModal> */}
       </>
     </Modal>
   );

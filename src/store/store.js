@@ -15,6 +15,7 @@ import transferSomeProductSlice from '../features/modal/transfer-someProductsSli
 import aboutReceiptSlice from '../features/modal/about-receiptSlice';
 import adminUsersSlice from '../features/admin/adminUsersSlice';
 import addUserSlice  from '../features/modal/add-userSlice';
+import aboutUserSlice from '../features/modal/about-userSlice';
 
 export const store = configureStore({
     reducer: {
@@ -30,8 +31,9 @@ export const store = configureStore({
         modal_add_warehouse: addWarehouseSlice,
         modal_transfer_someProducts: transferSomeProductSlice,
         modal_about_receipt: aboutReceiptSlice,
-        modal_about_user: adminUsersSlice,
-        modal_add_user: addUserSlice
+        usersList: adminUsersSlice,
+        modal_add_user: addUserSlice,
+        modal_about_user: aboutUserSlice
 
     },
 });

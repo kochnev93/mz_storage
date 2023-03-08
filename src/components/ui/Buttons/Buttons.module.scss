@@ -23,6 +23,12 @@
 		&:hover{
 			background-color: lighten(#0dc6bf,2%);
 		}
+		&.loading{
+			background-color: #dbdbdb;
+			color: #444;
+			pointer-events: none;
+			border: none;
+		}
 		&.loading:after{
 			content: '';
 			width: 15px;

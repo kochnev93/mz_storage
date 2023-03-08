@@ -12,7 +12,7 @@ const MyButton = (props) => {
                 [styles.loading]: props.loading
             })}     
             onClick={props.action}
-            disabled={props.loading}
+            disabled={props.disabled}
         >
             {props.loading ? props.loadingTitle : props.title}
         </button>

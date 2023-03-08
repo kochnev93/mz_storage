@@ -15,14 +15,14 @@ import { useAuth } from '../../hooks/use-auth.js';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { removeUser, refreshImgUser } from '../../features/users/userSlice.js';
-import Dropdown from '../../components/ui/Dropdown/MyDropdown-function.jsx';
+//import Dropdown from '../../components/ui/Dropdown/MyDropdown-function.jsx';
 
 export const Profile = () => {
   const user = useAuth();
   const dispatch = useDispatch();
   const { fetchNow } = useFetch();
 
-  const { warehouses, category } = useSelector((state) => state.app_state);
+  //const { warehouses, category } = useSelector((state) => state.app_state);
 
   const titleColumn = [
     'Номер',
@@ -84,7 +84,7 @@ export const Profile = () => {
             {user?.img && (
               <img
                 src={`${process.env.REACT_APP_SERVER}/images/${user?.img}`}
-                alt="Аватар поьзователя"
+                alt="Аватар пользователя"
               />
             )}
           </div>
@@ -93,7 +93,7 @@ export const Profile = () => {
         <div className={styles.bio__info}>
           <ul>
             <li>
-              Должность: <span>Инженер ИТ</span>
+              Должность: <span>{user.position}</span>
             </li>
             <li>
               Логин: <span>{user?.login}</span>

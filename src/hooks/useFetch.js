@@ -9,7 +9,6 @@ const useFetch = (url, options) => {
 
   async function fetchNow(url, options, contentType=true) {
     let myHeaders = new Headers();
-    //console.log('contenttype', contentType)
 
     if(contentType){
       myHeaders.append('content-type', 'application/json');
@@ -37,7 +36,7 @@ const useFetch = (url, options) => {
    
     }
     catch (e){
-      console.error(e.message)
+      //console.error(e.message)
       return {data: null, error: e.message}
     }
   }

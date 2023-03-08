@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 import MyInput from '../../components/ui/Input/MyInput.jsx';
-//import userAuthorization from '../../services/user-authorization.js';
-
 import styles from './Auth.module.scss';
 import 'regenerator-runtime/runtime';
+
 
 // Redux
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../features/users/userSlice.js';
+import useFetch from '../../hooks/useFetch'
 
 export const Auth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const {fetchNow} = useFetch();
   const frompage = location.state?.from?.pathname || '/';
 
   const [login, setLogin] = useState('');
@@ -54,65 +55,106 @@ export const Auth = () => {
   };
 
   async function load() {
-    let myHeaders = new Headers();
-    myHeaders.append('content-type', 'application/json');
 
-    let data = JSON.stringify({
-      login: login,
-      password: password,
-    });
+    let data = JSON.stringify({login, password});
 
     let requestOptions = {
       method: 'POST',
-      headers: myHeaders,
       body: data,
     };
 
-    const response = await fetch(
-      `${process.env.REACT_APP_API_SERVER}/auth`,
-      requestOptions
+    const result = await fetchNow(
+    `${process.env.REACT_APP_API_SERVER}/auth`,
+    requestOptions
+  );
+
+  console.log(result)
+
+  if (result.data) {
+    dispatch(
+      setUser({
+        id: result.data.id,
+        name: result.data.name,
+        surname: result.data.surname,
+        phone: result.data.phone,
+        email: result.data.email,
+        login: result.data.login,
+        position: result.data.position,
+        role: result.data.role,
+        img: result.data.img,
+        accessToken: result.data.accessToken,
+      })
     );
 
-    const status = response.status;
-    const statusOK = response.ok;
-    const result = await response.json();
+    navigate(frompage);
 
-    try {
-      if (!statusOK) {
-        throw new Error(result.errorMessage);
-      }
+  } else {
+    setError(true);
+    setErrorMessage(result.error);
+  }
 
-      dispatch(
-        setUser({
-          id: result.id,
-          login: result.login,
-          role: result.role,
-          img: result.img,
-          accessToken: result.accessToken,
-        })
-      );
 
-      localStorage.setItem(
-        'mz_storage_user',
-        JSON.stringify({
-          id: result.id,
-          login: result.login,
-          role: result.role,
-          img: result.img,
-          accessToken: result.accessToken,
-        })
-      );
+    // let myHeaders = new Headers();
+    // myHeaders.append('content-type', 'application/json');
 
-      navigate(frompage);
-    } catch (error) {
-      if (status == 401) {
-        //refresh
-        console.log('refresh');
-      }
-      console.log(error);
-      setError(true);
-      setErrorMessage(result.errorMessage);
-    }
+    // let data = JSON.stringify({
+    //   login: login,
+    //   password: password,
+    // });
+
+    // let requestOptions = {
+    //   method: 'POST',
+    //   headers: myHeaders,
+    //   body: data,
+    // };
+
+    // const response = await fetch(
+    //   `${process.env.REACT_APP_API_SERVER}/auth`,
+    //   requestOptions
+    // );
+
+
+
+    // const status = response.status;
+    // const statusOK = response.ok;
+    // const result = await response.json();
+
+    // try {
+    //   if (!statusOK) {
+    //     throw new Error(result.errorMessage);
+    //   }
+
+    //   dispatch(
+    //     setUser({
+    //       id: result.id,
+    //       login: result.login,
+    //       role: result.role,
+    //       img: result.img,
+    //       accessToken: result.accessToken,
+    //     })
+    //   );
+
+    //   localStorage.setItem(
+    //     'mz_storage_user',
+    //     JSON.stringify({
+    //       id: result.id,
+    //       login: result.login,
+    //       role: result.role,
+    //       img: result.img,
+    //       accessToken: result.accessToken,
+    //     })
+    //   );
+
+    //   navigate(frompage);
+    // } catch (error) {
+    //   if (status == 401) {
+    //     //refresh
+    //     console.log('refresh');
+    //   }
+    //   console.log(error);
+    //   setError(true);
+    //   setErrorMessage(result.errorMessage);
+    // }
   }
 
   async function signIn(e) {

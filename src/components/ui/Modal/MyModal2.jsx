@@ -102,6 +102,7 @@ function Modal({
                   title={actions?.buttonSend?.title}
                   loadingTitle={actions?.buttonSend?.loadingTitle}
                   loading={actions?.buttonSend?.loading}
+                  disabled={actions?.buttonSend?.disabled}
                 />
               </div>
             )}

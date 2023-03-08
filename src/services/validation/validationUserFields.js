@@ -2,7 +2,7 @@ const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@((
 const NAME_REGEXP = /^[а-яА-ЯёЁ\s]+$/;
 const LOGIN_REGEXP = /^[_a-zA-Z0-9]+$/;
 
-export const validationNameAddUser = (tempValidation, inputValue) => {
+export const validationNameUser = (tempValidation, inputValue) => {
   let errorCounter = 0;
 
   if (inputValue.trim().length == 0) {
@@ -31,7 +31,7 @@ export const validationNameAddUser = (tempValidation, inputValue) => {
 }
 
 
-export const validationSurnameAddUser = (tempValidation, inputValue) => {
+export const validationSurnameUser = (tempValidation, inputValue) => {
   let errorCounter = 0;
 
   if (inputValue.trim().length == 0) {
@@ -60,7 +60,7 @@ export const validationSurnameAddUser = (tempValidation, inputValue) => {
 }
 
 
-export const validationEmailAddUser = (tempValidation, inputValue) => {
+export const validationEmailUser = (tempValidation, inputValue) => {
   let errorCounter = 0;
 
 
@@ -82,7 +82,7 @@ export const validationEmailAddUser = (tempValidation, inputValue) => {
 }
 
 
-export const validationPhoneAddUser = (tempValidation, inputValue) => {
+export const validationPhoneUser = (tempValidation, inputValue) => {
   let errorCounter = 0;
 
 
@@ -103,7 +103,7 @@ export const validationPhoneAddUser = (tempValidation, inputValue) => {
 }
 
 
-export const validationLoginAddUser = (tempValidation, inputValue) => {
+export const validationLoginUser = (tempValidation, inputValue) => {
   let errorCounter = 0;
 
   if (inputValue.trim().length == 0) {
@@ -131,7 +131,7 @@ export const validationLoginAddUser = (tempValidation, inputValue) => {
 }
 
 
-export const validationPositionAddUser = (tempValidation, inputValue) => {
+export const validationPositionUser = (tempValidation, inputValue) => {
   let errorCounter = 0;
 
   if (inputValue.trim().length == 0) {
@@ -162,12 +162,12 @@ export const validationPositionAddUser = (tempValidation, inputValue) => {
 export const validationAddUserForm = (tempValidation, values) => {
   let errorCounter = 0;
 
-  errorCounter += validationNameAddUser(tempValidation, values.name);
-  errorCounter += validationSurnameAddUser(tempValidation, values.surname);
-  errorCounter += validationEmailAddUser(tempValidation, values.email);
-  errorCounter += validationPhoneAddUser(tempValidation, values.phone);
-  errorCounter += validationLoginAddUser(tempValidation, values.login);
-  errorCounter += validationPositionAddUser(tempValidation, values.position);
+  errorCounter += validationNameUser(tempValidation, values.name);
+  errorCounter += validationSurnameUser(tempValidation, values.surname);
+  errorCounter += validationEmailUser(tempValidation, values.email);
+  errorCounter += validationPhoneUser(tempValidation, values.phone);
+  errorCounter += validationLoginUser(tempValidation, values.login);
+  errorCounter += validationPositionUser(tempValidation, values.position);
 
 
   if (values.pass.length == 0) {

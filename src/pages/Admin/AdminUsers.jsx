@@ -9,18 +9,17 @@ import { MyTable } from '../../components/elements/Table/MyTable.jsx';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchUsers,
-  setActiveAboutUser,
-} from '../../features/admin/adminUsersSlice.js';
+import {fetchUsers} from '../../features/admin/adminUsersSlice.js';
 import { setActiveAddUser } from '../../features/modal/add-userSlice.js';
+import { setActiveAboutUser } from '../../features/modal/about-userSlice';
+
 
 
 export const AdminUsers = () => {
   const dispatch = useDispatch();
 
-  const { active, id_user, users, errors, message, reset, isLoading } =
-    useSelector((state) => state.modal_about_user);
+  const { users, errors, message, isLoading } =
+    useSelector((state) => state.usersList);
 
   const [titleColumn] = useState([
     'ID',
@@ -42,12 +41,12 @@ export const AdminUsers = () => {
         return (
           <tr key={item?.id}>
             <td>{item?.id}</td>
-            <td>{`${item?.mz_user_name} ${item?.mz_user_surname}`}</td>
-            <td>{item?.mz_user_login}</td>
-            <td>{item?.mz_user_role}</td>
-            <td>{item?.mz_user_email}</td>
+            <td>{`${item?.name} ${item?.surname}`}</td>
+            <td>{item?.login}</td>
+            <td>{item?.role}</td>
+            <td>{item?.email}</td>
             <td>
-              {item?.mz_user_isBlocked ? (
+              {item?.isBlocked ? (
                 <span title="Заблокирован" style={{ color: 'red' }}>
                   &#10060; Заблокирован
                 </span>
@@ -64,7 +63,7 @@ export const AdminUsers = () => {
                   dispatch(
                     setActiveAboutUser({
                       active: true,
-                      id_user: item?.id,
+                      user: item
                     })
                   );
                 }}

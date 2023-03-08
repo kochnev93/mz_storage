@@ -17,7 +17,7 @@ import { addNewUser } from "../../../../features/admin/adminUsersSlice.js";
 
 // Hooks
 import {
-  validationAddUsertForm,
+  validationAddUserForm,
   validationNameAddUser,
   validationSurnameAddUser,
   validationEmailAddUser,
@@ -47,13 +47,12 @@ function ModalAddUser() {
   const { fetchNow } = useFetch();
 
   const validationForm = (obj) => {
-    //dispatch(setDefaultValidationAddUser());
 
-    // const values = { ...user };
+    const values = { ...user };
     const tempValidation = JSON.parse(JSON.stringify(validation));
     let validateError;
 
-    switch (obj.inputName) {
+    switch (obj?.inputName) {
       case "name":
         validateError = validationNameAddUser(tempValidation, obj.inputValue);
         break;
@@ -78,11 +77,10 @@ function ModalAddUser() {
           obj.inputValue
         );
         break;
+      default:
+        validateError = validationAddUserForm(tempValidation, values);
+        break;
     }
-
-    console.log("validateError", validateError);
-
-    //const validateError = validationAddUsertForm(tempValidation, values);
 
     if (validateError == 0) {
       dispatch(setValidationAddUser({ ...tempValidation }));
@@ -192,7 +190,7 @@ function ModalAddUser() {
               value={user.name}
               onBlur={() => {
                 let temp = delSpaseStr(user.name);
-                let str = temp.charAt(0).toUpperCase() + temp.slice(1);
+                let str = temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                 dispatch(setUser_AddUser({ name: str }));
                 validationForm({ inputName: "name", inputValue: str });
               }}
@@ -215,7 +213,7 @@ function ModalAddUser() {
               }}
               onBlur={() => {
                 let temp = delSpaseStr(user.surname);
-                let str = temp.charAt(0).toUpperCase() + temp.slice(1);
+                let str = temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                 dispatch(setUser_AddUser({ surname: str }));
                 validationForm({ inputName: "surname", inputValue: str });
 
@@ -314,7 +312,7 @@ function ModalAddUser() {
               value={user.position}
               onBlur={() => {
                 let temp = delSpaseStr(user.position);
-                let str = temp.charAt(0).toUpperCase() + temp.slice(1);
+                let str = temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                 dispatch(setUser_AddUser({ position: str }));
                 validationForm({ inputName: "position", inputValue: str });
               }}
