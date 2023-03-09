@@ -1,32 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const user = JSON.parse(localStorage.getItem('mz_storage_user'));
-
-const initialState = {
-  id: user?.id ?? null,
-  name: user?.name ?? null,
-  surname: user?.surname ?? null,
-  phone: user?.phone ?? null,
-  email: user?.email ?? null,
-  login: user?.login ?? null,
-  position: user?.position ?? null,
-  role: user?.role ?? null,
-  img: user?.img ?? null,
-  accessToken: user?.accessToken ?? null,
-};
+// const user = JSON.parse(localStorage.getItem('mz_storage_user'));
 
 // const initialState = {
-    // id: 1,
-    // name: 'Тест',
-    // surname: "Тестов",
-    // phone: "89995552244",
-    // email: "test@mail.ru",
-    // login: "test777",
-    // position: "Инженер ИТ (тест)",
-    // role: "admin",
-    // img: null,
-    // accessToken: "1234",
-// }
+//   id: user?.id ?? null,
+//   name: user?.name ?? null,
+//   surname: user?.surname ?? null,
+//   phone: user?.phone ?? null,
+//   email: user?.email ?? null,
+//   login: user?.login ?? null,
+//   position: user?.position ?? null,
+//   role: user?.role ?? null,
+//   img: user?.img ?? null,
+//   accessToken: user?.accessToken ?? null,
+// };
+
+const initialState = {
+    id: 1,
+    name: 'Тест',
+    surname: "Тестов",
+    phone: "89995552244",
+    email: "test@mail.ru",
+    login: "test777",
+    position: "Инженер ИТ (тест)",
+    role: "admin",
+    img: null,
+    accessToken: "1234",
+}
 
 export const userSlice = createSlice({
   name: 'user',

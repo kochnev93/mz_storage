@@ -14,12 +14,19 @@ export const fetchUsers = createAsyncThunk(
 
 const initialState = {
   users: [
-  //   {
-  //   id: 999,
-  //   isBlocked: true,
-  //   mz_user_login: 'testik',
-  //   mz_user_role: 'admin'
-  // },
+     {
+    id: 1,
+    name: 'Тест',
+    surname: "Тестов",
+    phone: "89995552244",
+    email: "test@mail.ru",
+    login: "test777",
+    position: "Инженер ит тест",
+    role: "admin",
+    img: null,
+    accessToken: "1234",
+    isBlocked: 0
+   },
 
   // {
   //   id: 777,

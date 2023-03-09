@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   setActiveAboutUser,
   setDefaultAboutUser,
@@ -12,15 +12,17 @@ import {
   setEditAboutUser,
   cancelChangesAboutUser,
   setValidationAboutUser,
-} from '../../../../features/modal/about-userSlice.js';
+  saveUser,
+} from "../../../../features/modal/about-userSlice.js";
 
 // Components
-import Modal from '../MyModal2.jsx';
-import MyInput from '../../Input/MyInput.jsx';
-import { FormItemModal } from '../FormItemModal/FormItemModal.jsx';
-import { FormItemError } from '../FormItemModal/FormItemError.jsx';
-import { FormModal } from '../FormModal/FormModal.jsx';
-import Dropdown from '../../Dropdown/MyDropdown-function.jsx';
+import Modal from "../MyModal2.jsx";
+import MyInput from "../../Input/MyInput.jsx";
+import { FormItemModal } from "../FormItemModal/FormItemModal.jsx";
+import { FormItemError } from "../FormItemModal/FormItemError.jsx";
+import { FormModal } from "../FormModal/FormModal.jsx";
+import Dropdown from "../../Dropdown/MyDropdown-function.jsx";
+import ModalAction from "../MyModalAction.jsx";
 
 // Service
 import {
@@ -30,12 +32,16 @@ import {
   validationPhoneUser,
   validationLoginUser,
   validationPositionUser,
-} from '../../../../services/validation/validationUserFields.js';
+} from "../../../../services/validation/validationUserFields.js";
 
-import styles from './MyModal-aboutUser.module.scss';
+//Hooks
+import useFetch from "../../../../hooks/useFetch.js";
+
+import styles from "./MyModal-aboutUser.module.scss";
 
 function ModalAboutUser() {
   const dispatch = useDispatch();
+  const { fetchNow } = useFetch();
 
   const {
     active,
@@ -52,11 +58,11 @@ function ModalAboutUser() {
   const { roles } = useSelector((state) => state.app_state);
 
   const currentRoles = roles.map((item) => {
-    if (item.title == user.role){
-      return {...item, isCheked: true};
+    if (item.title == user.role) {
+      return { ...item, isCheked: true };
     }
 
-    return {...item};
+    return { ...item };
   });
 
   const validationForm = (obj) => {
@@ -65,54 +71,84 @@ function ModalAboutUser() {
     let validateError;
 
     switch (obj?.inputName) {
-      case 'name':
+      case "name":
         validateError = validationNameUser(tempValidation, obj.inputValue);
         break;
 
-      case 'surname':
+      case "surname":
         validateError = validationSurnameUser(tempValidation, obj.inputValue);
         break;
 
-      case 'login':
+      case "login":
         validateError = validationLoginUser(tempValidation, obj.inputValue);
         break;
 
-      case 'phone':
+      case "phone":
         validateError = validationPhoneUser(tempValidation, obj.inputValue);
         break;
 
-      case 'email':
+      case "email":
         validateError = validationEmailUser(tempValidation, obj.inputValue);
         break;
 
-      case 'position':
+      case "position":
         validateError = validationPositionUser(tempValidation, obj.inputValue);
         break;
     }
 
     if (validateError == 0) {
       dispatch(setValidationAboutUser({ ...tempValidation }));
-      dispatch(
-        setMessageAboutUser({
-          errors: false,
-          message: ``,
-        })
-      );
+      // dispatch(
+      //   setMessageAboutUser({
+      //     errors: false,
+      //     message: ``,
+      //   })
+      // );
       return true;
     } else {
       dispatch(setValidationAboutUser({ ...tempValidation }));
-      dispatch(
-        setMessageAboutUser({
-          errors: true,
-          message: `В документе присутствуют ошибки`,
-        })
-      );
+      // dispatch(
+      //   setMessageAboutUser({
+      //     errors: true,
+      //     message: `В документе присутствуют ошибки`,
+      //   })
+      // );
       return false;
     }
   };
 
-  const saveUser = () => {
-    console.log('save');
+  const saveUser = async () => {
+    console.log("save");
+
+    dispatch(setIsLoadingAboutUser({ isLoading: true }));
+
+    let data = JSON.stringify(editUser);
+
+    let requestOptions = {
+      method: "UPDATE",
+      body: data,
+    };
+
+    const result = await fetchNow(
+      `${process.env.REACT_APP_API_SERVER}/user/${user?.id}`,
+      requestOptions
+    );
+
+    if (result.data) {
+      dispatch(saveUser());
+
+    } else {
+      dispatch(
+        setMessageAboutUser({
+          errors: true,
+          message: `Произошла ошибка при сохранении пользователя`,
+        })
+      );
+    }
+
+    setTimeout(() => {
+      dispatch(setIsLoadingAboutUser({ isLoading: false }));
+    }, 100);
   };
 
   const resetUser = () => {
@@ -120,13 +156,13 @@ function ModalAboutUser() {
   };
 
   const delSpaseStr = (str) => {
-    return str.replace(/\s+/g, ' ').trim();
+    return str.replace(/\s+/g, " ").trim();
   };
 
   return (
     <Modal
       active={active}
-      size={'big'}
+      size={"big"}
       setActive={() => {
         dispatch(setActiveAboutUser({ active: false }));
         dispatch(setDefaultAboutUser());
@@ -135,25 +171,29 @@ function ModalAboutUser() {
       message={message}
       errors={errors}
       isLoading={isLoading}
-      footer={'Внесите изменения и нажмите Сохранить'}
+      footer={
+        isEdit ? "Внесите изменения и нажмите Сохранить" : "Нет изменений"
+      }
       actions={{
         visible: true,
         buttonSend: {
           action: saveUser,
-          title: 'Сохранить',
-          loadingTitle: 'Сохраняю',
+          title: "Сохранить",
+          loadingTitle: "Сохраняю",
           loading: isLoading,
           disabled: !isEdit || errors,
         },
         buttonClear: {
           action: resetUser,
-          title: 'Отменить изменения',
-          loadingTitle: 'Отменить',
+          title: "Отменить изменения",
+          loadingTitle: "Отменить",
           loading: isLoading,
         },
       }}
     >
       <>
+        {/* <ModalAction active={true}/> */}
+
         {Boolean(user?.isBlocked) && (
           <div className={styles.blocked_msg}>
             <div>
@@ -173,7 +213,7 @@ function ModalAboutUser() {
                 src={
                   user?.img
                     ? `${process.env.REACT_APP_SERVER}/images/${user?.img}`
-                    : 'https://iglit.ru/dist/no-image.jpg'
+                    : "https://iglit.ru/dist/no-image.jpg"
                 }
                 alt="Аватар пользователя"
               />
@@ -210,14 +250,14 @@ function ModalAboutUser() {
                 title="Логин"
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ login: value }));
-                  validationForm({ inputName: 'login', inputValue: value });
+                  validationForm({ inputName: "login", inputValue: value });
                 }}
                 validation={validation?.login.status}
                 value={editUser?.login}
                 onBlur={() => {
                   let temp = delSpaseStr(editUser?.login);
                   dispatch(setEditAboutUser({ login: temp.toLowerCase() }));
-                  validationForm({ inputName: 'login', inputValue: temp });
+                  validationForm({ inputName: "login", inputValue: temp });
                 }}
               />
 
@@ -233,7 +273,7 @@ function ModalAboutUser() {
                 title="Фамилия"
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ surname: value }));
-                  validationForm({ inputName: 'surname', inputValue: value });
+                  validationForm({ inputName: "surname", inputValue: value });
                 }}
                 validation={validation?.surname.status}
                 value={editUser?.surname}
@@ -242,7 +282,7 @@ function ModalAboutUser() {
                   let str =
                     temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                   dispatch(setEditAboutUser({ surname: str }));
-                  validationForm({ inputName: 'surname', inputValue: str });
+                  validationForm({ inputName: "surname", inputValue: str });
                 }}
               />
 
@@ -258,7 +298,7 @@ function ModalAboutUser() {
                 title="Имя"
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ name: value }));
-                  validationForm({ inputName: 'name', inputValue: value });
+                  validationForm({ inputName: "name", inputValue: value });
                 }}
                 validation={validation?.name.status}
                 value={editUser?.name}
@@ -267,7 +307,7 @@ function ModalAboutUser() {
                   let str =
                     temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                   dispatch(setEditAboutUser({ name: str }));
-                  validationForm({ inputName: 'name', inputValue: str });
+                  validationForm({ inputName: "name", inputValue: str });
                 }}
               />
 
@@ -283,14 +323,14 @@ function ModalAboutUser() {
                 title="E-mail"
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ email: value }));
-                  validationForm({ inputName: 'email', inputValue: value });
+                  validationForm({ inputName: "email", inputValue: value });
                 }}
                 validation={validation?.email.status}
                 value={editUser?.email}
                 onBlur={() => {
                   let str = delSpaseStr(editUser?.email);
                   dispatch(setEditAboutUser({ email: str }));
-                  validationForm({ inputName: 'email', inputValue: str });
+                  validationForm({ inputName: "email", inputValue: str });
                 }}
               />
 
@@ -306,7 +346,7 @@ function ModalAboutUser() {
                 title="Номер телефона"
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ phone: value }));
-                  validationForm({ inputName: 'phone', inputValue: value });
+                  validationForm({ inputName: "phone", inputValue: value });
                 }}
                 validation={validation?.phone.status}
                 value={editUser?.phone}
@@ -324,7 +364,7 @@ function ModalAboutUser() {
                 title="Должность"
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ position: value }));
-                  validationForm({ inputName: 'position', inputValue: value });
+                  validationForm({ inputName: "position", inputValue: value });
                 }}
                 validation={validation?.position.status}
                 value={editUser?.position}
@@ -333,7 +373,7 @@ function ModalAboutUser() {
                   let str =
                     temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                   dispatch(setEditAboutUser({ position: str }));
-                  validationForm({ inputName: 'position', inputValue: str });
+                  validationForm({ inputName: "position", inputValue: str });
                 }}
               />
 
@@ -362,7 +402,6 @@ function ModalAboutUser() {
                 status={validation?.role.status}
                 message={validation?.role.message}
               />
-
             </FormItemModal>
           </FormModal>
         </div>

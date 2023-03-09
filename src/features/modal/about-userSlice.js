@@ -1,10 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import regeneratorRuntime from 'regenerator-runtime';
 
-const checkEdits = (state) => {
-  return JSON.stringify(state.user) === JSON.stringify(state.editUser) ? false : true;
-};
-
 const initValidation = {
   name: {
     status: true,
@@ -48,9 +44,32 @@ const initialState = {
   isLoading: false,
 };
 
-export const fetchUser = createAsyncThunk(
-  'modal_about_user/fetchUser',
+const checkEdits = (state) => {
+  return JSON.stringify(state.user) === JSON.stringify(state.editUser) ? false : true;
+};
+
+const checkValidation = (state) => {
+  return JSON.stringify(state.validation) === JSON.stringify(initValidation) ? true : false;
+}
+
+
+export const fetchSaveUser = createAsyncThunk(
+  'modal_about_user/fetchSaveUser',
   async function (id) {
+
+
+      //     let requestOptions = {
+      //   method: 'POST',
+      //   body: data,
+      // };
+
+      // const result = await fetchNow(
+      //   `${process.env.REACT_APP_API_SERVER}/transfer_product`,
+      //   requestOptions
+      // );
+
+
+
     const response = await fetch(
       `${process.env.REACT_APP_API_SERVER}/user/${id}`
     );
@@ -88,6 +107,7 @@ export const aboutUserSlice = createSlice({
       state.message = '';
       state.reset = false;
       state.isLoading = false;
+      state.validation = initValidation;
     },
 
     setErrorsAboutUser: (state, action) => {
@@ -108,7 +128,7 @@ export const aboutUserSlice = createSlice({
     },
 
     cancelChangesAboutUser: (state) => {
-      state.editUser = state.user;
+      state.editUser = {...state.user};
       state.isEdit = false;
       state.validation = initValidation;
       state.errors = false;
@@ -118,39 +138,47 @@ export const aboutUserSlice = createSlice({
     setEditAboutUser: (state, action) => {
       if (action.payload.hasOwnProperty('name')) {
         state.editUser.name = action.payload.name;
-        state.isEdit = checkEdits(state)
       }
 
       if (action.payload.hasOwnProperty('surname')) {
         state.editUser.surname = action.payload.surname;
-        state.isEdit = checkEdits(state)
       }
 
       if (action.payload.hasOwnProperty('login')) {
         state.editUser.login = action.payload.login;
-        state.isEdit = checkEdits(state)
       }
 
       if (action.payload.hasOwnProperty('phone')) {
         state.editUser.phone = action.payload.phone;
-        state.isEdit = checkEdits(state)
       }
 
       if (action.payload.hasOwnProperty('email')) {
         state.editUser.email = action.payload.email;
-        state.isEdit = checkEdits(state)
       }
 
       if (action.payload.hasOwnProperty('position')) {
         state.editUser.position = action.payload.position;
-        state.isEdit = checkEdits(state)
       }
+
+      state.isEdit = checkEdits(state)
 
     },
 
     setValidationAboutUser: (state, action) => {
       state.validation = action.payload;
+
+      if(checkValidation(state)){
+        state.errors = false;
+        state.message = '';
+      } else{
+        state.errors = true;
+        state.message = 'В документе присутствуют ошибки'
+      }
     },
+
+    saveUser: (state) => {
+      state.user = {...state.editUser}
+    }
   },
   //   extraReducers: {
   //     [fetchUsers.pending]: (state, action) => {
@@ -181,6 +209,7 @@ export const {
   setEditAboutUser,
   cancelChangesAboutUser,
   setValidationAboutUser,
+  saveUser,
 } = aboutUserSlice.actions;
 
 export default aboutUserSlice.reducer;
