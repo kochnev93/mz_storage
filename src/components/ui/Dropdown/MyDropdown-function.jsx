@@ -35,7 +35,7 @@ const Dropdown = (props) => {
   const [title] = useState(props.title || "Название");
   const [placeholder] = useState(props.placeholder || "Выберите...");
   const [searchInput, setSearchInput] = useState("");
-  const [selectOptionAnyone, setSelectOptionAnyone] = useState(false);
+  const [selectOptionAnyone, setSelectOptionAnyone] = useState(props.selectOptionAnyone ? props.selectOptionAnyone : false);
   const [selectOptionAll, setSelectOptionAll] = useState(false);
 
   const [reset] = useState(props.reset);

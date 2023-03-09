@@ -159,6 +159,23 @@ export const validationPositionUser = (tempValidation, inputValue) => {
 }
 
 
+export const validationRoleUser = (tempValidation, inputValue) => {
+  let errorCounter = 0;
+
+  if (inputValue.length == 0) {
+    tempValidation.role.status = false;
+    tempValidation.role.message = 'Выберите роль';
+    errorCounter++;
+  } else {
+    tempValidation.role.status = true;
+    tempValidation.role.message = '';
+  }
+
+
+  return errorCounter;
+}
+
+
 export const validationAddUserForm = (tempValidation, values) => {
   let errorCounter = 0;
 
@@ -197,14 +214,6 @@ export const validationAddUserForm = (tempValidation, values) => {
   }
 
 
-  if (values.role.length == 0) {
-    tempValidation.role.status = false;
-    tempValidation.role.message = 'Выберите роль';
-    errorCounter++;
-  } else {
-    tempValidation.role.status = true;
-    tempValidation.role.message = '';
-  }
 
 
  

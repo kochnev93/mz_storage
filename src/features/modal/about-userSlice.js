@@ -160,6 +160,13 @@ export const aboutUserSlice = createSlice({
         state.editUser.position = action.payload.position;
       }
 
+      if (action.payload.hasOwnProperty('role')) {
+        console.log(action.payload)
+
+        state.editUser.role = action.payload.role.length === 0 ? '' : action.payload.role[0].title;
+      }
+
+
       state.isEdit = checkEdits(state)
 
     },
