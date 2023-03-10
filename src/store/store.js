@@ -16,6 +16,7 @@ import aboutReceiptSlice from '../features/modal/about-receiptSlice';
 import adminUsersSlice from '../features/admin/adminUsersSlice';
 import addUserSlice  from '../features/modal/add-userSlice';
 import aboutUserSlice from '../features/modal/about-userSlice';
+import dialog  from '../features/dialog/dialogSlice';
 
 export const store = configureStore({
     reducer: {
@@ -33,7 +34,7 @@ export const store = configureStore({
         modal_about_receipt: aboutReceiptSlice,
         usersList: adminUsersSlice,
         modal_add_user: addUserSlice,
-        modal_about_user: aboutUserSlice
-
+        modal_about_user: aboutUserSlice,
+        dialog: dialog,
     },
 });

@@ -17,6 +17,8 @@ import ModalTransfersSomeProducts from './ui/Modal/Modal-transfersSomeProducts/M
 import ModalAboutReceipt from './ui/Modal/Modal-aboutReceipt/MyModal-aboutreceipt.jsx';
 
 
+
+
 export const MainWrapper = ({header_title, title = 'Страница без названия', children}) => {
   return (
     <section className={styles.main_section}>

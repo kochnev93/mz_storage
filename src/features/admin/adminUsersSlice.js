@@ -28,12 +28,20 @@ const initialState = {
     isBlocked: 0
    },
 
-  // {
-  //   id: 777,
-  //   isBlocked: false,
-  //   mz_user_login: 'testik777',
-  //   mz_user_role: 'user'
-  // }
+
+   {
+    id: 2,
+    name: 'Тестик',
+    surname: "Тестовый",
+    phone: "89995552266",
+    email: "test666@mail.ru",
+    login: "test666",
+    position: "Инженер",
+    role: "user",
+    img: null,
+    accessToken: "1234",
+    isBlocked: 1
+   },
 
 ],
   errors: false,

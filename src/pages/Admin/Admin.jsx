@@ -11,6 +11,7 @@ import styles from "./AdminPage.module.scss";
 import { MainWrapper } from "../../components/MainWrapper.jsx";
 import ModalAboutUser from "../../components/ui/Modal/Modal-aboutUser/MyModal-aboutUser.jsx";
 import ModalAddUser from "../../components/ui/Modal/Modal-addUser/Modal-addUser.jsx";
+import Dialog from "../../components/ui/Dialog/Dialog.jsx";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -40,6 +41,7 @@ export const Admin = () => {
 
   return (
     <>
+      {/* <Dialog /> */}
       <ModalAddUser />
       <ModalAboutUser />
       <MainWrapper header_title="Администратор" title="Панель управления">
