@@ -26,7 +26,7 @@
   background: transparent;
   outline: none;
   border-radius: 4px;
-  color: rgba(0, 0, 0, 0.23);
+  color: var(--dropdown-colorArrow);
   cursor: pointer;
 }
 
@@ -36,7 +36,7 @@
   border: none;
   width: 25px;
   flex-grow: 4;
-  color: #333;
+  color: var(--dropdown-colorInput);
   font-size: inherit;
   cursor: pointer;
 
@@ -49,7 +49,7 @@
   position: absolute;
   top: 6px;
   left: 13px;
-  color: rgba(0, 0, 0, 0.23);
+  color: var(--dropdown-colorLabel);
   transition: top 0.3s ease;
   pointer-events: none;
 }
@@ -66,7 +66,7 @@
   padding: 0 8px;
   margin: 0;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.23);
+  border: 1px solid var(--dropdown-colorBorder);
   pointer-events: none;
 
   &.error{
@@ -94,6 +94,7 @@
       display: inline-block;
       opacity: 0;
       visibility: visible;
+
     }
   }
 }
@@ -108,7 +109,7 @@
   overflow: hidden;
   padding: 10px;
   border-radius: 4px;
-  background-color: white;
+  background-color: var(--dropdown-bg-listItems);
   box-sizing: border-box;
   display: none;
   overflow-y: scroll;
@@ -124,17 +125,17 @@
 
   &::-webkit-scrollbar {
     width: 3px;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--dropdown-bg-scrollbar);
   }
   
   &::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--dropdown-bg-scrollbarThumb);
   }
   
   &::-webkit-scrollbar-track {
     border-radius: 5px;
-    background-color: #f9f9fd;
+    background-color: var(--dropdown-bg-scrollbarTrack);
   }
 
   -webkit-box-shadow: 0px 10px 11px -4px rgba(34, 60, 80, 0.1);
@@ -145,18 +146,18 @@
   li {
     padding: 5px;
     cursor: pointer;
-    background-color: white;
+    background-color: var(--dropdown-bg-items);
     border-radius: 4px;
     font-size: 14px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--dropdown-color-itemsBorder);
     
     &:hover{
-      background-color: rgba(0, 0, 0, 0.02);
+      background-color: var(--dropdown-bg-itemsHover);
       transition: all .2s ease;
     }
 
     &.checked{
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: var(--dropdown-bg-itemsChecked);
       position: relative;
       &::after{
         content: '•';
@@ -199,14 +200,14 @@
     align-items: center;
     justify-content: space-between;
 
-    background-color: #e6e6e6;
+    background-color: var(--dropdown-bg-itemsSelected);
     border-radius: 5px;
     font-size: 12px;
     margin-left: 5px;
     
     .selectedItem_title{
       padding: 3px 5px;
-      color: #333333;
+      color: var(--dropdown-color-itemsSelected);
       pointer-events: none;
     }
 
@@ -251,14 +252,14 @@
   background-color: transparent;
   outline: none;
   border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.23);
-  color: rgba(0, 0, 0, 0.23);
+  border: 1px solid var(--dropdown-color-borderSelectAll);
+  color: var(--dropdown-color-selectAll);
   margin-bottom: 5px;
   cursor: pointer;
   transition: all .2s ease;
 
   &.checked{
-    background-color: #0dc6bf;
+    background-color: var(--main-color);
     color: white;
   }
 }
@@ -267,7 +268,7 @@
   top: -11px;
   left: 14px;
   font-size: 10px;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--dropdown-colorLabel-focus);
 }
 
 

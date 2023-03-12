@@ -324,7 +324,7 @@ class MyDropdown extends Component {
               onClick={this.liHandler}
               data-value={option.title}
             >
-              <AiOutlineClose />
+              <AiOutlineClose onClick={this.liHandler}/>
             </div>
           </li>
         );

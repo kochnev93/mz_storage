@@ -5,26 +5,24 @@ import cx from 'classnames';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { setHeader } from '../../features/header/headerSlice';
-import { removeUser } from '../../features/users/userSlice'; 
+import { removeUser } from '../../features/users/userSlice';
 
 import { MdOutlineMenu } from 'react-icons/Md';
 import { IoMdExit } from 'react-icons/Io';
-
+import Theme from '../Theme/Theme.jsx';
 
 function Header({ title = 'Склад' }) {
   const dispatch = useDispatch();
   const menuIsOpen = useSelector((state) => state.button_menu.ButtonMenuOpen);
 
   const logout = () => {
-    let answerUser = confirm(
-      `Выйти из приложения?`
-    );
+    let answerUser = confirm(`Выйти из приложения?`);
 
-    if(answerUser){
+    if (answerUser) {
       localStorage.removeItem('mz_storage_user');
-      dispatch( removeUser() );
+      dispatch(removeUser());
     }
-  }
+  };
 
   return (
     <header className={cx(styles.header, { [styles.open]: menuIsOpen })}>
@@ -33,11 +31,21 @@ function Header({ title = 'Склад' }) {
           <MdOutlineMenu onClick={() => dispatch(setHeader())} />
           <h3>{title}</h3>
         </div>
-        <IoMdExit
-          className={styles.logout_icon}
-          onClick={logout}
-          title = "Выйти"
-        />
+
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignContent: 'center',
+          }}
+        >
+          <Theme className={styles.theme_icon}/>
+          <IoMdExit
+            className={styles.logout_icon}
+            onClick={logout}
+            title="Выйти"
+          />
+        </div>
       </div>
     </header>
   );

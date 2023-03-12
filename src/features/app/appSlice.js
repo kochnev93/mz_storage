@@ -21,9 +21,20 @@ export const fetchData = createAsyncThunk(
   }
 );
 
+const getTheme = () => {
+  const theme = localStorage.getItem('mz_theme')
+  if ([ 'light', 'dark' ].includes(theme)) return theme
+
+  const userMedia = window.matchMedia('(prefers-color-scheme: light)')
+  if (userMedia.matches) return 'light'
+
+  return 'dark'
+}
+
 const initialState = {
   status: true,
   error: null,
+  theme: getTheme(),
   roles: [],
   warehouses: [
     // {
@@ -75,6 +86,10 @@ export const appSlice = createSlice({
         (state.error = action.payload.error),
         (state.description = action.payload.description || state.description);
     },
+
+    setTheme: (state, action) => {
+      state.theme = action.payload
+    }
   },
 
   extraReducers: {
@@ -93,5 +108,5 @@ export const appSlice = createSlice({
   },
 });
 
-export const { setStatus } = appSlice.actions;
+export const { setStatus, setTheme } = appSlice.actions;
 export default appSlice.reducer;

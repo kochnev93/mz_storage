@@ -9,8 +9,8 @@
     left: 0;
     right: 0;
     width: 500px; 
-    background-color: #ff8686;
-    color: white;
+    background-color: var(--error-color);
+    color: var(--text-color);
     margin: 0 auto;
     border-radius: 5px;
     padding: 20px;

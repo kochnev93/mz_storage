@@ -1,5 +1,5 @@
 .navbar {
-  background-color: white;
+  background-color: var(--navbar-color);
   position: relative;
 }
 
@@ -8,6 +8,7 @@
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  background-color: var(--navbar-bg-color);
 }
 
 .navbar_container {
@@ -15,7 +16,7 @@
   flex-direction: column;
   min-width: 0;
   width: var(--widthMenuIsClose);
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid var(--navbar-colorBorderRight);
   transition: var(--navbarTransition);
 
   &.open {
@@ -29,7 +30,8 @@
   justify-content: flex-end;
   padding: var(--paddingMenu);
   min-height: var(--minHeightHeader);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: var(--navbar-bg-color);
+  border-bottom: 1px solid var(--navbar-colorBorderTop);
 
   button {
     display: inline-flex;
@@ -52,7 +54,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: #e7e7e7;
+      background-color: var(--navbar-colorHoverClose);
     }
   }
 }
@@ -65,7 +67,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: lighten( #757575, 50%);
+    background-color: var(--navbar-colorHoverLink);
   }
 
   a {
@@ -74,6 +76,19 @@
     width: 100%;
   }
 }
+
+.navlink_active{
+  .menu_title {
+    transition: color .3s ease ;
+    color: var(--main-color);
+  }
+
+  .menu_icon svg{
+    transition: all .3s ease ;
+    fill: var(--main-color);
+  }
+}
+
 
 .menu_title {
   flex: 1 1 auto;
@@ -96,4 +111,6 @@
     padding-left: 15px;
   }
 }
+
+
 

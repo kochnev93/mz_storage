@@ -13,6 +13,7 @@ import ModalReceiptProduct from '../../components/ui/Modal/Modal-receiptProduct/
 import { MyTable } from '../../components/elements/Table/MyTable.jsx';
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 import ModalAboutReceipt from '../../components/ui/Modal/Modal-aboutReceipt/MyModal-aboutreceipt.jsx';
+import { MainWrapper } from '../../components/MainWrapper.jsx';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -98,31 +99,24 @@ export const Receipt = () => {
     <>
       <ModalReceiptProduct />
       <ModalAboutReceipt />
-      <section className={styles.main_section}>
-        <Header title="Приход" />
-        <Navbar />
-        <main className={styles.main}>
-          
-          <h1>Приход</h1>
-
-          <div className={styles.header}>
-            <div className={styles.header_filter}>Фильтры</div>
-            <MyButton
-              type="send"
-              title="Добавить"
-              action={() => {
-                dispatch(setActiveReceipt({ active: true }));
-              }}
-            />
-          </div>
-
-          <MyTable
-            titleColumn={titleColumn}
-            content={bodyContent}
-            resultCount={receiptData.length}
+      <MainWrapper header_title="Приход" title="Приход">
+        <div className={styles.header}>
+          <div className={styles.header_filter}>Фильтры</div>
+          <MyButton
+            type="send"
+            title="Добавить"
+            action={() => {
+              dispatch(setActiveReceipt({ active: true }));
+            }}
           />
-        </main>
-      </section>
+        </div>
+
+        <MyTable
+          titleColumn={titleColumn}
+          content={bodyContent}
+          resultCount={receiptData.length}
+        />
+      </MainWrapper>
     </>
   );
 };

@@ -2,7 +2,7 @@
   border-spacing: 0;
   vertical-align: middle;
   width: 100%;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--text-color);
 
   caption{
     text-align: left;
@@ -14,7 +14,7 @@
     svg{
       width: 20px;
       height: 20px;
-      fill: #a5a5a5;
+      fill: var(--table-colorIcon);
 
       path{
         pointer-events: none;
@@ -41,7 +41,7 @@
 
   th,
   td {
-    border: 1px solid rgba(0, 0, 0, 0.23);
+    border: 1px solid var(--table-colorBorder);
     padding: 8px;
     position: relative;
     vertical-align: middle;
@@ -59,7 +59,7 @@
 
   th {
     background-color: var(--main-color);
-    color: white;
+    color: var(--table-colorTH);
     font-weight: 400;
   }
 
@@ -81,7 +81,7 @@
   }
 
   tbody tr:not(.empty_line):hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--table-hoverColorTD);
   }
 
   td:not(:last-child),
@@ -96,7 +96,7 @@
 
 .row{
   display: none;
-  background-color: #e9e9e9;
+  background-color: var(--navbar-bg-color);
   &.active{
     display: table-row;
   }

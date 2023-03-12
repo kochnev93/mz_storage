@@ -6,7 +6,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: var(--modal-overlayBgColor);
   z-index: 2000;
 
   display: flex;
@@ -24,9 +24,7 @@
 }
 
 .myModal {
-  background-color: white;
-
-
+  background-color: var(--modal-bg-color);
 
   border-radius: 10px;
 
@@ -39,26 +37,25 @@
   -moz-transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
   transition: all 0.3s cubic-bezier(0.25, 0.5, 0.5, 0.9);
 
-  &.medium{
+  &.medium {
     height: auto;
-    max-height: 700px; 
+    max-height: 700px;
     width: 600px;
-    max-width: 800px; 
+    max-width: 800px;
   }
 
-  &.small{
-    
+  &.small {
   }
 
-  &.big{
+  &.big {
     height: auto;
     min-height: 600px;
-    max-height: 800px; 
+    max-height: 800px;
     width: 900px;
-    max-width: 1000px; 
+    max-width: 1000px;
   }
 
-  h4{
+  h4 {
     margin-top: 0;
   }
 }
@@ -76,7 +73,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid var(--modal-color-borderBottom);
 }
 
 .myModal_body {
@@ -87,22 +84,22 @@
   overflow-y: scroll;
 
   &.loading {
-    background-color: #f1f1f1; 
+    background-color: var(--modal-bg-loading);
   }
 
   &::-webkit-scrollbar {
     width: 3px;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--modal-bg-scrollbar);
   }
-  
+
   &::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--modal-bg-scrollbarThumb);
   }
-  
+
   &::-webkit-scrollbar-track {
     border-radius: 5px;
-    background-color: #f9f9fd;
+    background-color: var( --modal-bg-scrollbarTrack);
   }
 }
 
@@ -120,7 +117,7 @@
     color: green;
   }
   &.error {
-    color: #fb5951;
+    color: var(--error-color);
   }
 }
 
@@ -135,13 +132,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   font-size: 10px;
-  color: grey;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--modal-footer-colorText);
+  border-top: 1px solid var(--modal-footer-colorBorderTop);
 }
 
-.subtitle{
+.subtitle {
   padding-top: 5px;
   color: grey;
   font-size: 12px;
@@ -171,7 +168,7 @@
   }
 }
 
-.footer_buttons{
+.footer_buttons {
   display: flex;
   justify-content: end;
   align-items: center;
@@ -181,14 +178,14 @@
   }
 }
 
-.description{
+.description {
   color: grey;
   margin: 0;
   font-size: 12px;
 }
 
-.error_message{
+.error_message {
   padding-top: 10px;
-    font-size: 11px;
-    color: red;
+  font-size: 11px;
+  color: var(--error-color);
 }

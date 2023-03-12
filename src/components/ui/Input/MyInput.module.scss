@@ -8,13 +8,13 @@
     outline: none;
     border: 0px;
     width: 100%;
-    color: rgba(0, 0, 0, 0.87);
+    color: var(--input-colorText);
     background: none;
     appearance: none;
     font-size: 14px;
 
     &:disabled{
-      background: #f1f1f1;
+      background: var(--input-bg-disabled);
     }
   }
 
@@ -22,7 +22,7 @@
     position: absolute;
     top: 9px;
     left: 13px;
-    color: rgba(0, 0, 0, 0.23);
+    color: var(--input-colorLabel);
     transition: top 0.3s ease;
     pointer-events: none;
   }
@@ -33,7 +33,7 @@
     top: -6px;
     left: 14px;
     font-size: 10px;
-    color: rgba(0, 0, 0, 0.87);
+    color: var(--input-colorLabel-focus);
   }
   
   .myInput_input:focus ~ .myInput_fieldset>legend,
@@ -42,7 +42,7 @@
   }
   
   .myInput_input:focus ~ .myInput_fieldset{
-    border: 2px solid rgba(0, 0, 0, 0.87);
+    border: 2px solid var(--input-color-border-focus);
   }
   
   
@@ -58,7 +58,7 @@
     padding: 0 8px;
     margin: 0;
     border-radius: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.23);
+    border: 1px solid var(--input-color-border);
     pointer-events: none;
 
     &.error{

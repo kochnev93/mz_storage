@@ -11,7 +11,7 @@
 	text-transform: uppercase;
 	font-weight: normal;
 	text-decoration: none;
-	color: #fff;
+	color: var(--button-colorText);
 	cursor: pointer;
 	user-select: none;
 	appearance: none;
@@ -21,7 +21,7 @@
     &.send{
         background-color: var(--main-color);
 		&:hover{
-			background-color: lighten(#0dc6bf,2%);
+			background-color: lighten(#12cac4,2%);
 		}
 		&.loading{
 			background-color: #dbdbdb;

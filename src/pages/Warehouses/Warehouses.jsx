@@ -1,26 +1,21 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { MainWrapper } from '../../components/MainWrapper.jsx';
 import { MyTable } from '../../components/elements/Table/MyTable.jsx';
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 import styles from '../style.module.scss';
+import ModalAddWarehose from '../../components/ui/Modal/Modal-addWarehouse/Modal-addWarehouse.jsx';
 
 // redux
 import { useDispatch } from 'react-redux';
 import useFetch from '../../hooks/useFetch.js';
 import { setActiveWarehouse } from '../../features/modal/add-warehouseSlice.js';
 
-
 export const Warehouses = () => {
   const dispatch = useDispatch();
   const { fetchNow } = useFetch();
 
-  const [titleColumn] = useState([
-    'id',
-    'Наименование',
-    'Адрес',
-    'Код'
-  ]);
+  const [titleColumn] = useState(['id', 'Наименование', 'Адрес', 'Код']);
   const [warehouses, setWarehouses] = useState([]);
 
   useEffect(() => {
@@ -43,7 +38,6 @@ export const Warehouses = () => {
     return result.data;
   };
 
-
   const tableContent = useMemo(() => {
     if (warehouses.length) {
       return warehouses.map((item) => {
@@ -59,16 +53,26 @@ export const Warehouses = () => {
     }
   }, [warehouses]);
 
-
   return (
-    <MainWrapper header_title="Склады" title='Склады'>
+    <>
+      <ModalAddWarehose />
+      <MainWrapper header_title="Склады" title="Склады">
         <div className={styles.header}>
-          <div className={styles.header_filter}>
-            Фильтры
-          </div>
-          <MyButton type="send" title="Добавить" action={() => {dispatch(setActiveWarehouse({ active: true }))}}/>
-      </div>
-      <MyTable titleColumn={titleColumn} content={tableContent} resultCount = {warehouses.length} />
-    </MainWrapper>
+          <div className={styles.header_filter}>Фильтры</div>
+          <MyButton
+            type="send"
+            title="Добавить"
+            action={() => {
+              dispatch(setActiveWarehouse({ active: true }));
+            }}
+          />
+        </div>
+        <MyTable
+          titleColumn={titleColumn}
+          content={tableContent}
+          resultCount={warehouses.length}
+        />
+      </MainWrapper>
+    </>
   );
 };

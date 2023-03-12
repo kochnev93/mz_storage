@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 // Styles
-import styles from "./Nomenclature.module.scss";
+import styles from './Nomenclature.module.scss';
 
 // Components
 import { MainWrapper } from '../../components/MainWrapper.jsx';
 import { MyTable } from '../../components/elements/Table/MyTable.jsx';
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
+import ModalAddProduct from '../../components/ui/Modal/Modal-addproduct/Modal-addProduct.jsx';
 
 // Hooks
 import useFetch from '../../hooks/useFetch.js';
@@ -14,7 +15,6 @@ import useFetch from '../../hooks/useFetch.js';
 // redux
 import { useDispatch } from 'react-redux';
 import { setActive } from '../../features/modal/add-productSlice.js';
-
 
 export const Nomenclature = () => {
   const dispatch = useDispatch();
@@ -71,17 +71,27 @@ export const Nomenclature = () => {
     }
   }, [nomenclature]);
 
-
   return (
-    <MainWrapper header_title="Номенклатура" title="Номенклатура">
-      <div className={styles.header}>
-        <div className={styles.header_filter}>
-          Фильтры
+    <>
+      <ModalAddProduct />
+      <MainWrapper header_title="Номенклатура" title="Номенклатура">
+        <div className={styles.header}>
+          <div className={styles.header_filter}>Фильтры</div>
+          <MyButton
+            type="send"
+            title="Добавить"
+            action={() => {
+              dispatch(setActive({ active: true }));
+            }}
+          />
         </div>
-        <MyButton type="send" title="Добавить" action={() => {dispatch( setActive({active: true}) )}}/>
-      </div>
-      
-      <MyTable titleColumn={titleColumn} content={tableContent} resultCount = {nomenclature.length} />
-    </MainWrapper>
+
+        <MyTable
+          titleColumn={titleColumn}
+          content={tableContent}
+          resultCount={nomenclature.length}
+        />
+      </MainWrapper>
+    </>
   );
 };

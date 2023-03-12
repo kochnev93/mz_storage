@@ -8,6 +8,7 @@
         padding: 5px;
         font-size: 14px;
         border-radius: var(--border-radius);
+        background-color: var(--background-color);
         &:focus{
             border: 1px solid grey;
             transition: border .3s ease;

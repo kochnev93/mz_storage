@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import regeneratorRuntime from 'regenerator-runtime';
 
+
 const initValidation = {
   name: {
     status: true,
@@ -29,7 +30,7 @@ const initValidation = {
   position: {
     status: true,
     message: '',
-  }
+  },
 };
 
 const initialState = {
@@ -45,36 +46,38 @@ const initialState = {
 };
 
 const checkEdits = (state) => {
-  return JSON.stringify(state.user) === JSON.stringify(state.editUser) ? false : true;
+  return JSON.stringify(state.user) === JSON.stringify(state.editUser)
+    ? false
+    : true;
 };
 
 const checkValidation = (state) => {
-  return JSON.stringify(state.validation) === JSON.stringify(initValidation) ? true : false;
-}
-
+  return JSON.stringify(state.validation) === JSON.stringify(initValidation)
+    ? true
+    : false;
+};
 
 export const fetchSaveUser = createAsyncThunk(
   'modal_about_user/fetchSaveUser',
-  async function (id) {
+  async function (user) {
 
+    let data = JSON.stringify({ login: user.login });
 
-      //     let requestOptions = {
-      //   method: 'POST',
-      //   body: data,
-      // };
+    console.log(data);
 
-      // const result = await fetchNow(
-      //   `${process.env.REACT_APP_API_SERVER}/transfer_product`,
-      //   requestOptions
-      // );
-
-
+    let requestOptions = {
+      method: 'POST',
+      body: data,
+    };
 
     const response = await fetch(
-      `${process.env.REACT_APP_API_SERVER}/user/${id}`
+      `${process.env.REACT_APP_API_SERVER}/update_user`,
+      requestOptions
     );
-    const data = await response.json();
-    return data.data;
+
+    const result = await response.json();
+
+    return result;
   }
 );
 
@@ -128,7 +131,7 @@ export const aboutUserSlice = createSlice({
     },
 
     cancelChangesAboutUser: (state) => {
-      state.editUser = {...state.user};
+      state.editUser = { ...state.user };
       state.isEdit = false;
       state.validation = initValidation;
       state.errors = false;
@@ -161,49 +164,66 @@ export const aboutUserSlice = createSlice({
       }
 
       if (action.payload.hasOwnProperty('role')) {
-        console.log(action.payload)
+        console.log(action.payload);
 
-        state.editUser.role = action.payload.role.length === 0 ? '' : action.payload.role[0].title;
+        state.editUser.role =
+          action.payload.role.length === 0 ? '' : action.payload.role[0].title;
       }
 
-
-      state.isEdit = checkEdits(state)
-
+      state.isEdit = checkEdits(state);
     },
 
     setValidationAboutUser: (state, action) => {
       state.validation = action.payload;
 
-      if(checkValidation(state)){
+      if (checkValidation(state)) {
         state.errors = false;
         state.message = '';
-      } else{
+      } else {
         state.errors = true;
-        state.message = 'В документе присутствуют ошибки'
+        state.message = 'В документе присутствуют ошибки';
       }
     },
 
-    saveUser: (state) => {
-      state.user = {...state.editUser}
-    }
-  },
-  //   extraReducers: {
-  //     [fetchUsers.pending]: (state, action) => {
-  //       state.message = 'Идет загрузка данных...';
-  //       state.isLoading = true;
-  //     },
-  //     [fetchUsers.fulfilled]: (state, action) => {
-  //       state.message = '';
-  //       state.isLoading = false;
-  //       state.users = action.payload;
-  //     },
-  //     [fetchUsers.rejected]: (state, action) => {
-  //       state.message = 'Ошибка при загрузке информации о пользователях';
-  //       state.errors = true;
-  //       state.isLoading = true;
-  //     },
+    saveEditUser: (state) => {
+      state.user = { ...state.editUser };
+      state.isEdit = false;
+      state.validation = initValidation;
+    },
 
-  //   },
+    blockEditUser: (state) => {
+      state.user.isBlocked = 1;
+      state.editUser.isBlocked = 1;
+      state.isEdit = false;
+      state.validation = initValidation;
+    },
+
+    unlockEditUser: (state) => {
+      state.user.isBlocked = 0;
+      state.editUser.isBlocked = 0;
+      state.isEdit = false;
+      state.validation = initValidation;
+    },
+
+  },
+  extraReducers: {
+    [fetchSaveUser.pending]: (state, action) => {
+      state.message = 'Сохранение данных...';
+      state.isLoading = true;
+    },
+    [fetchSaveUser.fulfilled]: (state, action) => {
+      console.log(action.payload);
+      state.message = 'Сохранено';
+      state.isLoading = false;
+      state.user = state.editUser;
+      state.isEdit = false;
+    },
+    [fetchSaveUser.rejected]: (state, action) => {
+      state.message = 'Ошибка при сохранении';
+      state.errors = true;
+      state.isLoading = false;
+    },
+  },
 });
 
 export const {
@@ -216,7 +236,9 @@ export const {
   setEditAboutUser,
   cancelChangesAboutUser,
   setValidationAboutUser,
-  saveUser,
+  saveEditUser,
+  blockEditUser,
+  unlockEditUser
 } = aboutUserSlice.actions;
 
 export default aboutUserSlice.reducer;

@@ -1,15 +1,15 @@
-import React, {useState, useEffect, useMemo} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import { MainWrapper } from '../../components/MainWrapper.jsx';
 import { MyTable } from '../../components/elements/Table/MyTable.jsx';
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 import styles from '../style.module.scss';
+import ModalTransfersSomeProducts from '../../components/ui/Modal/Modal-transfersSomeProducts/Modal-transfersSomeProducts.jsx';
 
 // redux
 import { useDispatch } from 'react-redux';
 import useFetch from '../../hooks/useFetch.js';
 import { setActiveSomeTransfer } from '../../features/modal/transfer-someProductsSlice.js';
-
 
 export const Transfers = () => {
   const dispatch = useDispatch();
@@ -21,14 +21,11 @@ export const Transfers = () => {
     'Откуда',
     'Куда',
     'SN',
-    'Количество'
+    'Количество',
   ]);
   const [warehouses, setWarehouses] = useState([]);
 
-  useEffect(() => {
-    
-  }, []);
-
+  useEffect(() => {}, []);
 
   const tableContent = useMemo(() => {
     if (warehouses.length) {
@@ -45,16 +42,26 @@ export const Transfers = () => {
     }
   }, [warehouses]);
 
-
   return (
-    <MainWrapper header_title="Перемещения" title='Перемещения'>
+    <>
+      <ModalTransfersSomeProducts />
+      <MainWrapper header_title="Перемещения" title="Перемещения">
         <div className={styles.header}>
-          <div className={styles.header_filter}>
-            Фильтры
-          </div>
-          <MyButton type="send" title="Добавить" action={() => {dispatch(setActiveSomeTransfer({active: true}))}}/>
-      </div>
-      <MyTable titleColumn={titleColumn} content={tableContent} resultCount = {warehouses.length} />
-    </MainWrapper>
+          <div className={styles.header_filter}>Фильтры</div>
+          <MyButton
+            type="send"
+            title="Добавить"
+            action={() => {
+              dispatch(setActiveSomeTransfer({ active: true }));
+            }}
+          />
+        </div>
+        <MyTable
+          titleColumn={titleColumn}
+          content={tableContent}
+          resultCount={warehouses.length}
+        />
+      </MainWrapper>
+    </>
   );
 };

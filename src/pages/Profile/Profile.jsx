@@ -15,6 +15,7 @@ import { useAuth } from '../../hooks/use-auth.js';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
 import { removeUser, refreshImgUser } from '../../features/users/userSlice.js';
+
 //import Dropdown from '../../components/ui/Dropdown/MyDropdown-function.jsx';
 
 export const Profile = () => {
@@ -37,7 +38,6 @@ export const Profile = () => {
   const [image, setImage] = useState();
   const [imageURL, setImageURL] = useState();
   const [avatar, setAvatar] = useState(user?.img);
-
 
   const logout = () => {
     let answerUser = confirm(`Выйти из приложения?`);
@@ -69,52 +69,53 @@ export const Profile = () => {
       false
     );
 
-    if(result.data){
-      dispatch(refreshImgUser({filename: result.filename}))
+    if (result.data) {
+      dispatch(refreshImgUser({ filename: result.filename }));
     }
 
     return;
   };
 
   return (
-    <MainWrapper header_title="Профиль" title={user.login}>
-      <div className={styles.bio}>
-        <div className={styles.bio__img}>
-          <div className={styles.wrapper_img}>
-            {user?.img && (
-              <img
-                src={`${process.env.REACT_APP_SERVER}/images/${user?.img}`}
-                alt="Аватар пользователя"
-              />
-            )}
+    <>
+      <MainWrapper header_title="Профиль" title={user.login}>
+        <div className={styles.bio}>
+          <div className={styles.bio__img}>
+            <div className={styles.wrapper_img}>
+              {user?.img && (
+                <img
+                  src={`${process.env.REACT_APP_SERVER}/images/${user?.img}`}
+                  alt="Аватар пользователя"
+                />
+              )}
+            </div>
+            <span>Сменить фото</span>
           </div>
-          <span>Сменить фото</span>
-        </div>
-        <div className={styles.bio__info}>
-          <ul>
-            <li>
-              Должность: <span>{user.position}</span>
-            </li>
-            <li>
-              Логин: <span>{user?.login}</span>
-            </li>
-            <li>
-              Роль: <span>{user?.role}</span>
-            </li>
-            <li>
-              ID пользователя: <span>{user?.id}</span>
-            </li>
-          </ul>
-        </div>
+          <div className={styles.bio__info}>
+            <ul>
+              <li>
+                Должность: <span>{user.position}</span>
+              </li>
+              <li>
+                Логин: <span>{user?.login}</span>
+              </li>
+              <li>
+                Роль: <span>{user?.role}</span>
+              </li>
+              <li>
+                ID пользователя: <span>{user?.id}</span>
+              </li>
+            </ul>
+          </div>
 
-        <div className={styles.bio__actions}>
-          <MyButton type="send" action={logout} title="Выйти" />
+          <div className={styles.bio__actions}>
+            <MyButton type="send" action={logout} title="Выйти" />
+          </div>
         </div>
-      </div>
-      <h2>История</h2>
-      <MyTable titleColumn={titleColumn} />
+        <h2>История</h2>
+        <MyTable titleColumn={titleColumn} />
 
-      {/* <input type="file" onChange={sendFile} accept="image/*,.png,.jpg,.jpeg" />
+        {/* <input type="file" onChange={sendFile} accept="image/*,.png,.jpg,.jpeg" />
       <button onClick={send}>Отправить</button>
 
       <br />
@@ -130,6 +131,7 @@ export const Profile = () => {
       <br />
 
       <Dropdown id={'12367'} validation={true} options={category} /> */}
-    </MainWrapper>
+      </MainWrapper>
+    </>
   );
 };

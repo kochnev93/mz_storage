@@ -1,6 +1,6 @@
 .bio {
   display: flex;
-  background-color: white;
+  background-color: var(--navbar-bg-color);
   padding: 20px;
   border-radius: 5px;
 
@@ -22,11 +22,13 @@
       display: flex;
       justify-content: center;
       align-items: center;
+
+      border-radius: 5px;
     }
 
     .wrapper_img img {
-      height: 100%;
-      width: auto;
+      height: auto;
+      width: 100%;
     }
   }
 

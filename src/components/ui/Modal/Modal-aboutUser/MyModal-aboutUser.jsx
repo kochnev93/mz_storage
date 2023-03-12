@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React from 'react';
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setActiveAboutUser,
   setDefaultAboutUser,
@@ -12,18 +12,21 @@ import {
   setEditAboutUser,
   cancelChangesAboutUser,
   setValidationAboutUser,
-  saveUser,
-} from "../../../../features/modal/about-userSlice.js";
-import { setVisibleDialog } from "../../../../features/dialog/dialogSlice.js";
+  saveEditUser,
+  blockEditUser,
+  unlockEditUser
+} from '../../../../features/modal/about-userSlice.js';
+import { setVisibleDialog } from '../../../../features/dialog/dialogSlice.js';
+import { fetchUsers } from '../../../../features/admin/adminUsersSlice.js';
 
 // Components
-import Modal from "../MyModal2.jsx";
-import MyInput from "../../Input/MyInput.jsx";
-import { FormItemModal } from "../FormItemModal/FormItemModal.jsx";
-import { FormItemError } from "../FormItemModal/FormItemError.jsx";
-import { FormModal } from "../FormModal/FormModal.jsx";
-import Dropdown from "../../Dropdown/MyDropdown-function.jsx";
-import ModalAction from "../MyModalAction.jsx";
+import Modal from '../MyModal2.jsx';
+import MyInput from '../../Input/MyInput.jsx';
+import { FormItemModal } from '../FormItemModal/FormItemModal.jsx';
+import { FormItemError } from '../FormItemModal/FormItemError.jsx';
+import { FormModal } from '../FormModal/FormModal.jsx';
+import Dropdown from '../../Dropdown/MyDropdown-function.jsx';
+import ModalAction from '../MyModalAction.jsx';
 
 // Service
 import {
@@ -34,12 +37,12 @@ import {
   validationLoginUser,
   validationPositionUser,
   validationRoleUser,
-} from "../../../../services/validation/validationUserFields.js";
+} from '../../../../services/validation/validationUserFields.js';
 
 //Hooks
-import useFetch from "../../../../hooks/useFetch.js";
+import useFetch from '../../../../hooks/useFetch.js';
 
-import styles from "./MyModal-aboutUser.module.scss";
+import styles from './MyModal-aboutUser.module.scss';
 
 
 function ModalAboutUser() {
@@ -61,15 +64,6 @@ function ModalAboutUser() {
   const { roles } = useSelector((state) => state.app_state);
   const { visible } = useSelector((state) => state.dialog);
 
-  // const currentRoles = useMemo(() => {
-  //   roles.map((item) => {
-  //     if (item.title == editUser.role) {
-  //       return { ...item, isCheked: true };
-  //     }
-
-  //     return { ...item };
-  //   });
-  // }, [editUser.role])
 
   const currentRoles = roles.map((item) => {
     return item.title === editUser.role
@@ -77,37 +71,49 @@ function ModalAboutUser() {
       : { ...item };
   });
 
+  const footerMessage = () => {
+    if(Boolean(user?.isBlocked)){
+      return 'Для редактирования необходимо разблокировать пользователя'
+    }
+
+    if(isEdit){
+      return 'Внесите изменения и нажмите Сохранить'
+    } else {
+      return 'Нет изменений'
+    }
+  }
+
   const validationForm = (obj) => {
     //const values = { ...user };
     const tempValidation = JSON.parse(JSON.stringify(validation));
     let validateError;
 
     switch (obj?.inputName) {
-      case "name":
+      case 'name':
         validateError = validationNameUser(tempValidation, obj.inputValue);
         break;
 
-      case "surname":
+      case 'surname':
         validateError = validationSurnameUser(tempValidation, obj.inputValue);
         break;
 
-      case "login":
+      case 'login':
         validateError = validationLoginUser(tempValidation, obj.inputValue);
         break;
 
-      case "phone":
+      case 'phone':
         validateError = validationPhoneUser(tempValidation, obj.inputValue);
         break;
 
-      case "email":
+      case 'email':
         validateError = validationEmailUser(tempValidation, obj.inputValue);
         break;
 
-      case "position":
+      case 'position':
         validateError = validationPositionUser(tempValidation, obj.inputValue);
         break;
 
-      case "role":
+      case 'role':
         validateError = validationRoleUser(tempValidation, obj.inputValue);
         break;
     }
@@ -117,37 +123,143 @@ function ModalAboutUser() {
     return validateError == 0 ? true : false;
   };
 
-  const saveUser = async () => {
-    console.log("save");
-
+  const blockUser = async () => {
     dispatch(setIsLoadingAboutUser({ isLoading: true }));
-
-    let data = JSON.stringify(editUser);
+    dispatch(
+      setMessageAboutUser({
+        message: 'Идет сохранение данных...',
+        errors: false,
+      })
+    );
 
     let requestOptions = {
-      method: "UPDATE",
-      body: data,
+      method: 'GET',
     };
 
     const result = await fetchNow(
-      `${process.env.REACT_APP_API_SERVER}/user/${user?.id}`,
+      `${process.env.REACT_APP_API_SERVER}/block_user/${editUser.id}`,
       requestOptions
     );
 
     if (result.data) {
-      dispatch(saveUser());
+      dispatch(
+        setMessageAboutUser({
+          message: 'Пользователь заблокирован',
+          errors: false,
+        })
+      );
+
+      // Сохранение изменений
+      dispatch(blockEditUser());
+
+      //обновление списка пользователей
+      dispatch(fetchUsers())
     } else {
       dispatch(
         setMessageAboutUser({
+          message: result.error,
           errors: true,
-          message: `Произошла ошибка при сохранении пользователя`,
         })
       );
     }
 
     setTimeout(() => {
       dispatch(setIsLoadingAboutUser({ isLoading: false }));
-    }, 100);
+    }, 500);
+  }
+
+  const unlockUser = async () => {
+    dispatch(setIsLoadingAboutUser({ isLoading: true }));
+    dispatch(
+      setMessageAboutUser({
+        message: 'Идет сохранение данных...',
+        errors: false,
+      })
+    );
+
+    let requestOptions = {
+      method: 'GET',
+    };
+
+    const result = await fetchNow(
+      `${process.env.REACT_APP_API_SERVER}/unlock_user/${editUser.id}`,
+      requestOptions
+    );
+
+    if (result.data) {
+      dispatch(
+        setMessageAboutUser({
+          message: 'Пользователь разблокирован',
+          errors: false,
+        })
+      );
+
+      // Сохранение изменений
+      dispatch(unlockEditUser());
+
+      //обновление списка пользователей
+      dispatch(fetchUsers())
+    } else {
+      dispatch(
+        setMessageAboutUser({
+          message: result.error,
+          errors: true,
+        })
+      );
+    }
+
+    setTimeout(() => {
+      dispatch(setIsLoadingAboutUser({ isLoading: false }));
+    }, 500);
+  }
+
+
+  const saveUser = async () => {
+    dispatch(setIsLoadingAboutUser({ isLoading: true }));
+    dispatch(
+      setMessageAboutUser({
+        message: 'Идет сохранение данных...',
+        errors: false,
+      })
+    );
+
+    const data = JSON.stringify(editUser);
+
+    let requestOptions = {
+      method: 'POST',
+      body: data,
+    };
+
+    const result = await fetchNow(
+      `${process.env.REACT_APP_API_SERVER}/update_user`,
+      requestOptions
+    );
+
+    if (result.data) {
+      dispatch(
+        setMessageAboutUser({
+          message: 'Сохранено',
+          errors: false,
+        })
+      );
+
+      // Сохранение изменений
+      dispatch(saveEditUser());
+
+      //обновление списка пользователей
+      dispatch(fetchUsers())
+    } else {
+      dispatch(
+        setMessageAboutUser({
+          message: result.error,
+          errors: true,
+        })
+      );
+    }
+
+    setTimeout(() => {
+      dispatch(setIsLoadingAboutUser({ isLoading: false }));
+    }, 500);
   };
 
   const resetUser = () => {
@@ -155,13 +267,13 @@ function ModalAboutUser() {
   };
 
   const delSpaseStr = (str) => {
-    return str.replace(/\s+/g, " ").trim();
+    return str.replace(/\s+/g, ' ').trim();
   };
 
   return (
     <Modal
       active={active}
-      size={"big"}
+      size={'big'}
       setActive={() => {
         dispatch(setActiveAboutUser({ active: false }));
         dispatch(setDefaultAboutUser());
@@ -170,38 +282,34 @@ function ModalAboutUser() {
       message={message}
       errors={errors}
       isLoading={isLoading}
-      footer={
-        isEdit ? "Внесите изменения и нажмите Сохранить" : "Нет изменений"
-      }
+      footer={footerMessage()}
       actions={{
-        visible: true,
+        visible: Boolean(!user?.isBlocked),
         buttonSend: {
           action: saveUser,
-          title: "Сохранить",
-          loadingTitle: "Сохраняю",
+          title: 'Сохранить',
+          loadingTitle: 'Сохраняю',
           loading: isLoading,
           disabled: !isEdit || errors,
         },
         buttonClear: {
           action: resetUser,
-          title: "Отменить изменения",
-          loadingTitle: "Отменить",
+          title: 'Отменить изменения',
+          loadingTitle: 'Отменить',
           loading: isLoading,
         },
       }}
     >
       <>
-
-
-        <button
+        {/* <button
           onClick={() => {
-            dispatch(setVisibleDialog({visible: true}));
+            dispatch(setVisibleDialog({ visible: true }));
           }}
         >
           Открыть
-        </button>
+        </button> */}
         <h2
-          style={{ margin: "0 0 20px 0" }}
+          style={{ margin: '0 0 20px 0' }}
         >{`${user?.surname} ${user?.name}`}</h2>
         {Boolean(user?.isBlocked) && (
           <div className={styles.blocked_msg}>
@@ -210,7 +318,7 @@ function ModalAboutUser() {
             </div>
 
             <div className={styles.unlock_btn}>
-              <button>Разблокировать</button>
+              <button onClick={unlockUser}>Разблокировать</button>
             </div>
           </div>
         )}
@@ -222,7 +330,7 @@ function ModalAboutUser() {
                 src={
                   user?.img
                     ? `${process.env.REACT_APP_SERVER}/images/${user?.img}`
-                    : "https://iglit.ru/dist/no-image.jpg"
+                    : 'https://iglit.ru/dist/no-image.jpg'
                 }
                 alt="Аватар пользователя"
               />
@@ -234,13 +342,13 @@ function ModalAboutUser() {
                 <span>
                   {user?.date_create
                     ? new Date(user?.date_create).toLocaleDateString()
-                    : "нет данных"}
+                    : 'нет данных'}
                 </span>
               </li>
 
               <li>
                 Автор:&nbsp;
-                <span>{user?.author ? user?.author : "нет данных"}</span>
+                <span>{user?.author ? user?.author : 'нет данных'}</span>
               </li>
 
               <li>
@@ -248,13 +356,13 @@ function ModalAboutUser() {
                 <span>
                   {user?.last_activity
                     ? new Date(user?.last_activity).toLocaleString()
-                    : "нет данных"}
+                    : 'нет данных'}
                 </span>
               </li>
             </ul>
 
             {!user?.isBlocked && (
-              <button className={styles.block_btn}>Заблокировать</button>
+              <button className={styles.block_btn} onClick={blockUser}>Заблокировать</button>
             )}
           </div>
 
@@ -273,16 +381,17 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="Логин"
+                disabled={Boolean(user?.isBlocked)}
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ login: value }));
-                  validationForm({ inputName: "login", inputValue: value });
+                  validationForm({ inputName: 'login', inputValue: value });
                 }}
                 validation={validation?.login.status}
                 value={editUser?.login}
                 onBlur={() => {
                   let temp = delSpaseStr(editUser?.login);
                   dispatch(setEditAboutUser({ login: temp.toLowerCase() }));
-                  validationForm({ inputName: "login", inputValue: temp });
+                  validationForm({ inputName: 'login', inputValue: temp });
                 }}
               />
 
@@ -296,9 +405,10 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="Фамилия"
+                disabled={Boolean(user?.isBlocked)}
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ surname: value }));
-                  validationForm({ inputName: "surname", inputValue: value });
+                  validationForm({ inputName: 'surname', inputValue: value });
                 }}
                 validation={validation?.surname.status}
                 value={editUser?.surname}
@@ -307,7 +417,7 @@ function ModalAboutUser() {
                   let str =
                     temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                   dispatch(setEditAboutUser({ surname: str }));
-                  validationForm({ inputName: "surname", inputValue: str });
+                  validationForm({ inputName: 'surname', inputValue: str });
                 }}
               />
 
@@ -321,9 +431,10 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="Имя"
+                disabled={Boolean(user?.isBlocked)}
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ name: value }));
-                  validationForm({ inputName: "name", inputValue: value });
+                  validationForm({ inputName: 'name', inputValue: value });
                 }}
                 validation={validation?.name.status}
                 value={editUser?.name}
@@ -332,7 +443,7 @@ function ModalAboutUser() {
                   let str =
                     temp.charAt(0).toUpperCase() + temp.slice(1).toLowerCase();
                   dispatch(setEditAboutUser({ name: str }));
-                  validationForm({ inputName: "name", inputValue: str });
+                  validationForm({ inputName: 'name', inputValue: str });
                 }}
               />
 
@@ -346,16 +457,17 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="E-mail"
+                disabled={Boolean(user?.isBlocked)}
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ email: value }));
-                  validationForm({ inputName: "email", inputValue: value });
+                  validationForm({ inputName: 'email', inputValue: value });
                 }}
                 validation={validation?.email.status}
                 value={editUser?.email}
                 onBlur={() => {
                   let str = delSpaseStr(editUser?.email);
                   dispatch(setEditAboutUser({ email: str }));
-                  validationForm({ inputName: "email", inputValue: str });
+                  validationForm({ inputName: 'email', inputValue: str });
                 }}
               />
 
@@ -369,9 +481,10 @@ function ModalAboutUser() {
               <MyInput
                 type="number"
                 title="Номер телефона"
+                disabled={Boolean(user?.isBlocked)}
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ phone: value }));
-                  validationForm({ inputName: "phone", inputValue: value });
+                  validationForm({ inputName: 'phone', inputValue: value });
                 }}
                 validation={validation?.phone.status}
                 value={editUser?.phone}
@@ -387,9 +500,10 @@ function ModalAboutUser() {
               <MyInput
                 type="text"
                 title="Должность"
+                disabled={Boolean(user?.isBlocked)}
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ position: value }));
-                  validationForm({ inputName: "position", inputValue: value });
+                  validationForm({ inputName: 'position', inputValue: value });
                 }}
                 validation={validation?.position.status}
                 value={editUser?.position}
@@ -397,7 +511,7 @@ function ModalAboutUser() {
                   let temp = delSpaseStr(editUser?.position);
                   let str = temp.charAt(0).toUpperCase() + temp.slice(1);
                   dispatch(setEditAboutUser({ position: str }));
-                  validationForm({ inputName: "position", inputValue: str });
+                  validationForm({ inputName: 'position', inputValue: str });
                 }}
               />
 
@@ -411,11 +525,12 @@ function ModalAboutUser() {
               <Dropdown
                 id="aboutUserModal_role"
                 title="Роль"
+                disabled={Boolean(user?.isBlocked)}
                 placeholder="Выберите роль"
                 multiple={false}
                 changeValue={(value) => {
                   dispatch(setEditAboutUser({ role: value }));
-                  validationForm({ inputName: "role", inputValue: value });
+                  validationForm({ inputName: 'role', inputValue: value });
                 }}
                 reset={reset}
                 setReset={() => dispatch(setResetAboutUser({ reset: false }))}

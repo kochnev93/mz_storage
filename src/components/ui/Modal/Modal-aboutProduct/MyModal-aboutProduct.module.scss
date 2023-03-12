@@ -6,7 +6,6 @@
 
 .modalAbout_form {
   min-width: 300px;
- // margin-right: 50px;
 }
 
 .modalAbout_formItem {
@@ -15,7 +14,7 @@
 
 .accounting_sn{
   font-size: 12px;
-  background-color: #ffc1c1;
+  background-color: var(--error-color);
   padding: 5px;
   border-radius: 4px;
   margin-bottom: 20px;
