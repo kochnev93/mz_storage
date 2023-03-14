@@ -71,9 +71,7 @@ export const DashboardTable = () => {
   const getProducts = async (e) => {
     e.preventDefault();
 
-    if (!validationForm()) {
-      return;
-    }
+    // if (!validationForm()) return false;
 
     setIsLoading(true);
 
@@ -89,13 +87,17 @@ export const DashboardTable = () => {
       requestOptions
     );
 
+
     if(result.data){
       dispatch(addProducts({ products: result.data }));
+      setErrorMessage('');
+    } else {
+      setErrorMessage(result.error);
     }
 
     setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 300);
 
     
   };
@@ -199,7 +201,7 @@ export const DashboardTable = () => {
       </form>
 
       <div className={styles.message_error}>
-        {validationFilter ? '' : errorMessage}
+        {errorMessage}
       </div>
 
       <MyTable
