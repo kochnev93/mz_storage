@@ -36,7 +36,6 @@ const useFetch = (url, options) => {
    
     }
     catch (e){
-      //console.error(e.message)
       return {data: null, error: e.message}
     }
   }

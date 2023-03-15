@@ -41,9 +41,9 @@
     }
 
 	&.clear{
-		border: 1px solid rgba(0, 0, 0, 0.23);
+		border: 1px solid var(--colorMenuIcon);
 		background: transparent;
-        color: rgba(0, 0, 0, 0.23);
+        color: var(--colorMenuIcon);
     }
 
 }

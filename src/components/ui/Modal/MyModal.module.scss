@@ -112,6 +112,7 @@
 .myModal_message {
   margin-right: 10px;
   font-size: 12px;
+  max-width: 300px;
 
   &.succses {
     color: green;
