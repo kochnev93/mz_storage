@@ -27,11 +27,15 @@
 
 .close_menu_btn {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   padding: var(--paddingMenu);
   min-height: var(--minHeightHeader);
   background-color: var(--navbar-bg-color);
   border-bottom: 1px solid var(--navbar-colorBorderTop);
+
+  svg{
+    fill: var(--main-color);
+  }
 
   button {
     display: inline-flex;
@@ -55,6 +59,10 @@
 
     &:hover {
       background-color: var(--navbar-colorHoverClose);
+      svg{
+        fill: white;
+      }
+    
     }
   }
 }

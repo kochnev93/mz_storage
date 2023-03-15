@@ -6,7 +6,6 @@ import { AiOutlineInfoCircle } from 'react-icons/Ai';
 
 import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
 import { MyTable } from '../../components/elements/Table/MyTable.jsx';
-import ModalAction from '../../components/ui/Modal/MyModalAction.jsx';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -79,7 +78,6 @@ export const AdminUsers = () => {
 
   return (
     <section>
-      {/* <ModalAction active={true}/> */}
       <div className={styles.header}>
         <span className={cx(styles.info_message, { [styles.error]: errors })}>
           {message}

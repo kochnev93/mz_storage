@@ -45,6 +45,7 @@
 
   /*Buttons*/
   --button-colorText: #fff;
+  --button-bg-hover: #29d1cb;
 
   /*Table*/
   --table-colorIcon: #a5a5a5;
@@ -111,6 +112,7 @@
 
   /*Buttons*/
   --button-colorText: #16171b;
+--button-bg-hover: #08e79c;
 
   /*Table*/
   --table-colorIcon: #d1d7e0;

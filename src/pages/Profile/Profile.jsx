@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 // Styles
-import styles from './Profile.module.scss';
+import styles from "./Profile.module.scss";
 
 // Components
-import { MainWrapper } from '../../components/MainWrapper.jsx';
-import { MyTable } from '../../components/elements/Table/MyTable.jsx';
-import MyButton from '../../components/ui/Buttons/ButtonSend.jsx';
+import { MainWrapper } from "../../components/MainWrapper.jsx";
+import { MyTable } from "../../components/elements/Table/MyTable.jsx";
+import MyButton from "../../components/ui/Buttons/ButtonSend.jsx";
+import ModalDialog from "../../components/ui/Modal/MyModalDialog.jsx";
 
 // Hooks
-import useFetch from '../../hooks/useFetch.js';
-import { useAuth } from '../../hooks/use-auth.js';
+import useFetch from "../../hooks/useFetch.js";
+import { useAuth } from "../../hooks/use-auth.js";
 
 // redux
-import { useDispatch, useSelector } from 'react-redux';
-import { removeUser, refreshImgUser } from '../../features/users/userSlice.js';
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser, refreshImgUser } from "../../features/users/userSlice.js";
 
 //import Dropdown from '../../components/ui/Dropdown/MyDropdown-function.jsx';
 
@@ -23,16 +24,21 @@ export const Profile = () => {
   const dispatch = useDispatch();
   const { fetchNow } = useFetch();
 
+  const [activeDialog, setActiveDialog] = useState(false);
+  const closeDialog = (str) => {
+    console.log(str);
+    setActiveDialog(false);
+  };
   //const { warehouses, category } = useSelector((state) => state.app_state);
 
   const titleColumn = [
-    'Номер',
-    'Действие',
-    'Откуда',
-    'Куда',
-    'Количество',
-    'Дата',
-    '',
+    "Номер",
+    "Действие",
+    "Откуда",
+    "Куда",
+    "Количество",
+    "Дата",
+    "",
   ];
 
   const [image, setImage] = useState();
@@ -43,7 +49,7 @@ export const Profile = () => {
     let answerUser = confirm(`Выйти из приложения?`);
 
     if (answerUser) {
-      localStorage.removeItem('mz_storage_user');
+      localStorage.removeItem("mz_storage_user");
       dispatch(removeUser());
     }
   };
@@ -56,10 +62,10 @@ export const Profile = () => {
 
   const send = async () => {
     const formData = new FormData();
-    formData.append('avatar', image);
+    formData.append("avatar", image);
 
     let requestOptions = {
-      method: 'POST',
+      method: "POST",
       body: formData,
     };
 
@@ -78,6 +84,12 @@ export const Profile = () => {
 
   return (
     <>
+      <ModalDialog
+        active={activeDialog}
+        action={closeDialog}
+        title='О пользователе'
+        subtitle='Описание'
+      />
       <MainWrapper header_title="Профиль" title={user.login}>
         <div className={styles.bio}>
           <div className={styles.bio__img}>
@@ -114,6 +126,14 @@ export const Profile = () => {
         </div>
         <h2>История</h2>
         <MyTable titleColumn={titleColumn} />
+
+        <button
+          onClick={() => {
+            setActiveDialog(true);
+          }}
+        >
+          Тест Диалога
+        </button>
 
         {/* <input type="file" onChange={sendFile} accept="image/*,.png,.jpg,.jpeg" />
       <button onClick={send}>Отправить</button>

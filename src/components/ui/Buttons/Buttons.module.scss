@@ -17,11 +17,12 @@
 	appearance: none;
 	touch-action: manipulation;  
 	transition: all .2s ease-out;
+	min-width: 80px;
 
     &.send{
         background-color: var(--main-color);
 		&:hover{
-			background-color: lighten(#12cac4,2%);
+			background-color: var(--button-bg-hover)
 		}
 		&.loading{
 			background-color: #dbdbdb;
