@@ -144,6 +144,26 @@ function ModalTransfersSomeProducts() {
     return errorCounter == 0 ? true : false;
   };
 
+  const getTransferStatus = (item) => {
+    if (!item.hasOwnProperty('status_transfer')) return <></>;
+
+    return (
+      <>
+        {item.status_transfer ? (
+          <span title="Успешно" style={{ color: 'green' }}>
+            &#9989;
+          </span>
+        ) : (
+          <span title="Ошибка" style={{ color: 'red' }}>
+            &#10060;
+          </span>
+        )}
+      </>
+    );
+
+  };
+
+
   const addTransfer = async () => {
     if (validateForm()){
 
@@ -165,8 +185,11 @@ function ModalTransfersSomeProducts() {
         requestOptions
       );
 
+      console.log('transfer-modal', result)
+
       if(result.data){
         dispatch(setMessagesomeTransfer({ message: result.data }));
+        dispatch(setProductSomeTransfer(result.transfers));
 
         setTimeout(() => {
           dispatch(setIsLoadingsomeTransfer({ isLoading: false }));
@@ -382,12 +405,14 @@ function ModalTransfersSomeProducts() {
               <th>SN</th>
               <th>{`Количество (${warehouseFrom[0]?.title})`}</th>
               <th>Количество (для перемещения)</th>
+              <th>Статус</th>
+              <th>Описание</th>
             </tr>
           </thead>
           <tbody>
             {products?.map((item, index) => {
               return (
-                <tr key={item.id}>
+                <tr key={item.id} >
                   <td>{index + 1}</td>
                   <td>{item.id}</td>
                   <td>{item.name}</td>
@@ -416,6 +441,8 @@ function ModalTransfersSomeProducts() {
                       </div>
                     )}
                   </td>
+                  <td>{getTransferStatus(item)}</td>
+                  <td style={{color: 'red'}}>{item?.error ? item.error : ''}</td>
                 </tr>
               );
             })}
@@ -423,22 +450,6 @@ function ModalTransfersSomeProducts() {
         </table>
       )}
 
-      {/* <div className={styles.buttons}>
-        <MyButton
-          type="clear"
-          action={resetForm}
-          title="Сбросить"
-          loadingTitle="Сбросить"
-          loading={isLoading}
-        />
-        <MyButton
-          type="send"
-          action={addTransfer}
-          title="Переместить"
-          loadingTitle="Перемещаю"
-          loading={isLoading}
-        />
-      </div> */}
     </Modal>
   );
 }

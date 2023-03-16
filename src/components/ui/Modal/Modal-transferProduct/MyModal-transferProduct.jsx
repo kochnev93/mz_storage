@@ -126,7 +126,8 @@ function ModalTransferProduct() {
     setValidationWarehouse(true);
     setCount(null);
     setValidationCount(true);
-  }
+  };
+
 
   const transfer = async () => {
     if (validation()) {
@@ -139,7 +140,7 @@ function ModalTransferProduct() {
         old_warehouse: product.id_warehouse,
         sn: product?.sn,
         transfer_count: count,
-        count: product?.count
+        count: product?.count,
       });
 
       let requestOptions = {
@@ -170,7 +171,6 @@ function ModalTransferProduct() {
         setTimeout(() => {
           dispatch(setIsLoadingTransfer({ isLoading: false }));
         }, 100);
-        
       }
     }
   };
