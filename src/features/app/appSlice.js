@@ -37,42 +37,42 @@ const initialState = {
   theme: getTheme(),
   roles: [],
   warehouses: [
-    // {
-    //   isCheked: false,
-    //   title: "Долгоозёрная",
-    //   id: 5,
-    // },
+    {
+      isCheked: false,
+      title: "Долгоозёрная",
+      id: 5,
+    },
 
-    // {
-    //   isCheked: false,
-    //   title: "Кирова",
-    //   id: 50,
-    // },
+    {
+      isCheked: false,
+      title: "Кирова",
+      id: 50,
+    },
 
-    // {
-    //   isCheked: false,
-    //   title: "Яхтенная",
-    //   id: 115,
-    // },
+    {
+      isCheked: false,
+      title: "Яхтенная",
+      id: 115,
+    },
   ],
   category: [
-    // {
-    //   isCheked: false,
-    //   title: "АДМ",
-    //   id: 5,
-    // },
+    {
+      isCheked: false,
+      title: "АДМ",
+      id: 5,
+    },
 
-    // {
-    //   isCheked: false,
-    //   title: "Принтер",
-    //   id: 54,
-    // },
+    {
+      isCheked: false,
+      title: "Принтер",
+      id: 54,
+    },
 
-    // {
-    //   isCheked: false,
-    //   title: "Монитор",
-    //   id: 52,
-    // },
+    {
+      isCheked: false,
+      title: "Монитор",
+      id: 52,
+    },
   ],
   description: '',
 };

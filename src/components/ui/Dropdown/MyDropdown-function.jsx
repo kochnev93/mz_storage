@@ -1,13 +1,16 @@
-//Компонент в стадии разработки
-
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import styles from "./MyDropdown.module.scss";
+import cx from "classnames";
 
+// Icons
 import { MdKeyboardArrowDown } from "react-icons/Md";
 import { MdKeyboardArrowUp } from "react-icons/Md";
-import cx from "classnames";
-import { useDispatch, useSelector } from "react-redux";
+
+// Hooks
+import { useDispatch } from "react-redux";
 import useFetch from "../../../hooks/useFetch.js";
+
+// Components
 import { MenuSelectedItems } from "./MenuSelectedItems.jsx";
 import { ListOptions } from "./ListOptions.jsx";
 import { SearchInput } from "./SearchInput.jsx";
@@ -16,10 +19,6 @@ const Dropdown = (props) => {
   const dispatch = useDispatch();
   const dropdownRef = useRef(null);
   const { fetchNow } = useFetch();
-
-  //REdux state
-  // const { warehouses, category } = useSelector((state) => state.app_state);
-  // console.log("MY_DROPDOWN_DATA", { warehouses, category });
 
   // Local State
   const [type] = useState(props.type);
@@ -35,12 +34,14 @@ const Dropdown = (props) => {
   const [title] = useState(props.title || "Название");
   const [placeholder] = useState(props.placeholder || "Выберите...");
   const [searchInput, setSearchInput] = useState("");
-  const [selectOptionAnyone, setSelectOptionAnyone] = useState(props.selectOptionAnyone ? props.selectOptionAnyone : false);
+  const [selectOptionAnyone, setSelectOptionAnyone] = useState(
+    props.selectOptionAnyone ? props.selectOptionAnyone : false
+  );
   const [selectOptionAll, setSelectOptionAll] = useState(false);
 
-  const [reset] = useState(props.reset);
-
   const memoOptions = useMemo(() => {
+   // if (props?.options?.length === 0) return [];
+
     return props?.options?.map((item) => {
       return { ...item };
     });
@@ -48,7 +49,7 @@ const Dropdown = (props) => {
 
   useEffect(() => {
     getContent();
-  }, [url]);
+  }, [props.url]);
 
   useEffect(() => {
     setOptions(memoOptions);
@@ -56,26 +57,7 @@ const Dropdown = (props) => {
 
   useEffect(() => {
     clearDropdown();
-  }, [reset]);
-
-  // useEffect(() => {
-  //   switch (props.type) {
-  //     case "warehouse":
-  //       let tempWarehouse = warehouses.map((warehouse) => {
-  //         return { ...warehouse };
-  //       });
-  //       setOptions(tempWarehouse);
-  //       break;
-  //     case "category":
-  //       let tempCategory = category.map((category) => {
-  //         return { ...category };
-  //       });
-  //       setOptions(tempCategory);
-  //       break;
-  //     default:
-  //       setOptions([]);
-  //   }
-  // }, []);
+  }, [props.reset]);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -90,13 +72,13 @@ const Dropdown = (props) => {
   };
 
   const openDropdown = () => {
-    setIsOpen(true)
-  }
+    setIsOpen(true);
+  };
 
   const closeDropdown = () => {
     setIsOpen(false);
     setSearchInput("");
-  }
+  };
 
   const isSelectedAll = (arr) => {
     // Проверяем все ли элементы выделены
@@ -110,10 +92,12 @@ const Dropdown = (props) => {
 
   // Получение контента
   const getContent = async () => {
-    if (options?.length === 0 && url) {
+    if (props.options === undefined && props.url) {
       let requestOptions = {
         method: "GET",
       };
+
+      console.log('LOADING Dropdonw', props.id)
 
       const result = await fetchNow(
         `${process.env.REACT_APP_API_SERVER}/${url}`,
@@ -151,7 +135,7 @@ const Dropdown = (props) => {
     setOptions(newOptions);
     setSelectOptionAnyone(selectedAnyone);
     setSelectOptionAll(selectedAll);
-    setSearchInput("")
+    setSearchInput("");
 
     // Передача значений родителю
     if (props.changeValue) {

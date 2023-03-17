@@ -1,5 +1,5 @@
 import React from "react";
 
-export const FormItemModal = ({children}) => {
-  return <div>{children}</div>;
+export const FormItemModal = ({children, style}) => {
+  return <div style={style}>{children}</div>;
 };
