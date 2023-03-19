@@ -5,7 +5,7 @@ import cx from "classnames";
 import styles from "./MyModalDialog.module.scss";
 import MyButton from "../Buttons/ButtonSend.jsx";
 
-function ModalDialog({active, action, title, subtitle, succsesTitle, cancelTitle}) {
+function ModalDialog({active, action, title, subtitle, succsesTitle, cancelTitle, children}) {
   return (
     <div
       className={cx(styles.dialog_overlay, {
@@ -20,6 +20,7 @@ function ModalDialog({active, action, title, subtitle, succsesTitle, cancelTitle
 
           <div className={cx(styles.dialog_body)}>
               {subtitle}
+              {children}
           </div>
 
           <div className={cx(styles.dialog_footer)}>

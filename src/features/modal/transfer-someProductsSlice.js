@@ -22,6 +22,7 @@ const initialState = {
   reset: false,
   isLoading: false,
   isEdit: false,
+  isTransferComplete: false,
   //
   products: [],
   validationProducts: true,
@@ -60,6 +61,7 @@ export const transferSomeProductSlice = createSlice({
         state.products = [];
         state.reset = true;
         state.isEdit = false;
+        state.message = '';
     },
 
     setIsLoadingsomeTransfer: (state, action) => {
@@ -71,7 +73,6 @@ export const transferSomeProductSlice = createSlice({
     },
 
     setErrorsSomeTransfer: (state, action) => {
-      console.log(action.payload);
       state.errors = action.payload.errors;
       state.message = action.payload.message;
       state.validationProducts =

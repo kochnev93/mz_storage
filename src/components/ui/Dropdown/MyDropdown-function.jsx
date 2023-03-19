@@ -97,14 +97,17 @@ const Dropdown = (props) => {
         method: "GET",
       };
 
-      console.log('LOADING Dropdonw', props.id)
-
       const result = await fetchNow(
-        `${process.env.REACT_APP_API_SERVER}/${url}`,
+        `${process.env.REACT_APP_API_SERVER}/${props.url}`,
         requestOptions
       );
 
-      setOptions(result.data);
+      console.log(props.url, result)
+
+      if(result.data){
+        setOptions(result.data);
+      }
+
       setIsLoaded(true);
     }
   };
@@ -161,16 +164,16 @@ const Dropdown = (props) => {
 
   const clearDropdown = () => {
     if (props.reset) {
-      let newOptions = options.map((option) => {
+      let newOptions = options?.map((option) => {
         option.isCheked = false;
         return option;
       });
 
-      props.setReset();
-
       setOptions(newOptions);
       setSelectOptionAnyone(false);
       setSelectOptionAll(false);
+
+      props.setReset();
     }
   };
 

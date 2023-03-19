@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 
 // Hooks
-import useFetch from "../../../../hooks/useFetch";
+import useFetch from '../../../../hooks/useFetch';
 
 // Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setActiveSomeTransfer,
   setProductSomeTransfer,
@@ -18,23 +18,23 @@ import {
   setCountSomeTransfer,
   setValidationSomeTransfer,
   setDefaultValidationSomeTransfer,
-} from "../../../../features/modal/transfer-someProductsSlice";
+} from '../../../../features/modal/transfer-someProductsSlice';
 
 //Styles
-import styles from "./Modal-transfersSomeProducts.module.scss";
-import stylesModal from "../MyModal.module.scss";
-import { ImArrowRight } from "react-icons/Im";
+import styles from './Modal-transfersSomeProducts.module.scss';
+import stylesModal from '../MyModal.module.scss';
+import { ImArrowRight } from 'react-icons/Im';
 
 // Components
-import MyDropdown from "../../Dropdown/MyDropdown.jsx";
-import Modal from "../MyModal2.jsx";
-import MyInput from "../../Input/MyInput.jsx";
-import { MyTable } from "../../../elements/Table/MyTable.jsx";
-import Dropdown from "../../Dropdown/MyDropdown-function.jsx";
-import { FormModal } from "../FormModal/FormModal.jsx";
-import { FormItemModal } from "../FormItemModal/FormItemModal.jsx";
-import { FormItemError } from "../FormItemModal/FormItemError.jsx";
-import ModalDialog from "../MyModalDialog.jsx";
+import MyDropdown from '../../Dropdown/MyDropdown.jsx';
+import Modal from '../MyModal2.jsx';
+import MyInput from '../../Input/MyInput.jsx';
+import { MyTable } from '../../../elements/Table/MyTable.jsx';
+import Dropdown from '../../Dropdown/MyDropdown-function.jsx';
+import { FormModal } from '../FormModal/FormModal.jsx';
+import { FormItemModal } from '../FormItemModal/FormItemModal.jsx';
+import { FormItemError } from '../FormItemModal/FormItemError.jsx';
+import ModalDialog from '../MyModalDialog.jsx';
 
 function ModalTransfersSomeProducts() {
   const dispatch = useDispatch();
@@ -61,23 +61,29 @@ function ModalTransfersSomeProducts() {
   const { warehouses } = useSelector((state) => state.app_state);
 
   const [titleColumns] = useState([
-    "№",
-    "id",
-    "Наименование",
-    "sn",
-    `Количество (${warehouseFrom[0]?.title})`,
-    "Количество (для перемещения)",
-    "Статус",
-    "Описание",
+    '№',
+    'id',
+    'Наименование',
+    'sn',
+    'Остаток',
+    'Количество (перемещение)',
+    'Статус',
+    'Описание',
   ]);
 
   const [activeCloseDialog, setActiveCloseDialog] = useState(false);
+  const [activeTransferDialog, setActiveTransferDialog] = useState(false);
 
   const { fetchNow } = useFetch();
 
   const closeDialog = (answer) => {
     setActiveCloseDialog(false);
     if (answer) closeModal();
+  };
+
+  const transferDialog = (answer) => {
+    setActiveTransferDialog(false);
+    if (answer) addTransfer();
   };
 
   const closeModal = () => {
@@ -98,7 +104,7 @@ function ModalTransfersSomeProducts() {
       dispatch(
         setErrorsSomeTransfer({
           errors: true,
-          message: "Выберите склад (откуда)",
+          message: 'Выберите склад (откуда)',
           validationWarehouseFrom: false,
           validationWarehouseTo: true,
           validationProducts: true,
@@ -112,7 +118,7 @@ function ModalTransfersSomeProducts() {
       dispatch(
         setErrorsSomeTransfer({
           errors: true,
-          message: "Выберите склад (куда)",
+          message: 'Выберите склад (куда)',
           validationWarehouseTo: false,
           validationProducts: true,
           validationWarehouseFrom: true,
@@ -126,7 +132,7 @@ function ModalTransfersSomeProducts() {
       dispatch(
         setErrorsSomeTransfer({
           errors: true,
-          message: "Выберите товар / товары",
+          message: 'Выберите товар / товары',
           validationProducts: false,
           validationWarehouseFrom: true,
           validationWarehouseTo: true,
@@ -140,7 +146,7 @@ function ModalTransfersSomeProducts() {
       dispatch(
         setErrorsSomeTransfer({
           errors: true,
-          message: "Нельзя перемещать на этот же склад",
+          message: 'Нельзя перемещать на этот же склад',
           validationWarehouseTo: false,
           validationProducts: true,
           validationWarehouseFrom: true,
@@ -158,7 +164,7 @@ function ModalTransfersSomeProducts() {
             setValidationSomeTransfer({
               id_product: product.id,
               validationCountTransfer: false,
-              validationMessage: "Количество должно быть >0",
+              validationMessage: 'Количество должно быть >0',
             })
           );
         }
@@ -169,7 +175,7 @@ function ModalTransfersSomeProducts() {
             setValidationSomeTransfer({
               id_product: product.id,
               validationCountTransfer: false,
-              validationMessage: "Количество превышает остаток",
+              validationMessage: 'Количество превышает остаток',
             })
           );
         }
@@ -180,17 +186,17 @@ function ModalTransfersSomeProducts() {
   };
 
   const getTransferStatus = (item) => {
-    if (!item.hasOwnProperty("status_transfer"))
+    if (!item.hasOwnProperty('status_transfer'))
       return <span title="Ожидает перемещения">&#128260;</span>;
 
     return (
       <>
         {item.status_transfer ? (
-          <span title="Успешно" style={{ color: "green" }}>
+          <span title="Успешно" style={{ color: 'green' }}>
             &#9989;
           </span>
         ) : (
-          <span title="Ошибка" style={{ color: "red" }}>
+          <span title="Ошибка" style={{ color: 'red' }}>
             &#10060;
           </span>
         )}
@@ -209,7 +215,7 @@ function ModalTransfersSomeProducts() {
       });
 
       let requestOptions = {
-        method: "POST",
+        method: 'POST',
         body: data,
       };
 
@@ -218,7 +224,7 @@ function ModalTransfersSomeProducts() {
         requestOptions
       );
 
-      console.log("transfer-modal", result);
+      console.log('transfer-modal', result);
 
       if (result.data) {
         dispatch(setMessagesomeTransfer({ message: result.data }));
@@ -240,7 +246,7 @@ function ModalTransfersSomeProducts() {
         );
       }
     } else {
-      console.warn("Не пройдена валидация формы");
+      console.warn('Не пройдена валидация формы');
     }
   };
 
@@ -251,42 +257,17 @@ function ModalTransfersSomeProducts() {
         <td>{item.id}</td>
         <td>{item.name}</td>
         <td>{item.sn}</td>
-        <td>{item.accounting_sn ? "1" : item.count}</td>
-        {/* <td>
-          {!item.accounting_sn ? (
-            <MyInput
-              type="number"
-              changeValue={(value) => {
-                dispatch(
-                  setCountSomeTransfer({
-                    countTransfer: value,
-                    id_product: item.id,
-                  })
-                );
-              }}
-              validation={item?.validationCountTransfer}
-              value={item?.countTransfer}
-            />
-          ) : (
-            "1"
-          )}
-
-          {!item?.validationCountTransfer && (
-            <div className={stylesModal.error_message}>
-              {item?.validationMessage}
-            </div>
-          )}
-        </td> */}
+        <td>{item.accounting_sn ? '1' : item.count}</td>
         <td>
           {!item.accounting_sn ? (
             <input
               style={{
-                width: "100%",
-                height: "100%",
-                background: "transparent",
+                width: '100%',
+                height: '100%',
+                background: 'transparent',
                 color: 'var(--text-color)',
-                border:'1px solid var(--colorMenuIcon)',
-                padding: '5px'
+                border: '1px solid var(--colorMenuIcon)',
+                padding: '5px',
               }}
               type="number"
               onChange={(e) => {
@@ -300,11 +281,11 @@ function ModalTransfersSomeProducts() {
               value={item?.countTransfer}
             />
           ) : (
-            "1"
+            '1'
           )}
         </td>
-        <td style={{ textAlign: "center" }}>{getTransferStatus(item)}</td>
-        <td style={{ color: "red" }}>{item?.error ? item.error : ""}</td>
+        <td style={{ textAlign: 'center' }}>{getTransferStatus(item)}</td>
+        <td style={{ color: 'red' }}>{item?.error ? item.error : ''}</td>
       </tr>
     );
   });
@@ -320,9 +301,35 @@ function ModalTransfersSomeProducts() {
         cancelTitle="Отмена"
       />
 
+      <ModalDialog
+        active={activeTransferDialog}
+        action={transferDialog}
+        title="Перемещение товаров"
+        subtitle={`Переместить товары со склада ${warehouseFrom[0]?.title} на склад ${warehouseTo[0]?.title}?`}
+        succsesTitle="Да"
+        cancelTitle="Отмена"
+      >
+        <ul
+          style={{
+            marginTop: '10px',
+            listStyle: 'none',
+            color: 'var(--text-color)',
+            fontSize: '14px'
+          }}
+        >
+          {products?.map((item) => {
+            let str;
+            if (item.accounting_sn) str = `${item.name}, sn: ${item.sn}`;
+            if (!item.accounting_sn)
+              str = `${item.name}, количество: ${item.countTransfer}`;
+            return <li style={{ marginBottom: '5px' }} key={item.id}>{str}</li>;
+          })}
+        </ul>
+      </ModalDialog>
+
       <Modal
         active={active}
-        size={"big"}
+        size={'big'}
         setActive={
           isEdit
             ? () => {
@@ -339,23 +346,26 @@ function ModalTransfersSomeProducts() {
         actions={{
           visible: true,
           buttonSend: {
-            action: addTransfer,
-            title: "Переместить",
-            loadingTitle: "Перемещаю",
+            action: () => {
+              setActiveTransferDialog(true);
+            },
+            title: 'Переместить',
+            loadingTitle: 'Перемещаю',
             loading: isLoading,
             disabled: !isEdit,
           },
           buttonClear: {
             action: resetForm,
-            title: "Сбросить",
-            loadingTitle: "Сбросить",
+            title: 'Сбросить',
+            loadingTitle: 'Сбросить',
             loading: isLoading,
           },
         }}
       >
-        <div>{new String(isEdit)}</div>
-
-        <FormModal columns={3} styles={{ gridAutoRows: "100px" }}>
+        <FormModal
+          columns={3}
+          styles={{ gridAutoRows: '100px', gridTemplateColumns: '2fr 1fr 2fr' }}
+        >
           <FormItemModal>
             <h4>1. Выберите склад (откуда)</h4>
 
@@ -375,21 +385,22 @@ function ModalTransfersSomeProducts() {
               validation={validationWarehouseFrom}
             />
 
-            <FormItemError status={true} message={"validation?.name.message"} />
+            <FormItemError status={true} message={'validation?.name.message'} />
           </FormItemModal>
 
           <FormItemModal
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "30px",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '30px',
             }}
+            visible={!warehouseFrom?.length}
           >
-            <ImArrowRight style={{ fill: "var(--main-color)" }} />
+            <ImArrowRight style={{ fill: 'var(--main-color)' }} />
           </FormItemModal>
 
-          <FormItemModal>
+          <FormItemModal visible={!warehouseFrom?.length}>
             <h4>2. Выберите склад (куда)</h4>
 
             <Dropdown
@@ -408,10 +419,10 @@ function ModalTransfersSomeProducts() {
               validation={validationWarehouseTo}
             />
 
-            <FormItemError status={true} message={"validation?.name.message"} />
+            <FormItemError status={true} message={'validation?.name.message'} />
           </FormItemModal>
 
-          <FormItemModal>
+          <FormItemModal visible={!warehouseFrom?.length}>
             <h4>3. Выберите товар / товары</h4>
 
             <Dropdown
@@ -431,27 +442,29 @@ function ModalTransfersSomeProducts() {
               validation={validationWarehouseFrom}
             />
 
-            <FormItemError status={true} message={"validation?.name.message"} />
+            <FormItemError status={true} message={'validation?.name.message'} />
           </FormItemModal>
 
           <FormItemModal
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "30px",
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              fontSize: '30px',
             }}
+            visible={!warehouseFrom?.length}
           >
-            <ImArrowRight style={{ fill: "var(--main-color)" }} />
+            <ImArrowRight style={{ fill: 'var(--main-color)' }} />
           </FormItemModal>
 
           <FormItemModal
             style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              height: "100%",
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              height: '100%',
             }}
+            visible={!warehouseFrom?.length}
           >
             <h4>4. Укажите количество</h4>
             <p className={stylesModal.description}>
@@ -460,163 +473,6 @@ function ModalTransfersSomeProducts() {
             </p>
           </FormItemModal>
         </FormModal>
-
-        {/* <form className={stylesModal.form}>
-          <div className={stylesModal.itemsContainer}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "2fr 1fr 2fr",
-              }}
-            >
-              <div className={stylesModal.item}>
-                <h4>1. Выберите склад (откуда)</h4>
-                <p className={stylesModal.description}>
-                  Выберите склад откуда выполняется перемещение
-                </p>
-
-                <Dropdown
-                  id="receiptProductModal_warehouseFrom"
-                  title="Склад (откуда)"
-                  placeholder="Откуда"
-                  multiple={false}
-                  changeValue={(value) => {
-                    dispatch(setWarehouseFromSomeTransfer(value));
-                  }}
-                  reset={reset}
-                  setReset={() => {
-                    dispatch(setResetSomeTransfer({ reset: false }));
-                  }}
-                  options={warehouses}
-                  validation={validationWarehouseFrom}
-                />
-
- 
-
-                {!validation?.warehouseFrom?.status && (
-                  <div className={stylesModal.error_message}>
-                    {validation.warehouseFrom.message}
-                  </div>
-                )}
-              </div>
-
-              {warehouseFrom.length != 0 && (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontSize: "30px",
-                  }}
-                >
-                  <ImArrowRight style={{ fill: "var(--main-color)" }} />
-                </div>
-              )}
-
-              {warehouseFrom.length != 0 && (
-                <div className={stylesModal.item}>
-                  <h4>2. Выберите склад (куда)</h4>
-                  <p className={stylesModal.description}>
-                    Выберите склад куда выполняется перемещение
-                  </p>
-                  <MyDropdown
-                    id="receiptProductModal_warehouseTo"
-                    title="Склад (куда)"
-                    placeholder="Куда"
-                    multiple={false}
-                    changeValue={(res) => {
-                      dispatch(setWarehouseToSomeTransfer(res));
-                    }}
-                    validation={validationWarehouseTo}
-                    reset={reset}
-                    setReset={() =>
-                      dispatch(setResetSomeTransfer({ reset: false }))
-                    }
-                    url={"get_warehouse"}
-                  />
-
-                  {!validation?.warehouseTo?.status && (
-                    <div className={stylesModal.error_message}>
-                      {validation.warehouseTo.message}
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "2fr 1fr 2fr",
-              }}
-            >
-              {warehouseTo.length != 0 && warehouseFrom.length != 0 && (
-                <div className={stylesModal.item}>
-                  <h4>3. Выберите товар / товары</h4>
-                  <p className={stylesModal.description}>
-                    Выберите позиции для перемещения
-                  </p>
-                  <MyDropdown
-                    id="receiptProductModal_productTo"
-                    title="Товар"
-                    placeholder="Товар"
-                    multiple={true}
-                    changeValue={(res) => {
-                      dispatch(setProductSomeTransfer(res));
-                    }}
-                    validation={validationProducts}
-                    reset={reset}
-                    setReset={() =>
-                      dispatch(setResetSomeTransfer({ reset: false }))
-                    }
-                    url={urlProducts}
-                  />
-
-                  {!validation?.products?.status && (
-                    <div className={stylesModal.error_message}>
-                      {validation.products.message}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {products.length != 0 &&
-                warehouseTo.length != 0 &&
-                warehouseFrom.length != 0 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      fontSize: "30px",
-                    }}
-                  >
-                    <ImArrowRight style={{ fill: "var(--main-color)" }} />
-                  </div>
-                )}
-
-              {products.length != 0 &&
-                warehouseTo.length != 0 &&
-                warehouseFrom.length != 0 && (
-                  <div
-                    className={stylesModal.item}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      height: "100%",
-                    }}
-                  >
-                    <h4>4. Укажите количество</h4>
-                    <p className={stylesModal.description}>
-                      Проверьте таблицу ниже. Укажите количество для товаров без
-                      серийного номера и нажмите "Переместить"
-                    </p>
-                  </div>
-                )}
-            </div>
-          </div>
-        </form> */}
 
         {products.length != 0 && (
           <MyTable

@@ -28,3 +28,37 @@
         color: red;
     }
 }
+
+
+
+.header_status{
+    padding: 15px 0;
+    color: green;
+
+    &.error{
+        color: var(--error-color);
+    }
+}
+
+.header_filter{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all .3s ease;
+}
+
+.filter_btn{
+    display: flex;
+    button:not(:last-child){
+        margin-right: 10px;
+    }
+}
+
+.filter_items{
+    flex: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    column-gap: 15px;
+    padding-right: 50px;
+}

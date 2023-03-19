@@ -17,6 +17,8 @@ import adminUsersSlice from '../features/admin/adminUsersSlice';
 import addUserSlice  from '../features/modal/add-userSlice';
 import aboutUserSlice from '../features/modal/about-userSlice';
 import dialog  from '../features/dialog/dialogSlice';
+import transferPageSlice  from '../features/transfers/transfers-pageSlice';
+
 
 export const store = configureStore({
     reducer: {
@@ -36,5 +38,6 @@ export const store = configureStore({
         modal_add_user: addUserSlice,
         modal_about_user: aboutUserSlice,
         dialog: dialog,
+        transferPage: transferPageSlice,
     },
 });

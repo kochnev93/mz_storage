@@ -286,7 +286,7 @@ function ModalAboutUser() {
   };
 
   const delSpaseStr = (str) => {
-    return str.replace(/\s+/g, ' ').trim();
+    //return str.replace(/\s+/g, ' ').trim();
   };
 
   return (
