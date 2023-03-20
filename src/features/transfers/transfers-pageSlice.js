@@ -101,7 +101,7 @@ export const transferPageSlice = createSlice({
     [fetchTransfers.pending]: (state, action) => {
       state.message = 'Идет загрузка данных...';
       state.isLoading = true;
-      state.errors = true;
+      state.errors = false;
     },
     [fetchTransfers.fulfilled]: (state, action) => {
       state.message = action.payload.errorMessage
@@ -109,6 +109,7 @@ export const transferPageSlice = createSlice({
         : '';
       state.isLoading = false;
       state.transfers = action.payload.data;
+      state.errors = action.payload.errorMessage ? true : false;
     },
     [fetchTransfers.rejected]: (state, action) => {
       state.message = 'Ошибка при загрузке информации';
