@@ -37,7 +37,7 @@ const initialState = {
   transfers: [],
   errors: false,
   message: '',
-  isLoading: true,
+  isLoading: false,
   reset: false,
   warehouseTo: [],
   warehouseFrom: [],
@@ -57,6 +57,7 @@ export const transferPageSlice = createSlice({
       state.dateBegin ='';
       state.dateEnd = '';
       state.search = '';
+      state.message = '';
     },
 
     setResetPageTransfer: (state, action) => {
@@ -106,13 +107,13 @@ export const transferPageSlice = createSlice({
       state.message = action.payload.errorMessage
         ? action.payload.errorMessage
         : '';
-      state.isLoading = action.payload.errorMessage ? true : false;
+      state.isLoading = false;
       state.transfers = action.payload.data;
     },
     [fetchTransfers.rejected]: (state, action) => {
       state.message = 'Ошибка при загрузке информации';
       state.errors = true;
-      state.isLoading = true;
+      state.isLoading = false;
       state.transfers = [];
     },
   },

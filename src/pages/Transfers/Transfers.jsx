@@ -36,6 +36,7 @@ export const Transfers = () => {
     errors,
     message,
     reset,
+    isLoading,
     warehouseTo,
     warehouseFrom,
     dateBegin,
@@ -184,6 +185,8 @@ export const Transfers = () => {
               <MyButton
                 type="send"
                 title="Найти"
+                loadingTitle="Ищу..."
+                loading={isLoading}
                 action={() => {
                   getTransfer();
                 }}
