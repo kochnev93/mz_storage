@@ -48,6 +48,12 @@
     font-size: 14px;
   }
 
+  thead tr{
+    position: sticky;
+    top: -40px;
+    z-index: 9;
+  }
+
   @media screen and (max-width: 1200px){
     th,
     td {

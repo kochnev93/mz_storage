@@ -55,7 +55,7 @@ export const Transfers = () => {
     'Дата',
   ]);
 
-  const [visibleFilter, setVisibleFilter] = useState(false);
+  const [visibleFilter, setVisibleFilter] = useState(true);
 
   useEffect(() => {
     //dispatch(fetchTransfers());
