@@ -42,7 +42,7 @@ export default function App() {
         <Route
           path="/"
           element={
-            <RequireAuth>
+            <RequireAuth allowAccess={['admin', 'user', 'viewer']}>
               <Dashboard />
             </RequireAuth>
           }
@@ -51,7 +51,7 @@ export default function App() {
         <Route
           path="nomenclature"
           element={
-            <RequireAuth>
+            <RequireAuth allowAccess={['admin', 'user']}>
               <Nomenclature />
             </RequireAuth>
           }
@@ -60,7 +60,7 @@ export default function App() {
         <Route
           path="receipt"
           element={
-            <RequireAuth>
+            <RequireAuth allowAccess={['admin', 'user']}>
               <Receipt />
             </RequireAuth>
           }
@@ -69,7 +69,7 @@ export default function App() {
         <Route
           path="warehouses"
           element={
-            <RequireAuth>
+            <RequireAuth allowAccess={['admin', 'user']}>
               <Warehouses />
             </RequireAuth>
           }
@@ -78,7 +78,7 @@ export default function App() {
         <Route
           path="transfers"
           element={
-            <RequireAuth>
+            <RequireAuth allowAccess={['admin', 'user']}>
               <Transfers />
             </RequireAuth>
           }
@@ -87,7 +87,7 @@ export default function App() {
         <Route
           path="about"
           element={
-            <RequireAuth>
+            <RequireAuth allowAccess={['admin', 'user', 'viewer']}>
               <About />
             </RequireAuth>
           }
@@ -96,7 +96,7 @@ export default function App() {
         <Route
           path="profile"
           element={
-            <RequireAuth>
+            <RequireAuth allowAccess={['admin', 'user', 'viewer']}>
               <Profile />
             </RequireAuth>
           }
@@ -105,7 +105,7 @@ export default function App() {
         <Route
           path="admin/*"
           element={
-            <RequireAuth onlyAdmin={true}>
+            <RequireAuth allowAccess={['admin']}>
               <Admin />
             </RequireAuth>
           }

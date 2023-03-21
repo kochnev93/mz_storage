@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import regeneratorRuntime from 'regenerator-runtime';
 
 export const fetchTransfers = createAsyncThunk(
-  'transferPage/fetchTransfers',
+  'nomenclaturePage/fetchNomenclature',
   async function (filter) {
 
     let myHeaders = new Headers();
@@ -33,87 +33,45 @@ export const fetchTransfers = createAsyncThunk(
   }
 );
 
-const checkEditsFilter = (state) => {
-  if (!state.warehouseTo.length) return false;
-  if (!state.warehouseFrom.length) return false;
-  if (!state.dateBegin) return false;
-  if (!state.dateEnd) return false;
-  if (!state.search) return false;
-
-  return true;
-}
-
 const initialState = {
-  transfers: [],
+  nomenclature: [],
   errors: false,
   message: '',
   isLoading: false,
   reset: false,
-  warehouseTo: [],
-  warehouseFrom: [],
-  dateBegin: '',
-  dateEnd: '',
+  category_filter: [],
   search: '',
-  isEditFilter: false
 };
 
-export const transferPageSlice = createSlice({
-  name: 'transferPage',
+export const nomenclaturePageSlice = createSlice({
+  name: 'nomenclaturePage',
   initialState,
   reducers: {
-    setDefaultPageTransfer: (state, action) => {
+    setDefaultPageNomenclature: (state, action) => {
       state.reset = true;
-      state.warehouseFrom = [];
-      state.warehouseTo = [];
-      state.dateBegin ='';
-      state.dateEnd = '';
+      state.category_filter = [];
       state.search = '';
       state.message = '';
-      state.isEditFilter = false;
     },
 
-    setResetPageTransfer: (state, action) => {
+    setResetPageNomenclature: (state, action) => {
       state.reset = action.payload.reset;
     },
 
-    setWarehouseFrom: (state, action) => {
+    setCategory: (state, action) => {
       if (action.payload.length == 0) {
-        state.warehouseFrom = [];
+        state.category_filter = [];
       } else {
-        state.warehouseFrom = action.payload.map((item) => {
+        state.category_filter = action.payload.map((item) => {
           return { ...item };
         });
       }
-
-      state.isEditFilter = checkEditsFilter(state);
-    },
-
-    setWarehouseTo: (state, action) => {
-      if (action.payload.length == 0) {
-        state.warehouseTo = [];
-      } else {
-        state.warehouseTo = action.payload.map((item) => {
-          return { ...item };
-        });
-      }
-
-      state.isEditFilter = checkEditsFilter(state);
     },
 
     setSearch: (state, action) => {
-      state.search = action.payload.search;
-      state.isEditFilter = checkEditsFilter(state);
+      state.search = action.payload.search
     },
 
-    setDateBegin: (state, action) => {
-      state.dateBegin = action.payload.dateBegin;
-      state.isEditFilter = checkEditsFilter(state);
-    },
-
-    setDateEnd: (state, action) => {
-      state.dateEnd = action.payload.dateEnd;
-      state.isEditFilter = checkEditsFilter(state);
-    }
   },
 
   extraReducers: {
@@ -139,6 +97,6 @@ export const transferPageSlice = createSlice({
   },
 });
 
-export const { setDefaultPageTransfer, setResetPageTransfer, setWarehouseFrom, setWarehouseTo, setSearch, setDateBegin, setDateEnd  } = transferPageSlice.actions;
+export const { setDefaultPageNomenclature, setResetPageNomenclature, setCategory, setSearch } = nomenclaturePageSlice.actions;
 
-export default transferPageSlice.reducer;
+export default nomenclaturePageSlice.reducer;

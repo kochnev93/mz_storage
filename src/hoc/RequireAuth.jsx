@@ -6,22 +6,17 @@ import { Error } from '../pages/Error/Error.jsx';
 
 
 
-const RequireAuth = ({children, onlyAdmin = false}) => {
+const RequireAuth = ({children, allowAccess=[]}) => {
     const location = useLocation();
     const {isAuth, role} = useAuth();
 
-    if(isAuth){
+    let access = allowAccess.includes(role);
 
-        if(onlyAdmin){
-           return role == 'admin' ? children : <Error message={'Нет прав доступа. Обратитесь к администратору'}/>
-        } else {
-            return children;
-        }
+    if (!isAuth) return <Navigate to='/login' state = {{from: location}}/>
 
-    } else{
-         return <Navigate to='/login' state = {{from: location}}/>
-    }
-
+    if (!access) return <Error message={'Нет прав доступа. Обратитесь к администратору'}/>
+    
+    return children
 
 }
 

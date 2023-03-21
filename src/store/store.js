@@ -18,6 +18,7 @@ import addUserSlice  from '../features/modal/add-userSlice';
 import aboutUserSlice from '../features/modal/about-userSlice';
 import dialog  from '../features/dialog/dialogSlice';
 import transferPageSlice  from '../features/transfers/transfers-pageSlice';
+import nomenclaturePageSlice from '../features/nomenclature/nomenclature-pageSlice';
 
 
 export const store = configureStore({
@@ -39,5 +40,6 @@ export const store = configureStore({
         modal_about_user: aboutUserSlice,
         dialog: dialog,
         transferPage: transferPageSlice,
+        nomenclaturePage: nomenclaturePageSlice,
     },
 });

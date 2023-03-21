@@ -42,6 +42,7 @@ export const Transfers = () => {
     dateBegin,
     dateEnd,
     search,
+    isEditFilter,
   } = useSelector((state) => state.transferPage);
 
   const [titleColumn] = useState([
@@ -184,8 +185,8 @@ export const Transfers = () => {
 
               <MyButton
                 type="send"
-                title="Найти"
-                loadingTitle="Ищу..."
+                title={!isEditFilter ? 'Найти все' : 'Найти'}
+                loadingTitle="Загрузка"
                 loading={isLoading}
                 action={() => {
                   getTransfer();
