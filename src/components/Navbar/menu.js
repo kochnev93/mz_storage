@@ -3,42 +3,49 @@ export const menu = [
         icon: 'MdOutlineSpaceDashboard',
         title: 'Главная',
         url: '/',
-        desc: 'Главная'
+        desc: 'Главная',
+        allowAccess: ['admin', 'user', 'viewer']
     },
     {
         icon: 'BsClipboardCheck',
         title: 'Номенклатура',
         url: '/nomenclature',
-        desc: 'Номенклатура'
+        desc: 'Номенклатура',
+        allowAccess: ['admin', 'user']
     },
     {
         icon: 'MdReceipt',
         title: 'Приход',
         url: '/receipt',
-        desc: 'Приход'
+        desc: 'Приход',
+        allowAccess: ['admin', 'user']
     },
     {
         icon: 'BiTransfer',
         title: 'Перемещения',
         url: '/transfers',
-        desc: 'Перемещения'
+        desc: 'Перемещения',
+        allowAccess: ['admin', 'user']
     },
     {
         icon: 'FaWarehouse',
         title: 'Склады',
         url: '/warehouses',
-        desc: 'Склады'
+        desc: 'Склады',
+        allowAccess: ['admin', 'user']
     },
     {
         icon: 'AiOutlineInfoCircle',
         title: 'О нас',
         url: '/about',
-        desc: 'О нас'
+        desc: 'О нас',
+        allowAccess: ['admin', 'user', 'viewer']
     },
     {
         icon: 'MdOutlineAdminPanelSettings',
         title: 'Администратор',
         url: '/admin',
-        desc: 'Администратор'
+        desc: 'Администратор',
+        allowAccess: ['admin']
     },
 ];

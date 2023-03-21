@@ -10,9 +10,11 @@ import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
 import { setActiveRate } from '../../../features/modal/rate-productSlice';
+import { useAuth } from '../../../hooks/use-auth';
 
 const Row = ({ product, key }) => {
   const dispatch = useDispatch();
+  const user = useAuth();
 
   const getIcon = () => {
     if (product?.accounting_sn) {
@@ -95,7 +97,9 @@ const Row = ({ product, key }) => {
       <td>{product?.count ? product.count : product.sn.length}</td>
       <td>
         <div className={styles.product_action}>
-          {getIcon()}
+          {user.role !== 'viewer' && (
+            getIcon()
+          )}
         </div>
       </td>
     </tr>

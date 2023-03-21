@@ -10,9 +10,11 @@ import styles from './Table.module.scss';
 import { useDispatch } from 'react-redux';
 import { setActive } from '../../../features/modal/about-productSlice';
 import { setActiveTransfer } from '../../../features/modal/transfer-productSlice';
+import { useAuth } from '../../../hooks/use-auth';
 
 const RowDropdown = ({ product, key }) => {
   const dispatch = useDispatch();
+  const user = useAuth();
 
   // Состояние скрытых строк
   const [visible, setVisible] = useState(false);
@@ -51,12 +53,15 @@ const RowDropdown = ({ product, key }) => {
             onClick={clickHandler}
             className={styles.count_link}
             title={visible ? 'Скрыть' : 'Показать'}
-          >{`${product?.sn.length} ${declination(
-            product?.sn.length,
-            'вариант',
-            'варианта',
-            'вариантов'
-          )}`}{visible ? <span>&#9650;</span> : <span>&#9660;</span>}</a>
+          >
+            {`${product?.sn.length} ${declination(
+              product?.sn.length,
+              'вариант',
+              'варианта',
+              'вариантов'
+            )}`}
+            {visible ? <span>&#9650;</span> : <span>&#9660;</span>}
+          </a>
         </td>
         <td>{product?.sn.length}</td>
         <td> </td>
@@ -65,7 +70,6 @@ const RowDropdown = ({ product, key }) => {
   };
 
   const subRow = product.sn.map((item) => {
-
     return (
       <tr className={cx(styles.row, { [styles.active]: visible })}>
         <td>{item.id}</td>
@@ -75,31 +79,33 @@ const RowDropdown = ({ product, key }) => {
         <td>{item.sn}</td>
         <td> </td>
         <td>
-          <div className={styles.product_action}>
-            <AiOutlineInfoCircle
-              title="Информация"
-              onClick={(e) => {
-                dispatch(
-                  setActive({
-                    active: true,
-                    product: { ...product, id: item.id, sn: item.sn },
-                  })
-                );
-              }}
-            />
+          {user.role !== 'viewer' && (
+            <div className={styles.product_action}>
+              <AiOutlineInfoCircle
+                title="Информация"
+                onClick={(e) => {
+                  dispatch(
+                    setActive({
+                      active: true,
+                      product: { ...product, id: item.id, sn: item.sn },
+                    })
+                  );
+                }}
+              />
 
-            <BiTransfer
-              title="Перемещение"
-              onClick={(e) => {
-                dispatch(
-                  setActiveTransfer({
-                    active: true,
-                    product: { ...product, id: item.id, sn: item.sn },
-                  })
-                );
-              }}
-            />
-          </div>
+              <BiTransfer
+                title="Перемещение"
+                onClick={(e) => {
+                  dispatch(
+                    setActiveTransfer({
+                      active: true,
+                      product: { ...product, id: item.id, sn: item.sn },
+                    })
+                  );
+                }}
+              />
+            </div>
+          )}
         </td>
       </tr>
     );

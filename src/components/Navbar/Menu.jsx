@@ -13,8 +13,10 @@ import { BsClipboardCheck } from 'react-icons/Bs';
 import { MdReceipt } from 'react-icons/Md';
 import { FaWarehouse } from 'react-icons/Fa';
 import { BiTransfer } from 'react-icons/Bi';
+import { useAuth } from '../../hooks/use-auth';
 
 function Menu() {
+  const user = useAuth();
 
   const getIcon = (icon) => {
     switch (icon) {
@@ -36,23 +38,28 @@ function Menu() {
   };
 
 
-  const menuItems = menu.map((item, index) => (
-    <li
-      className={cx(styles.menu_link, {
+  const menuItems = menu.map((item, index) => {
+    let access = item.allowAccess.includes(user.role);
 
-      })}
+    if(!access) return null;
+
+    return(
+      <li
+      className={styles.menu_link}
       key={item.icon}
       title={item.desc}
     >
       <NavLink
         to={item.url}
-        className={({ isActive }) => (isActive ? `${styles.navlink_active}` : `${styles.navlink}`)}
+        className={({ isActive }) => (isActive ? styles.navlink_active : styles.navlink)}
       >
         <div className={styles.menu_icon}>{getIcon(item.icon)}</div>
         <div className={styles.menu_title}>{item.title}</div>
       </NavLink>
     </li>
-  ));
+    )
+
+    });
 
   return <ul>{menuItems}</ul>;
 }
