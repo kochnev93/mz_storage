@@ -4,7 +4,7 @@ import cx from "classnames";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import { setHeader } from "../../features/header/headerSlice";
+import { setHeader } from "../../features/header/headerSlice.js";
 import { removeUser } from "../../features/users/userSlice";
 
 import { MdOutlineMenu } from "react-icons/Md";
@@ -39,7 +39,7 @@ function Header({ title = "Склад" }) {
       <header className={cx(styles.header, { [styles.open]: menuIsOpen })}>
         <div className={styles.wrapperHeader}>
           <div className={styles.logo}>
-            <MdOutlineMenu onClick={() => dispatch(setHeader())} />
+            <MdOutlineMenu onClick={ () => dispatch(setHeader({open: true})) } />
             <h3>{title}</h3>
           </div>
 

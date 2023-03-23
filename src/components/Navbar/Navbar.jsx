@@ -25,7 +25,7 @@ function Navbar(props) {
       className={cx(styles.navbar_container, {[styles.open]: isOpen})}
     >
       <div className={styles.close_menu_btn}>
-        <button onClick={() => dispatch(setHeader())}>
+        <button onClick={() => dispatch(setHeader({open: false}))}>
           <IoIosArrowBack />
         </button>
       </div>

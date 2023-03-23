@@ -14,9 +14,12 @@ import { MdReceipt } from 'react-icons/Md';
 import { FaWarehouse } from 'react-icons/Fa';
 import { BiTransfer } from 'react-icons/Bi';
 import { useAuth } from '../../hooks/use-auth';
+import { setHeader } from '../../features/header/headerSlice';
+import { useDispatch } from 'react-redux';
 
 function Menu() {
   const user = useAuth();
+  const dispatch = useDispatch();
 
   const getIcon = (icon) => {
     switch (icon) {
@@ -48,6 +51,7 @@ function Menu() {
       className={styles.menu_link}
       key={item.icon}
       title={item.desc}
+      onClick={() => {dispatch(setHeader({open: false}))}}
     >
       <NavLink
         to={item.url}

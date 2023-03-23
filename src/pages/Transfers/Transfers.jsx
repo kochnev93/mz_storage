@@ -76,17 +76,17 @@ export const Transfers = () => {
 
   const tableContent = useMemo(() => {
     if (transfers?.length) {
-      return transfers.map((item) => {
+      return transfers.map((item, index) => {
         return (
-          <tr key={item.id_transfer}>
-            <td>{item?.id_transfer}</td>
-            <td>{item?.name}</td>
-            <td>{item?.old_warehouse}</td>
-            <td>{item?.new_warehouse}</td>
-            <td>{item?.sn}</td>
-            <td>{item?.count}</td>
-            <td>{item?.mz_user_login}</td>
-            <td>{new Date(item?.date).toLocaleString()}</td>
+          <tr key={item.id_transfer} data-index={index}>
+            <td data-name={'id'}>{item?.id_transfer}</td>
+            <td data-name={'Наименование'}>{item?.name}</td>
+            <td data-name={'Откуда'}>{item?.old_warehouse}</td>
+            <td data-name={'Куда'}>{item?.new_warehouse}</td>
+            <td data-name={'SN'}>{item?.sn}</td>
+            <td data-name={'Количество'}>{item?.count}</td>
+            <td data-name={'Автор'}>{item?.mz_user_login}</td>
+            <td data-name={'Дата'}>{new Date(item?.date).toLocaleString()}</td>
           </tr>
         );
       });

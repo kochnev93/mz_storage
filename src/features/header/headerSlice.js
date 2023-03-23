@@ -9,7 +9,8 @@ export const headerSlice = createSlice({
     initialState,
     reducers: {
         setHeader: (state, action) => {
-            state.ButtonMenuOpen = !state.ButtonMenuOpen
+            console.log(action)
+            state.ButtonMenuOpen = action.payload.open;
         }
     }
 });

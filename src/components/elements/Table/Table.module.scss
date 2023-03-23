@@ -4,38 +4,38 @@
   width: 100%;
   color: var(--text-color);
 
-  caption{
+  caption {
     text-align: left;
     font-size: 12px;
     padding: 5px 0;
   }
 
-  .product_action{
-    svg{
+  .product_action {
+    svg {
       width: 20px;
       height: 20px;
       fill: var(--table-colorIcon);
 
-      path{
+      path {
         pointer-events: none;
       }
 
-      &:not(:last-child){
+      &:not(:last-child) {
         margin-right: 5px;
       }
 
-      &:hover{
+      &:hover {
         fill: var(--main-color);
       }
     }
   }
 
-  tr td:last-child{
+  tr td:last-child {
     padding: 5px;
   }
 
   tr td:first-child,
-  tr td:last-child{
+  tr td:last-child {
     text-align: center;
   }
 
@@ -48,19 +48,18 @@
     font-size: 14px;
   }
 
-  thead tr{
+  thead tr {
     position: sticky;
     top: -40px;
     z-index: 9;
   }
 
-  @media screen and (max-width: 1200px){
+  @media screen and (max-width: 1200px) {
     th,
     td {
       padding: 5px;
       font-size: 12px;
     }
-  
   }
 
   th {
@@ -100,18 +99,96 @@
   }
 }
 
-.row{
+.row {
   display: none;
   background-color: var(--navbar-bg-color);
-  &.active{
+  &.active {
     display: table-row;
   }
 }
 
-.count_link{
+.count_link {
   color: var(--main-color);
-  transition: border-bootom .3s ease;
-  &:hover{
+  transition: border-bootom 0.3s ease;
+  &:hover {
     border-bottom: 1px solid var(--main-color);
   }
 }
+
+@media (max-width: 800px) {
+  table thead {
+    left: -9999px;
+    position: absolute;
+    visibility: hidden;
+  }
+  table tr {
+    border-bottom: 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  table td {
+    border: 1px solid;
+    margin: 0 -1px -1px 0;
+    width: 50%;
+  }
+
+  td {
+    border: 1px solid var(--table-colorBorder) !important;
+    text-align: left !important;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .empty_line {
+    display: none;
+  }
+
+  td::before {
+    content: attr(data-name);
+    float: left;
+    //content: 'Наименование';
+    padding: 5px;
+    background: var(--main-color);
+    margin-bottom: 5px;
+    color: var(--table-colorTH);
+    border-radius: 3px;
+  }
+
+  // tr::before {
+  //   content: attr(data-index);
+  //   float: left;
+  //   padding: 5px;
+  //   background: var(--main-color);
+  //   margin-bottom: 5px;
+  //   color: var(--table-colorTH);
+  //   border-radius: 3px;
+  // }
+
+  tr td:first-child {
+    border-radius: 5px 5px 0 0;
+  }
+  tr td:last-child {
+    border-radius: 0 0 5px 5px;
+  }
+
+  tbody tr:hover {
+    background-color: transparent;
+  }
+
+}
+
+@media (max-width: 450px) {
+
+  table td {
+    width: 100%;
+  }
+
+  td {
+  font-size: 14px !important;
+  }
+
+}
+
