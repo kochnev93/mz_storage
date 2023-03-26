@@ -1,7 +1,7 @@
 import React from "react";
 
 // Styles
-import styles from "./FormModal.module.scss";
+import formStyle from "./FormModal.module.scss";
 
 export const FormModal = ({columns = 1, styles, children}) => {
   let propStyle = {
@@ -15,7 +15,7 @@ export const FormModal = ({columns = 1, styles, children}) => {
   };
 
   return (
-    <form style={propStyle}>
+    <form className={formStyle.form} style={propStyle}>
       {children}
     </form>
   );

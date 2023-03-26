@@ -112,7 +112,7 @@
 
   /*Buttons*/
   --button-colorText: #16171b;
---button-bg-hover: #08e79c;
+  --button-bg-hover: #08e79c;
 
   /*Table*/
   --table-colorIcon: #d1d7e0;
@@ -151,5 +151,11 @@
 @media screen and (max-width: 1200px) {
   :root {
     --widthMenuIsClose: 0;
+  }
+}
+
+@media (max-width: 450px) {
+  :root {
+    --widthMenuIsOpen: 100vw;
   }
 }

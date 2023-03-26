@@ -55,20 +55,51 @@ export const Auth = () => {
   };
 
   async function load() {
-
     let data = JSON.stringify({login, password});
 
+
+
+    let myHeaders = new Headers();
+    myHeaders.append('content-type', 'application/json');
+    myHeaders.append('Accept', `application/json`);
+    //requestOptions.headers = myHeaders;
+
+    
     let requestOptions = {
-      method: 'POST',
       body: data,
+      headers: myHeaders,
+      method: "POST",
+     // credentials: 'include',
+      mode: 'cors',
     };
 
-    const result = await fetchNow(
-    `${process.env.REACT_APP_API_SERVER}/auth`,
-    requestOptions
-  );
 
-  console.log(result)
+    const res = await fetch(
+      `${process.env.REACT_APP_API_SERVER}/auth`, requestOptions
+    );
+
+    const temp = await res.json()
+
+    let result = temp
+
+
+  
+    console.log(result)
+
+
+  //   console.log(data)
+
+  //   let requestOptions = {
+  //     method: 'POST',
+  //     body: data,
+  //     credentials: 'include',
+  //   };
+
+  //   const result = await fetchNow(
+  //   `${process.env.REACT_APP_API_SERVER}/auth`,
+  //   requestOptions
+  // );
+
 
   if (result.data) {
     dispatch(

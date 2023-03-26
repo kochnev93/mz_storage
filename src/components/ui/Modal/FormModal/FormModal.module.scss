@@ -1,0 +1,11 @@
+@media (max-width: 450px) {
+    .form {
+        grid-template-columns: repeat(1 ,1fr) !important;
+        // gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        // gridColumnGap: '10px',
+        // gridRowGap: '20px',
+        // gridAutoRows: 'auto',
+        // alignContent: 'space-between',
+    }
+  }
+  

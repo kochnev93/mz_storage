@@ -1,32 +1,32 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// const user = JSON.parse(localStorage.getItem('mz_storage_user'));
-
-// const initialState = {
-//   id: user?.id ?? null,
-//   name: user?.name ?? null,
-//   surname: user?.surname ?? null,
-//   phone: user?.phone ?? null,
-//   email: user?.email ?? null,
-//   login: user?.login ?? null,
-//   position: user?.position ?? null,
-//   role: user?.role ?? null,
-//   img: user?.img ?? null,
-//   accessToken: user?.accessToken ?? null,
-// };
+const user = JSON.parse(localStorage.getItem('mz_storage_user'));
 
 const initialState = {
-    id: 1,
-    name: 'Тест',
-    surname: "Тестов",
-    phone: "89995552244",
-    email: "test@mail.ru",
-    login: "test777",
-    position: "Инженер ИТ (тест)",
-    role: "admin",
-    img: null,
-    accessToken: "1234",
-}
+  id: user?.id ?? null,
+  name: user?.name ?? null,
+  surname: user?.surname ?? null,
+  phone: user?.phone ?? null,
+  email: user?.email ?? null,
+  login: user?.login ?? null,
+  position: user?.position ?? null,
+  role: user?.role ?? null,
+  img: user?.img ?? null,
+  accessToken: user?.accessToken ?? null,
+};
+
+// const initialState = {
+//     id: 1,
+//     name: 'Тест',
+//     surname: "Тестов",
+//     phone: "89995552244",
+//     email: "test@mail.ru",
+//     login: "test777",
+//     position: "Инженер ИТ (тест)",
+//     role: "admin",
+//     img: null,
+//     accessToken: "1234",
+// }
 
 export const userSlice = createSlice({
   name: 'user',
@@ -95,8 +95,28 @@ export const userSlice = createSlice({
         })
       );
     },
+
+    refreshToken: (state, action) => {
+      state.accessToken = action.payload.accessToken;
+
+      localStorage.setItem(
+        'mz_storage_user',
+        JSON.stringify({
+          id: state.id,
+          name: state.name,
+          surname: state.surname,
+          phone: state.phone,
+          email: state.email,
+          login: state.login,
+          position: state.position,
+          role: state.role,
+          img: action.payload.filename,
+          accessToken: action.payload.accessToken,
+        })
+      );
+    }
   },
 });
 
-export const { setUser, removeUser, refreshImgUser } = userSlice.actions;
+export const { setUser, removeUser, refreshImgUser, refreshToken } = userSlice.actions;
 export default userSlice.reducer;

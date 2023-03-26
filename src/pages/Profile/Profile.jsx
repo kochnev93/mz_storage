@@ -19,8 +19,10 @@ import { removeUser, refreshImgUser } from "../../features/users/userSlice.js";
 
 //import Dropdown from '../../components/ui/Dropdown/MyDropdown-function.jsx';
 
+
 export const Profile = () => {
   const user = useAuth();
+
   const dispatch = useDispatch();
   const { fetchNow } = useFetch();
 
@@ -44,6 +46,28 @@ export const Profile = () => {
   const [image, setImage] = useState();
   const [imageURL, setImageURL] = useState();
   const [avatar, setAvatar] = useState(user?.img);
+
+  const refresh = async () => {
+
+    let requestOptions = {
+      method: "POST",
+      credentials: 'include',
+      mode:'no-cors',
+    };
+
+    let myHeaders = new Headers();
+    myHeaders.append('Cookie', 'yummy_cookie=choco');
+    requestOptions.headers = myHeaders;
+
+
+    const result = await fetch(
+      `${process.env.REACT_APP_API_SERVER}/refresh`, requestOptions
+    );
+  
+    console.log(result)
+  
+  }
+
 
   const logout = () => {
     let answerUser = confirm(`Выйти из приложения?`);
@@ -133,6 +157,13 @@ export const Profile = () => {
           }}
         >
           Тест Диалога
+        </button>
+
+        
+        <button
+          onClick={refresh}
+        >
+          Тест refresh
         </button>
 
         {/* <input type="file" onChange={sendFile} accept="image/*,.png,.jpg,.jpeg" />
