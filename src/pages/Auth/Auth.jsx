@@ -57,48 +57,17 @@ export const Auth = () => {
   async function load() {
     let data = JSON.stringify({login, password});
 
-
-
-    let myHeaders = new Headers();
-    myHeaders.append('content-type', 'application/json');
-    myHeaders.append('Accept', `application/json`);
-    //requestOptions.headers = myHeaders;
-
-    
     let requestOptions = {
+      method: 'POST',
       body: data,
-      headers: myHeaders,
-      method: "POST",
-     // credentials: 'include',
+      credentials: 'include',
       mode: 'cors',
     };
 
-
-    const res = await fetch(
-      `${process.env.REACT_APP_API_SERVER}/auth`, requestOptions
-    );
-
-    const temp = await res.json()
-
-    let result = temp
-
-
-  
-    console.log(result)
-
-
-  //   console.log(data)
-
-  //   let requestOptions = {
-  //     method: 'POST',
-  //     body: data,
-  //     credentials: 'include',
-  //   };
-
-  //   const result = await fetchNow(
-  //   `${process.env.REACT_APP_API_SERVER}/auth`,
-  //   requestOptions
-  // );
+    const result = await fetchNow(
+    `${process.env.REACT_APP_API_SERVER}/auth`,
+    requestOptions
+  );
 
 
   if (result.data) {
@@ -124,68 +93,6 @@ export const Auth = () => {
     setErrorMessage(result.error);
   }
 
-
-    // let myHeaders = new Headers();
-    // myHeaders.append('content-type', 'application/json');
-
-    // let data = JSON.stringify({
-    //   login: login,
-    //   password: password,
-    // });
-
-    // let requestOptions = {
-    //   method: 'POST',
-    //   headers: myHeaders,
-    //   body: data,
-    // };
-
-    // const response = await fetch(
-    //   `${process.env.REACT_APP_API_SERVER}/auth`,
-    //   requestOptions
-    // );
-
-
-
-    // const status = response.status;
-    // const statusOK = response.ok;
-    // const result = await response.json();
-
-    // try {
-    //   if (!statusOK) {
-    //     throw new Error(result.errorMessage);
-    //   }
-
-    //   dispatch(
-    //     setUser({
-    //       id: result.id,
-    //       login: result.login,
-    //       role: result.role,
-    //       img: result.img,
-    //       accessToken: result.accessToken,
-    //     })
-    //   );
-
-    //   localStorage.setItem(
-    //     'mz_storage_user',
-    //     JSON.stringify({
-    //       id: result.id,
-    //       login: result.login,
-    //       role: result.role,
-    //       img: result.img,
-    //       accessToken: result.accessToken,
-    //     })
-    //   );
-
-    //   navigate(frompage);
-    // } catch (error) {
-    //   if (status == 401) {
-    //     //refresh
-    //     console.log('refresh');
-    //   }
-    //   console.log(error);
-    //   setError(true);
-    //   setErrorMessage(result.errorMessage);
-    // }
   }
 
   async function signIn(e) {

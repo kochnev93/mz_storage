@@ -52,19 +52,12 @@ export const Profile = () => {
     let requestOptions = {
       method: "POST",
       credentials: 'include',
-      mode:'no-cors',
+      mode:'cors',
     };
 
-    let myHeaders = new Headers();
-    myHeaders.append('Cookie', 'yummy_cookie=choco');
-    requestOptions.headers = myHeaders;
-
-
-    const result = await fetch(
-      `${process.env.REACT_APP_API_SERVER}/refresh`, requestOptions
-    );
+    const result = await fetchNow(`${process.env.REACT_APP_API_SERVER}/refresh`, requestOptions)
   
-    console.log(result)
+
   
   }
 
