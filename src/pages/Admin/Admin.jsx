@@ -26,16 +26,8 @@ export const Admin = () => {
       link: "users",
     },
     {
-      title: "Пользователи2",
-      link: "users",
-    },
-    {
-      title: "Пользователи3",
-      link: "users",
-    },
-    {
-      title: "Пользователи4",
-      link: "users4",
+      title: "Категории",
+      link: "category",
     },
   ];
 

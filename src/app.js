@@ -18,6 +18,7 @@ import { Profile } from './pages/Profile/Profile.jsx';
 
 //Pafes Admin
 import { AdminUsers } from './pages/Admin/AdminUsers.jsx';
+import { AdminCategory } from './pages/Admin/AdminCategory.jsx';
 
 
 // Redux
@@ -28,6 +29,7 @@ import { fetchData } from './features/app/appSlice.js';
 import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
+
 
 export default function App() {
   const dispatch = useDispatch();
@@ -111,6 +113,7 @@ export default function App() {
           }
         >
           <Route path="users" element={<AdminUsers />} />
+          <Route path="category" element={<AdminCategory />} />
         </Route>
 
         <Route path="login" element={<Auth />} />

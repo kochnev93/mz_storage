@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { removeUser, refreshToken } from '../features/users/userSlice';
 import authHeader from '../services/auth-header';
@@ -12,10 +12,14 @@ const getUnixTime = () => Math.round(+new Date() / 1000);
 
 
 const useFetch = (url, options) => {
+  //console.warn ('REnder useFetch');
+  //console.warn('refreshTokenReaquest', refreshTokenReaquest);
+  
+  //const [refreshTokenReaquest, setRefreshTokenReaquest] = useState(null)
   const dispatch = useDispatch();
   const { accessToken } = useAuth();
 
-  const isTokenExpired = useCallback((token) => {
+  const isTokenExpired = (token) => {
     if (!token) return true;
   
     try {
@@ -31,14 +35,14 @@ const useFetch = (url, options) => {
       console.error(e);
       return true;
     }
-  }, []);
+  };
   
-  const getAccessToken = useCallback(async () => {
+  const getAccessToken = async () => {
     console.warn('Сработал refresh');
   
     try {
       if (refreshTokenReaquest !== null) return null;
-  
+
       refreshTokenReaquest = `${process.env.REACT_APP_API_SERVER}/refresh`;
   
       let myHeaders = new Headers();
@@ -61,7 +65,7 @@ const useFetch = (url, options) => {
       console.error(e);
       return null;
     }
-  }, []);
+  };
 
   async function fetchNow(url, options, contentType = true) {
     let myHeaders = new Headers();
@@ -71,6 +75,8 @@ const useFetch = (url, options) => {
       console.warn('token expired');
       let temp = await getAccessToken();
       console.log('Новый токен ', temp);
+
+      if(!temp) return
 
       if (temp) {
         dispatch(refreshToken({ accessToken: temp }));

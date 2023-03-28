@@ -8,6 +8,7 @@ import { MyTable } from '../elements/Table/MyTable.jsx';
 import MyButton from '../ui/Buttons/ButtonSend.jsx';
 import MyDropdown from '../ui/Dropdown/MyDropdown.jsx';
 import { MyInputSearch } from '../elements/Form/InputSearch/MyInputSearch.jsx';
+import { Table } from '../elements/Table/Table.jsx';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
@@ -16,6 +17,7 @@ import useFilterTable from '../../hooks/useFilterTable';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts } from '../../features/dashboard/dashboardSlice';
+
 
 export const DashboardTable = () => {
   const dispatch = useDispatch();
@@ -209,6 +211,7 @@ export const DashboardTable = () => {
         content={bodyContent}
         resultCount={data.length}
       />
+
     </div>
   );
 };
