@@ -43,10 +43,10 @@ export const aboutProductSlice = createSlice({
     setDefault: (state, action) => {
       state.errors = false,
       state.message = '',
-      state.reset = false,
       state.isLoading = false,
       state.indexActiveTab = 0,
-      state.inputComment = ''
+      state.inputComment = '',
+      state.product = null
     },
 
     removeProductAbout: (state, action) => {

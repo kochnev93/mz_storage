@@ -190,3 +190,35 @@
   font-size: 11px;
   color: var(--error-color);
 }
+
+.loading_overlay{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--modal-bg-loading);
+  opacity: 0.9;
+  z-index: 1;
+  border-radius: 5px;
+}
+
+
+.loading_overlay h6{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  width: 100%;
+  height: 40px;
+  background: url('./loading.gif');
+  background-size: contain;
+  background-position-x: 38%;
+  background-position-y: initial;
+  background-repeat: no-repeat;
+  color: var(--modal-bg-loading-colorText);
+}
+

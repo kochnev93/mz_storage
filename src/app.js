@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 // Routes
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { RequireAuth } from './hoc/RequireAuth.jsx';
 
 // Pages
@@ -20,7 +20,6 @@ import { Profile } from './pages/Profile/Profile.jsx';
 import { AdminUsers } from './pages/Admin/AdminUsers.jsx';
 import { AdminCategory } from './pages/Admin/AdminCategory.jsx';
 
-
 // Redux
 import { useDispatch } from 'react-redux';
 import { fetchData } from './features/app/appSlice.js';
@@ -29,7 +28,6 @@ import { fetchData } from './features/app/appSlice.js';
 import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
-
 
 export default function App() {
   const dispatch = useDispatch();
@@ -112,6 +110,7 @@ export default function App() {
             </RequireAuth>
           }
         >
+          <Route index element={<div>Выберите пункт меню</div>} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="category" element={<AdminCategory />} />
         </Route>

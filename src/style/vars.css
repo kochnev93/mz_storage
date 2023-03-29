@@ -37,6 +37,7 @@
   --modal-bg-color: white;
   --modal-color-borderBottom: rgba(0, 0, 0, 0.1);
   --modal-bg-loading: #f1f1f1;
+  --modal-bg-loading-colorText: grey;
   --modal-bg-scrollbar: rgba(0, 0, 0, 0.05);
   --modal-bg-scrollbarThumb: rgba(0, 0, 0, 0.2);
   --modal-bg-scrollbarTrack: #f9f9fd;
@@ -103,7 +104,8 @@
   --modal-overlayBgColor: rgba(0, 0, 0, 0.7);
   --modal-bg-color: #202125;
   --modal-color-borderBottom: black;
-  --modal-bg-loading: #f1f1f1;
+  --modal-bg-loading: #363636;
+  --modal-bg-loading-colorText: #888889;
   --modal-bg-scrollbar: rgba(0, 0, 0, 0.05);
   --modal-bg-scrollbarThumb: rgba(0, 0, 0, 0.2);
   --modal-bg-scrollbarTrack: #2c2c2c;

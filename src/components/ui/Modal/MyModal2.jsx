@@ -78,8 +78,14 @@ function Modal({
           </div>
 
           <div
-            className={cx(styles.myModal_body, { [styles.loading]: isLoading })}
+            className={cx(styles.myModal_body)}
           >
+            {isLoading && (
+              <div className={styles.loading_overlay}>
+                <h6>Загрузка...</h6>
+              </div>
+            )}
+
             {children}
           </div>
 
@@ -98,7 +104,9 @@ function Modal({
 
                 <MyButton
                   type="send"
-                  action={(e) => {actions?.buttonSend?.action(e)}}
+                  action={(e) => {
+                    actions?.buttonSend?.action(e);
+                  }}
                   title={actions?.buttonSend?.title}
                   loadingTitle={actions?.buttonSend?.loadingTitle}
                   loading={actions?.buttonSend?.loading}

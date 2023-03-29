@@ -5,17 +5,16 @@ import MyInput from '../../components/ui/Input/MyInput.jsx';
 import styles from './Auth.module.scss';
 import 'regenerator-runtime/runtime';
 
-
 // Redux
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../features/users/userSlice.js';
-import useFetch from '../../hooks/useFetch'
+import useFetch from '../../hooks/useFetch';
 
 export const Auth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const {fetchNow} = useFetch();
+  const { fetchNow } = useFetch();
   const frompage = location.state?.from?.pathname || '/';
 
   const [login, setLogin] = useState('');
@@ -55,44 +54,47 @@ export const Auth = () => {
   };
 
   async function load() {
-    let data = JSON.stringify({login, password});
+    let myHeaders = new Headers();
+    myHeaders.append('content-type', 'application/json');
+
+    let data = JSON.stringify({ login, password });
 
     let requestOptions = {
       method: 'POST',
       body: data,
       credentials: 'include',
       mode: 'cors',
+      headers: myHeaders,
     };
 
-    const result = await fetchNow(
-    `${process.env.REACT_APP_API_SERVER}/auth`,
-    requestOptions
-  );
-
-
-  if (result.data) {
-    dispatch(
-      setUser({
-        id: result.data.id,
-        name: result.data.name,
-        surname: result.data.surname,
-        phone: result.data.phone,
-        email: result.data.email,
-        login: result.data.login,
-        position: result.data.position,
-        role: result.data.role,
-        img: result.data.img,
-        accessToken: result.data.accessToken,
-      })
+    const response = await fetch(
+      `${process.env.REACT_APP_API_SERVER}/auth`,
+      requestOptions
     );
 
-    navigate(frompage);
+    const result = await response.json();
 
-  } else {
-    setError(true);
-    setErrorMessage(result.error);
-  }
+    if (result.data) {
+      dispatch(
+        setUser({
+          id: result.data.id,
+          name: result.data.name,
+          surname: result.data.surname,
+          phone: result.data.phone,
+          email: result.data.email,
+          login: result.data.login,
+          position: result.data.position,
+          role: result.data.role,
+          img: result.data.img,
+          accessToken: result.data.accessToken,
+        })
+      );
 
+      navigate(frompage);
+    } else {
+      setError(true);
+      setErrorMessage(result.error);
+    }
   }
 
   async function signIn(e) {
