@@ -9,57 +9,55 @@ const LIFE_TIME_TO_UPDATE_TOKEN = 0.5;
 
 const getUnixTime = () => Math.round(+new Date() / 1000);
 
-
-
 const useFetch = (url, options) => {
   //console.warn ('REnder useFetch');
   //console.warn('refreshTokenReaquest', refreshTokenReaquest);
-  
+
   //const [refreshTokenReaquest, setRefreshTokenReaquest] = useState(null)
   const dispatch = useDispatch();
   const { accessToken } = useAuth();
 
   const isTokenExpired = (token) => {
     if (!token) return true;
-  
+
     try {
       const tokenBody = token.split('.')[1];
       const tokenBodyDecoded = window.atob(tokenBody);
       const { exp, iat } = JSON.parse(tokenBodyDecoded);
-  
+
       const tokenLeftTime = exp - getUnixTime();
       const minLifeTimeForUpdate = (exp - iat) * LIFE_TIME_TO_UPDATE_TOKEN;
-  
+
       return tokenLeftTime < minLifeTimeForUpdate;
     } catch (e) {
       console.error(e);
       return true;
     }
   };
-  
+
   const getAccessToken = async () => {
     console.warn('Сработал refresh');
-  
+
     try {
       if (refreshTokenReaquest !== null) return null;
 
       refreshTokenReaquest = `${process.env.REACT_APP_API_SERVER}/refresh`;
-  
+
       let myHeaders = new Headers();
       myHeaders.append('content-type', 'application/json');
       myHeaders.append('Authorization', `${authHeader()}`);
-  
+
       let requestOptions = {
         method: 'POST',
         credentials: 'include',
         mode: 'cors',
         headers: myHeaders,
       };
-  
+
       const response = await fetch(refreshTokenReaquest, requestOptions);
       refreshTokenReaquest = null;
       let result = await response.json();
-  
+
       return result.data;
     } catch (e) {
       console.error(e);
@@ -76,7 +74,7 @@ const useFetch = (url, options) => {
       let temp = await getAccessToken();
       console.log('Новый токен ', temp);
 
-      if(!temp) return
+      if (!temp) return;
 
       if (temp) {
         dispatch(refreshToken({ accessToken: temp }));
@@ -92,16 +90,12 @@ const useFetch = (url, options) => {
 
     if (contentType) {
       myHeaders.append('content-type', 'application/json');
-      //myHeaders.append('Authorization', `${authHeader()}`);
-      options.headers = myHeaders;
-    } else {
-      //myHeaders.append('Authorization', `${authHeader()}`);
-      options.headers = myHeaders;
     }
 
-    try {
-      console.log('Запрос на ', url);
+    //myHeaders.append('Cache-Control', 'no-cache, no-store, must-revalidate');
+    options.headers = myHeaders;
 
+    try {
       let response = await fetch(url, options);
 
       if (response.status === 401) dispatch(removeUser());

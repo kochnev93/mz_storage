@@ -8,7 +8,7 @@ import { MyTable } from '../elements/Table/MyTable.jsx';
 import MyButton from '../ui/Buttons/ButtonSend.jsx';
 import MyDropdown from '../ui/Dropdown/MyDropdown.jsx';
 import { MyInputSearch } from '../elements/Form/InputSearch/MyInputSearch.jsx';
-import { Table } from '../elements/Table/Table.jsx';
+import Dropdown from '../ui/Dropdown/MyDropdown-function.jsx';
 
 // Hooks
 import useFetch from '../../hooks/useFetch';
@@ -16,22 +16,34 @@ import useFilterTable from '../../hooks/useFilterTable';
 
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts } from '../../features/dashboard/dashboardSlice';
-
+import {
+  addProducts,
+  setWarehouseDashboard,
+  setCategoryDashboard,
+  setResetDashboard,
+  setSearchDashboard,
+  setIsLoadingDashboard,
+  setErrorsDashboard,
+} from '../../features/dashboard/dashboardSlice';
 
 export const DashboardTable = () => {
   const dispatch = useDispatch();
-  const statusApp = useSelector((state) => state.app_state.status);
+  const { fetchNow } = useFetch();
 
-  // Dashboard
-  const [isLoading, setIsLoading] = useState(false);
-  const [warehouse, setWarehouse] = useState([]);
-  const [validationWarehouse, setValidationWarehouse] = useState(true);
-  const [category, setCategory] = useState([]);
-  const [validationCategory, setValidationCategory] = useState(true);
-  const [search, setSearch] = useState(null);
-  const [validationFilter, setValidationFilter] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
+  // Список филиалов и категорий
+  const { warehouses, category } = useSelector((state) => state.app_state);
+
+  const {
+    products,
+    warehouseFilter,
+    categoryFilter,
+    inputSearch,
+    reset,
+    errors,
+    message,
+    isLoading,
+  } = useSelector((state) => state.dashboard);
+
   const [titleColumn, setTitleColumn] = useState([
     'id',
     'Склад',
@@ -42,8 +54,6 @@ export const DashboardTable = () => {
     'Действия',
   ]);
 
-  const { fetchNow } = useFetch();
-
   const validationForm = () => {
     let countError = 0;
 
@@ -52,14 +62,14 @@ export const DashboardTable = () => {
     setValidationFilter(true);
     setErrorMessage('');
 
-    if(search !== null && search !== ""){
+    if (search !== null && search !== '') {
       return true;
-    } else if(warehouse.length === 0){
+    } else if (warehouse.length === 0) {
       setValidationWarehouse(false);
       setValidationFilter(false);
       setErrorMessage('Выберите склад');
       countError++;
-    } else if(category.length === 0){
+    } else if (category.length === 0) {
       setValidationCategory(false);
       setValidationFilter(false);
       setErrorMessage('Выберите категорию');
@@ -73,11 +83,13 @@ export const DashboardTable = () => {
   const getProducts = async (e) => {
     e.preventDefault();
 
-    // if (!validationForm()) return false;
+    dispatch(setIsLoadingDashboard(true));
 
-    setIsLoading(true);
-
-    const data = JSON.stringify({ warehouse, category, search });
+    const data = JSON.stringify({
+      warehouse: warehouseFilter,
+      category: categoryFilter,
+      search: inputSearch,
+    });
 
     let requestOptions = {
       method: 'POST',
@@ -89,23 +101,20 @@ export const DashboardTable = () => {
       requestOptions
     );
 
-
-    if(result.data){
+    if (result.data) {
       dispatch(addProducts({ products: result.data }));
-      setErrorMessage('');
+      dispatch(setErrorsDashboard({ errors: false, message: '' }));
     } else {
-      setErrorMessage(result.error);
+      dispatch(setErrorsDashboard({ errors: true, message: result.error }));
     }
 
     setTimeout(() => {
-      setIsLoading(false);
+      dispatch(setIsLoadingDashboard(false));
     }, 300);
-
-    
   };
 
   // Записываем список товаров в state
-  const data = useSelector((state) => state.dashboard.products);
+  //const data = useSelector((state) => state.dashboard.products);
 
   // let data = [
   //   {
@@ -156,39 +165,54 @@ export const DashboardTable = () => {
   // ];
 
   // Сортировка данных для отображения в таблице
-  let bodyContent = useFilterTable(data);
+  let bodyContent = useFilterTable(products);
 
   return (
     <div className="dashboard">
       <form className={styles.form_dashboard_filter}>
         <div className={styles.MyDropdown}>
-          <MyDropdown
+          <Dropdown
             id="dashboard_warehouse"
             title="Склад"
             placeholder="Выберите склад"
             multiple={true}
-            validation={validationWarehouse}
-            changeValue={setWarehouse}
-            url={'get_warehouse'}
-            statusApp={statusApp}
+            validation={true}
+            options={warehouses}
+            changeValue={(value) => {
+              dispatch(setWarehouseDashboard(value));
+            }}
+            reset={reset}
+            setReset={() => {
+              dispatch(setResetDashboard({ reset: false }));
+            }}
           />
         </div>
 
         <div className={styles.MyDropdown}>
-          <MyDropdown
+          <Dropdown
             id="dashboard_category"
             title="Категория"
             placeholder="Выберите категорию"
             multiple={true}
-            validation={validationCategory}
-            changeValue={setCategory}
-            url={'get_category'}
-            statusApp={statusApp}
+            validation={true}
+            options={category}
+            changeValue={(value) => {
+              dispatch(setCategoryDashboard(value));
+            }}
+            reset={reset}
+            setReset={() => {
+              dispatch(setResetDashboard({ reset: false }));
+            }}
           />
         </div>
 
         <div className={styles.MyDropdown}>
-          <MyInputSearch value={search} changeValue={setSearch} />
+          <MyInputSearch
+            value={inputSearch}
+            changeValue={(value) => {
+              dispatch(setSearchDashboard(value));
+            }}
+          />
         </div>
 
         <div className={styles.MyButton}>
@@ -202,16 +226,13 @@ export const DashboardTable = () => {
         </div>
       </form>
 
-      <div className={styles.message_error}>
-        {errorMessage}
-      </div>
+      <div className={styles.message_error}>{message}</div>
 
       <MyTable
         titleColumn={titleColumn}
         content={bodyContent}
-        resultCount={data.length}
+        resultCount={products?.length}
       />
-
     </div>
   );
 };

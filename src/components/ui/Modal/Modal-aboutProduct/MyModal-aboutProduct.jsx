@@ -35,28 +35,31 @@ function ModalAboutProduct() {
 
   // Local State
   const [data, setData] = useState(null);
-  const [sn, setSn] = useState(null);
   const [history, setHistory] = useState(null);
-  const [disabled, setDisabled] = useState(
+  const [disabled] = useState(
     user.role === 'admin' ? false : true
   );
 
   // Redux
-  const active = useSelector((state) => state.modal_about_product.active);
-  const product = useSelector(
-    (state) => state.modal_about_product.product
+  const { active, product, errors, message, reset, isLoading, indexActiveTab } = useSelector(
+    (state) => state.modal_about_product
   );
-  const errors = useSelector((state) => state.modal_about_product.errors);
-  const message = useSelector((state) => state.modal_about_product.message);
-  const reset = useSelector((state) => state.modal_about_product.reset);
-  const isLoading = useSelector((state) => state.modal_about_product.isLoading);
+
+  console.log('Render', indexActiveTab, product)
 
   useEffect(() => {
-    if (product?.id !== null) {
-      fetchData();
-      fetchHistory();
-    }
-  }, [product?.id, product?.id_warehouse]);
+    console.log('Effect0', product)
+    if(active) fetchData();
+  }, [active]);
+
+  useEffect(() => {
+    console.log('Effect', indexActiveTab)
+
+    if(product?.id === null) return
+    if(indexActiveTab === 0 && data === null) fetchData();
+    if(indexActiveTab === 1 && history === null) fetchHistory();
+
+  }, [indexActiveTab]);
 
   const fetchData = async () => {
     dispatch(setIsLoading({ isLoading: true }));
@@ -79,15 +82,15 @@ function ModalAboutProduct() {
 
     if (productInfo.data) {
       setData(productInfo.data);
-      dispatch(setIsLoading({ isLoading: false }));
+      
     } else {
       dispatch(setMessage({ message: productInfo.errorMessage, errors: true }));
     }
 
+    dispatch(setIsLoading({ isLoading: false }));
   };
 
   const fetchHistory = async () => {
-
     let data = JSON.stringify({
       sn_accounting: product?.accounting_sn,
       id_product: product?.id,
@@ -106,15 +109,15 @@ function ModalAboutProduct() {
 
     if (history.data) {
       setHistory(history.data);
-      dispatch(setIsLoading({ isLoading: false }));
+      
     } else {
       dispatch(setMessage({ message: history.errorMessage, errors: true }));
     }
 
+    dispatch(setIsLoading({ isLoading: false }));
   };
 
   const getHistory = () => {
-
     if (history) {
       return history.map((item) => {
         if (item.type === 'receipt') {
@@ -151,7 +154,9 @@ function ModalAboutProduct() {
                 <ul>
                   <li>Дата: {item.date}</li>
                   <li>Количество: {item.count}</li>
-                  <li>{item.old_warehouse} &rarr;{item.new_warehouse}</li>
+                  <li>
+                    {item.old_warehouse} &rarr;{item.new_warehouse}
+                  </li>
                 </ul>
               </div>
 
@@ -174,7 +179,9 @@ function ModalAboutProduct() {
                 <ul>
                   <li>Дата: {item.date}</li>
                   <li>Количество: {item.count}</li>
-                  <li>{item.old_warehouse} &rarr;{item.new_warehouse}</li>
+                  <li>
+                    {item.old_warehouse} &rarr;{item.new_warehouse}
+                  </li>
                 </ul>
               </div>
               <details className={styles.history_details}>
@@ -197,9 +204,13 @@ function ModalAboutProduct() {
       setActive={() => {
         dispatch(setActive({ active: false }));
         dispatch(setDefault());
+        setData(null);
+        setHistory(null)
       }}
       title="Информация о товаре"
-      subtitle={`${product?.name} (${product?.accounting_sn ? product?.sn : ''})`}
+      subtitle={`${product?.name} (${
+        product?.accounting_sn ? product?.sn : ''
+      })`}
       message={message}
       errors={errors}
       isLoading={isLoading}
@@ -282,7 +293,6 @@ function ModalAboutProduct() {
                 validation={true}
               />
             </div>
-
           </div>
         </Tab>
         <Tab label={'История'}>
