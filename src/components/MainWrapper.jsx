@@ -9,7 +9,7 @@ import Navbar from "./Navbar/Navbar.jsx";
 import ModalDialog from "./ui/Modal/MyModalDialog.jsx";
 
 export const MainWrapper = ({
-  header_title,
+  header_title = 'Без названия',
   title = "Страница без названия",
   children,
 }) => {

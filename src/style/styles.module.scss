@@ -49,10 +49,11 @@ nav {
   overflow: auto;
   flex-grow: 1;
 
-  //background-image: url("https://www.techrepublic.com/wp-content/uploads/2022/05/network-storage-tutorial-openmediavault-770x498.jpeg");
+  background-image: url("https://kartinkin.net/uploads/posts/2021-07/thumbs/1625252344_1-kartinkin-com-p-sklad-fon-krasivie-foni-1.jpg");
   background-repeat: no-repeat;
-  background-blend-mode: soft-light;
+  background-blend-mode: overlay;
   background-size: cover;
+  background-attachment: fixed;
 }
 
 @media (max-width: 800px) {

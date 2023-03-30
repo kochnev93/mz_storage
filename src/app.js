@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 
 // Routes
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
 import { RequireAuth } from './hoc/RequireAuth.jsx';
 
 // Pages
-import { About } from './pages/About/About.jsx';
+import Preloader from './components/Preloader/Preloader.jsx';
+//import { About } from './pages/About/About.jsx';
+const About = React.lazy(() => import('./pages/About/About.jsx'));
+
 import { Dashboard } from './pages/Dashboard/Dashboard.jsx';
 import { Admin } from './pages/Admin/Admin.jsx';
 import { Auth } from './pages/Auth/Auth.jsx';
@@ -15,6 +18,7 @@ import { Receipt } from './pages/Receipt/Receipt.jsx';
 import { Warehouses } from './pages/Warehouses/Warehouses.jsx';
 import { Transfers } from './pages/Transfers/Transfers.jsx';
 import { Profile } from './pages/Profile/Profile.jsx';
+import { MainWrapper } from './components/MainWrapper.jsx';
 
 //Pafes Admin
 import { AdminUsers } from './pages/Admin/AdminUsers.jsx';
@@ -28,6 +32,8 @@ import { fetchData } from './features/app/appSlice.js';
 import './style/styles.module.scss';
 import './style/vars.css';
 import './index.css';
+
+
 
 export default function App() {
   const dispatch = useDispatch();
@@ -84,33 +90,43 @@ export default function App() {
           }
         />
 
-        <Route
-          path="about"
-          element={
-            <RequireAuth allowAccess={['admin', 'user', 'viewer']}>
-              <About />
-            </RequireAuth>
-          }
-        />
+
+          <Route
+            path="about"
+            element={(
+              <Suspense fallback={<Preloader />}>
+              <RequireAuth allowAccess={['admin', 'user', 'viewer']}>
+                 <About />
+               </RequireAuth>
+              </Suspense>
+
+            )}
+          />
+
+
+
 
         <Route
           path="profile"
           element={
+            <Suspense fallback={<Preloader />}>
             <RequireAuth allowAccess={['admin', 'user', 'viewer']}>
               <Profile />
             </RequireAuth>
+            </Suspense>
           }
         />
 
         <Route
           path="admin/*"
           element={
+            <Suspense fallback={<Preloader />}>
             <RequireAuth allowAccess={['admin']}>
               <Admin />
             </RequireAuth>
+            </Suspense>
           }
         >
-          <Route index element={<div>Выберите пункт меню</div>} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="category" element={<AdminCategory />} />
         </Route>

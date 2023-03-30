@@ -3,11 +3,13 @@ import { MainWrapper } from '../../components/MainWrapper.jsx';
 
 import styles from '../style.module.scss';
 
-export const About = () => {
+const About = () => {
   return (
     <MainWrapper header_title="О приложении" title={process.env.REACT_APP_NAME}>
       <p>Версия: {process.env.REACT_APP_VERSION}</p>
     </MainWrapper>
   );
 };
+
+export default About;
 

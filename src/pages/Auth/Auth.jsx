@@ -8,13 +8,11 @@ import 'regenerator-runtime/runtime';
 // Redux
 import { useDispatch } from 'react-redux';
 import { setUser } from '../../features/users/userSlice.js';
-import useFetch from '../../hooks/useFetch';
 
 export const Auth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { fetchNow } = useFetch();
   const frompage = location.state?.from?.pathname || '/';
 
   const [login, setLogin] = useState('');

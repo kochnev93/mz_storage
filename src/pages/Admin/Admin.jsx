@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import cx from "classnames";
 
 // Router
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 
 // Styles
 import styles from "./AdminPage.module.scss";
@@ -12,13 +12,11 @@ import { MainWrapper } from "../../components/MainWrapper.jsx";
 import ModalAboutUser from "../../components/ui/Modal/Modal-aboutUser/MyModal-aboutUser.jsx";
 import ModalAddUser from "../../components/ui/Modal/Modal-addUser/Modal-addUser.jsx";
 
-
-// Redux
-import { useDispatch } from "react-redux";
-
 export const Admin = () => {
-  const dispatch = useDispatch();
   const [activeLink, setActiveLink] = useState(null);
+  let location = useLocation();
+  console.log(location);
+  console.log('/', location.pathname)
 
   const adminMenu = [
     {
@@ -31,9 +29,10 @@ export const Admin = () => {
     },
   ];
 
+  //if(location.pathname == '/admin/users') setActiveLink(0)
+
   return (
     <>
-      {/* <Dialog /> */}
       <ModalAddUser />
       <ModalAboutUser />
       <MainWrapper header_title="Администратор" title="Панель управления">
