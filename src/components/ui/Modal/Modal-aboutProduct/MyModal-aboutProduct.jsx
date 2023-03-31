@@ -1,32 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import cx from 'classnames';
+import React, { useState, useEffect } from "react";
+import cx from "classnames";
 
 // Hooks
-import authHeader from '../../../../services/auth-header';
-import { useAuth } from '../../../../hooks/use-auth';
-import useFetch from '../../../../hooks/useFetch';
+import authHeader from "../../../../services/auth-header";
+import { useAuth } from "../../../../hooks/use-auth";
+import useFetch from "../../../../hooks/useFetch";
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   setActive,
   setErrors,
   setIsLoading,
   setMessage,
   setDefault,
-} from '../../../../features/modal/about-productSlice';
+} from "../../../../features/modal/about-productSlice";
 
 //Styles
-import styles from './MyModal-aboutProduct.module.scss';
+import styles from "./MyModal-aboutProduct.module.scss";
 
 // Components
-import MyDropdown from '../../Dropdown/MyDropdown.jsx';
-import MyInput from '../../Input/MyInput.jsx';
-import MyButton from '../../Buttons/ButtonSend.jsx';
-import Modal from '../MyModal2.jsx';
-import { Tabs } from '../../../Tabs/Tabs.jsx';
-import { Tab } from '../../../Tabs/Tab.jsx';
-import { Chat } from '../../../Chat/Chat.jsx';
+import MyDropdown from "../../Dropdown/MyDropdown.jsx";
+import MyInput from "../../Input/MyInput.jsx";
+import MyButton from "../../Buttons/ButtonSend.jsx";
+import Modal from "../MyModal2.jsx";
+import { Tabs } from "../../../Tabs/Tabs.jsx";
+import { Tab } from "../../../Tabs/Tab.jsx";
+import { Chat } from "../../../Chat/Chat.jsx";
 
 function ModalAboutProduct() {
   const dispatch = useDispatch();
@@ -36,29 +36,25 @@ function ModalAboutProduct() {
   // Local State
   const [data, setData] = useState(null);
   const [history, setHistory] = useState(null);
-  const [disabled] = useState(
-    user.role === 'admin' ? false : true
-  );
+  const [disabled] = useState(user.role === "admin" ? false : true);
 
   // Redux
-  const { active, product, errors, message, reset, isLoading, indexActiveTab } = useSelector(
-    (state) => state.modal_about_product
-  );
+  const { active, product, errors, message, reset, isLoading, indexActiveTab } =
+    useSelector((state) => state.modal_about_product);
 
-  console.log('Render', indexActiveTab, product)
+  console.log("Render", indexActiveTab, product);
 
   useEffect(() => {
-    console.log('Effect0', product)
-    if(active) fetchData();
+    console.log("Effect0", product);
+    if (active) fetchData();
   }, [active]);
 
   useEffect(() => {
-    console.log('Effect', indexActiveTab)
+    console.log("Effect", indexActiveTab);
 
-    if(product?.id === null) return
-    if(indexActiveTab === 0 && data === null) fetchData();
-    if(indexActiveTab === 1 && history === null) fetchHistory();
-
+    if (product?.id === null) return;
+    if (indexActiveTab === 0 && data === null) fetchData();
+    if (indexActiveTab === 1 && history === null) fetchHistory();
   }, [indexActiveTab]);
 
   const fetchData = async () => {
@@ -71,23 +67,31 @@ function ModalAboutProduct() {
     });
 
     let requestOptions = {
-      method: 'POST',
+      method: "POST",
       body: data,
     };
 
-    const productInfo = await fetchNow(
-      `${process.env.REACT_APP_API_SERVER}/get_product/${product?.id}`,
-      requestOptions
-    );
+    try {
+      const productInfo = await fetchNow(
+        `${process.env.REACT_APP_API_SERVER}/get_product/${product?.id}`,
+        requestOptions
+      );
 
-    if (productInfo.data) {
-      setData(productInfo.data);
-      
-    } else {
-      dispatch(setMessage({ message: productInfo.errorMessage, errors: true }));
+      if (productInfo.data) {
+        setData(productInfo.data);
+      } else {
+        dispatch(setMessage({ message: productInfo.errorMessage, errors: true }));
+      }
+  
+      dispatch(setIsLoading({ isLoading: false }));
+  
+    } catch (e) {
+      console.log('catch')
+      dispatch(setIsLoading({ isLoading: false }));
+      dispatch(setMessage({ message: e.message, errors: true }));
     }
 
-    dispatch(setIsLoading({ isLoading: false }));
+
   };
 
   const fetchHistory = async () => {
@@ -98,7 +102,7 @@ function ModalAboutProduct() {
     });
 
     let requestOptions = {
-      method: 'POST',
+      method: "POST",
       body: data,
     };
 
@@ -109,7 +113,6 @@ function ModalAboutProduct() {
 
     if (history.data) {
       setHistory(history.data);
-      
     } else {
       dispatch(setMessage({ message: history.errorMessage, errors: true }));
     }
@@ -120,7 +123,7 @@ function ModalAboutProduct() {
   const getHistory = () => {
     if (history) {
       return history.map((item) => {
-        if (item.type === 'receipt') {
+        if (item.type === "receipt") {
           return (
             <li>
               <h5 className={styles.history_title}>&#9989; {item.title}</h5>
@@ -146,7 +149,7 @@ function ModalAboutProduct() {
           );
         }
 
-        if (item.type === 'transfer') {
+        if (item.type === "transfer") {
           return (
             <li>
               <h5 className={styles.history_title}>&#9193; {item.title}</h5>
@@ -171,7 +174,7 @@ function ModalAboutProduct() {
           );
         }
 
-        if (item.type === 'rate') {
+        if (item.type === "rate") {
           return (
             <li>
               <h5 className={styles.history_title}>&#11093; {item.title}</h5>
@@ -205,35 +208,35 @@ function ModalAboutProduct() {
         dispatch(setActive({ active: false }));
         dispatch(setDefault());
         setData(null);
-        setHistory(null)
+        setHistory(null);
       }}
       title="Информация о товаре"
       subtitle={`${product?.name} (${
-        product?.accounting_sn ? product?.sn : ''
+        product?.accounting_sn ? product?.sn : ""
       })`}
       message={message}
       errors={errors}
       isLoading={isLoading}
       footer={
         disabled
-          ? 'Редактирование запрещено. Обратитесь к администратору'
-          : 'Редактирование разрешено'
+          ? "Редактирование запрещено. Обратитесь к администратору"
+          : "Редактирование разрешено"
       }
     >
       <Tabs>
-        <Tab label={'Общее'}>
+        <Tab label={"Общее"}>
           <div className={styles.modalAbout_form}>
             <div
               className={cx(styles.modalAbout_form, {
                 [styles.accounting_sn]: data?.accounting_sn,
               })}
             >
-              {data?.accounting_sn ? 'Ведется серийный учет' : null}
+              {data?.accounting_sn ? "Ведется серийный учет" : null}
             </div>
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'ID'}
+                title={"ID"}
                 value={data?.id_product}
                 disabled={true}
                 validation={true}
@@ -242,7 +245,7 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'Наименование'}
+                title={"Наименование"}
                 value={data?.name}
                 disabled={true}
                 validation={true}
@@ -251,7 +254,7 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'Категория'}
+                title={"Категория"}
                 value={data?.category_title}
                 disabled={true}
                 validation={true}
@@ -260,7 +263,7 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'Склад'}
+                title={"Склад"}
                 value={data?.warehouse_title}
                 disabled={true}
                 validation={true}
@@ -269,8 +272,8 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'Серийный номер'}
-                value={data?.sn === null ? '-' : data?.sn}
+                title={"Серийный номер"}
+                value={data?.sn === null ? "-" : data?.sn}
                 disabled={true}
                 validation={true}
               />
@@ -278,8 +281,8 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'Количество'}
-                value={data?.sn === null ? data?.count : '1'}
+                title={"Количество"}
+                value={data?.sn === null ? data?.count : "1"}
                 disabled={true}
                 validation={true}
               />
@@ -287,7 +290,7 @@ function ModalAboutProduct() {
 
             <div className={styles.modalAbout_formItem}>
               <MyInput
-                title={'Комментарий'}
+                title={"Комментарий"}
                 value={data?.comment}
                 disabled={true}
                 validation={true}
@@ -295,12 +298,12 @@ function ModalAboutProduct() {
             </div>
           </div>
         </Tab>
-        <Tab label={'История'}>
+        <Tab label={"История"}>
           <div>
             <ol className={styles.history_list}>{getHistory()}</ol>
           </div>
         </Tab>
-        <Tab label={'Комментарии'}>
+        <Tab label={"Комментарии"}>
           <Chat />
         </Tab>
       </Tabs>

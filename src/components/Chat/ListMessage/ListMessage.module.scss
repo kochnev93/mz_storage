@@ -16,11 +16,33 @@
   color: grey;
 }
 
+
+.messages_error {
+  display: flex;
+
+  padding-top: 5px;
+  font-size: 10px;
+  color: var(--error-color);
+
+  span:not(:last-child){
+    margin-right: 10px;
+  }
+
+  .repeat, .cancel{
+    color: var(--main-color);
+    cursor: pointer;
+  }
+}
+
 .messages_text {
   font-size: 14px;
   background-color: var(--background-color);
   padding: 10px;
   border-radius: var(--border-radius);
+
+  &.error{
+    border: 2px solid var(--error-color);
+  }
 }
 
 .messages_author,

@@ -10,7 +10,9 @@ const initialState = {
   inputComment: '',
   comments: [],
   indexActiveTab: 0,
-  loadingNewComent: false
+  loadingNewComent: false,
+  ErrorLoadingNewComment: false,
+  RepeatLoadingNewComment: null,
 };
 
 export const aboutProductSlice = createSlice({
@@ -46,7 +48,11 @@ export const aboutProductSlice = createSlice({
       state.isLoading = false,
       state.indexActiveTab = 0,
       state.inputComment = '',
-      state.product = null
+      state.product = null,
+      state.ErrorLoadingNewComment = false;
+      state.RepeatLoadingNewComment = null;
+      state.loadingNewComent = false;
+
     },
 
     removeProductAbout: (state, action) => {
@@ -72,6 +78,18 @@ export const aboutProductSlice = createSlice({
 
     setActiveTab: (state, action) => {
       state.indexActiveTab = action.payload.activeTab
+    },
+
+    serErrorLoadingNewComment: (state, action) => {
+      state.ErrorLoadingNewComment = action.payload.error;
+      state.RepeatLoadingNewComment = action.payload.repeat;
+    },
+
+    cancelLoadingComment: (state, action) => {
+      state.ErrorLoadingNewComment = false;
+      state.RepeatLoadingNewComment = null;
+      state.loadingNewComent = false;
+      state.inputComment = '';
     }
   },
 });
@@ -88,7 +106,9 @@ export const {
   setActiveTab,
   setComments,
   addNewComment,
-  setLoadingNewComment
+  setLoadingNewComment,
+  serErrorLoadingNewComment,
+  cancelLoadingComment
 } = aboutProductSlice.actions;
 
 export default aboutProductSlice.reducer;

@@ -69,7 +69,7 @@ const useFetch = (url, options) => {
     let myHeaders = new Headers();
 
     //Проверка состояния токена
-    if (isTokenExpired(accessToken)) {
+    if (false) {//isTokenExpired(accessToken)
       console.warn('token expired');
       let temp = await getAccessToken();
       console.log('Новый токен ', temp);

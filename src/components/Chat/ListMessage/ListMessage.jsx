@@ -5,8 +5,16 @@ import { useAuth } from '../../../hooks/use-auth';
 import styles from './ListMessage.module.scss';
 import { LoadingMessage } from './LoadingMessage.jsx';
 
+//Redux
+import { useSelector } from 'react-redux';
+
 export const ListMessage = (props) => {
   const user = useAuth();
+
+   const {loadingNewComent, ErrorLoadingNewComment} = useSelector(
+    (state) => state.modal_about_product
+  );
+
 
   const listMessage = props.messages?.map((item) => {
     return (
@@ -38,9 +46,9 @@ export const ListMessage = (props) => {
       </ul>
 
       {
-        props.loadingNewComent && (
+        loadingNewComent || ErrorLoadingNewComment ? (
             <LoadingMessage/>
-        )
+        ) : null
       }
     </div>
   );

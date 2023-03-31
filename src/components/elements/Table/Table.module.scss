@@ -1,3 +1,35 @@
+.myTable_v{
+  border-spacing: 0;
+  vertical-align: middle;
+  width: 100%;
+  color: var(--text-color);
+
+  th {
+    background-color: var(--main-color);
+    color: var(--table-colorTH);
+    font-weight: 400;
+  }
+
+  th,
+  td {
+    border: 1px solid var(--table-colorBorder);
+    padding: 8px;
+    position: relative;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+
+  tr:nth-child(1), tr:nth-child(2){
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  };
+
+  tr:nth-child(1){
+text-align: left;
+  }
+}
+
 .myTable {
   border-spacing: 0;
   vertical-align: middle;

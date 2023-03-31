@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import cx from 'classnames';
+import React, { useState, useEffect } from "react";
+import cx from "classnames";
 
 // Hooks
-import authHeader from '../../../../services/auth-header';
-import { useAuth } from '../../../../hooks/use-auth';
-import useFetch from '../../../../hooks/useFetch';
+import authHeader from "../../../../services/auth-header";
+import { useAuth } from "../../../../hooks/use-auth";
+import useFetch from "../../../../hooks/useFetch";
 
 // Redux
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   setActiveTransfer,
   setErrorsTransfer,
@@ -16,37 +16,42 @@ import {
   setIsLoadingTransfer,
   editProductTransfer,
   setDefaultTransfer,
-} from '../../../../features/modal/transfer-productSlice';
-import { editProduct } from '../../../../features/dashboard/dashboardSlice';
+} from "../../../../features/modal/transfer-productSlice";
+import { editProduct } from "../../../../features/dashboard/dashboardSlice";
 
 //Styles
-import styles from './MyModal-transferProduct.module.scss';
+import styles from "./MyModal-transferProduct.module.scss";
 
 // Components
-import MyDropdown from '../../Dropdown/MyDropdown.jsx';
-import Modal from '../MyModal2.jsx';
-import MyButton from '../../Buttons/ButtonSend.jsx';
-import MyInput from '../../Input/MyInput.jsx';
+import MyDropdown from "../../Dropdown/MyDropdown.jsx";
+import Modal from "../MyModal2.jsx";
+import MyButton from "../../Buttons/ButtonSend.jsx";
+import MyInput from "../../Input/MyInput.jsx";
+import { Table_v } from "../../../elements/Table/Table_v.jsx";
 
 function ModalTransferProduct() {
   const dispatch = useDispatch();
   const user = useAuth();
 
   // Redux
-  const active = useSelector((state) => state.modal_transfer_product.active);
-  const product = useSelector((state) => state.modal_transfer_product.product);
-  const errors = useSelector((state) => state.modal_transfer_product.errors);
-  const message = useSelector((state) => state.modal_transfer_product.message);
-  const reset = useSelector((state) => state.modal_transfer_product.reset);
-  const isLoading = useSelector(
-    (state) => state.modal_transfer_product.isLoading
+  const { active, product, errors, message, reset, isLoading } = useSelector(
+    (state) => state.modal_transfer_product
   );
 
   // Local State
   const [warehouse, setWarehouse] = useState([]);
   const [validationWarehouse, setValidationWarehouse] = useState(true);
-  const [count, setCount] = useState('');
+  const [count, setCount] = useState("");
   const [validationCount, setValidationCount] = useState(true);
+  const [titleColumn] = useState([
+    "ID",
+    "Наименование",
+    "SN",
+    "Количество",
+    "Склад",
+  ]);
+
+  let bodyContent=[product?.id, product?.name, product?.sn, product?.count, product?.warehouse_title];
 
   const { fetchNow } = useFetch();
 
@@ -59,7 +64,7 @@ function ModalTransferProduct() {
     setValidationWarehouse(true);
 
     if (warehouse.length === 0) {
-      dispatch(setMessageTransfer({ errors: true, message: 'Выберите склад' }));
+      dispatch(setMessageTransfer({ errors: true, message: "Выберите склад" }));
       setValidationWarehouse(false);
       return false;
     }
@@ -68,7 +73,7 @@ function ModalTransferProduct() {
       dispatch(
         setMessageTransfer({
           errors: true,
-          message: 'Выбранный склад совпадает с текущим',
+          message: "Выбранный склад совпадает с текущим",
         })
       );
       setValidationWarehouse(false);
@@ -77,11 +82,11 @@ function ModalTransferProduct() {
 
     // Проверка при перемещении не серийного товара
     if (!product?.accounting_sn) {
-      if (count === null || count === '') {
+      if (count === null || count === "") {
         dispatch(
           setMessageTransfer({
             errors: true,
-            message: 'Введите количество',
+            message: "Введите количество",
           })
         );
         setValidationCount(false);
@@ -92,7 +97,7 @@ function ModalTransferProduct() {
         dispatch(
           setMessageTransfer({
             errors: true,
-            message: 'Некорректное значение (количество >= 1)',
+            message: "Некорректное значение (количество >= 1)",
           })
         );
         setValidationCount(false);
@@ -103,7 +108,7 @@ function ModalTransferProduct() {
         dispatch(
           setMessageTransfer({
             errors: true,
-            message: 'Количество превышает остаток товара',
+            message: "Количество превышает остаток товара",
           })
         );
         setValidationCount(false);
@@ -128,7 +133,6 @@ function ModalTransferProduct() {
     setValidationCount(true);
   };
 
-
   const transfer = async () => {
     if (validation()) {
       dispatch(setIsLoadingTransfer({ isLoading: true }));
@@ -144,7 +148,7 @@ function ModalTransferProduct() {
       });
 
       let requestOptions = {
-        method: 'POST',
+        method: "POST",
         body: data,
       };
 
@@ -175,6 +179,18 @@ function ModalTransferProduct() {
     }
   };
 
+  // let bodyContent = (
+  //   <>
+  //     <tr key={product?.id}>
+  //       <td>{product?.id}</td>
+  //       <td>{product?.name}</td>
+  //       <td>{product?.sn}</td>
+  //       {!product?.accounting_sn && <td>{product?.count}</td>}
+  //       <td>{product?.warehouse_title}</td>
+  //     </tr>
+  //   </>
+  // );
+
   return (
     <Modal
       active={active}
@@ -198,7 +214,7 @@ function ModalTransferProduct() {
           changeValue={setWarehouse}
           reset={reset}
           setReset={() => dispatch(setResetTransfer({ reset: false }))}
-          url={'get_warehouse'}
+          url={"get_warehouse"}
         />
       </div>
 
@@ -216,6 +232,7 @@ function ModalTransferProduct() {
 
       <div className={styles.transfer_item}>
         <h4>Текущее расположение</h4>
+        <Table_v titleColumn={titleColumn} content={bodyContent} />
         <table className={styles.product_table}>
           <tr>
             <th>ID</th>

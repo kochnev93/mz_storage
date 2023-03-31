@@ -5,7 +5,7 @@ import styles from './Chat.module.scss';
 
 //Redux
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewComment, setComments, setInputComment, setLoadingNewComment } from '../../features/modal/about-productSlice';
+import { addNewComment, setComments, setInputComment, setLoadingNewComment, serErrorLoadingNewComment } from '../../features/modal/about-productSlice';
 
 //Components
 import { ListMessage } from './ListMessage/ListMessage.jsx';
@@ -48,6 +48,7 @@ export const Chat = (props) => {
 
   const addComment = async () => {
    dispatch(setLoadingNewComment({loading: true}))
+   dispatch(serErrorLoadingNewComment({error: false, repeat: null}))
 
     let data = JSON.stringify({
       product_id: product?.id,
@@ -68,8 +69,11 @@ export const Chat = (props) => {
       dispatch(addNewComment({comment: sendingComment.data}))
       dispatch(setInputComment({inputComment: ''}));
     } else {
+      dispatch(serErrorLoadingNewComment({error: true, repeat: () => {addComment()}}))
       console.warn('Комментарий не был отправлен: ', sendingComment.error)
     }
+
+    dispatch(setLoadingNewComment({loading: false}))
   };
 
   return (
